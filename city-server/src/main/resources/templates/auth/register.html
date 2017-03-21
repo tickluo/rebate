@@ -9,11 +9,13 @@
           th:href="@{/styles/framework-font.css}" rel="stylesheet" />
     <link href="../../static/styles/framework-login.css"
           th:href="@{/styles/framework-login.css}" rel="stylesheet" />
+    <link href="//unpkg.com/element-ui@1.0.7/lib/theme-default/index.css" rel="stylesheet" />
     <!--[if lte IE 8]>
     <div id="errorie"><div>您还在使用老掉牙的IE，正常使用系统前请升级您的浏览器到 IE8以上版本 <a target="_blank" href="http://windows.microsoft.com/zh-cn/internet-explorer/ie-8-worldwide-languages">点击升级</a>&nbsp;&nbsp;强烈建议您更改换浏览器：<a href="http://down.tech.sina.com.cn/content/40975.html" target="_blank">谷歌 Chrome</a></div></div>
     <![endif]-->
 </head>
 <body>
+
 <div class="login-topbar" style="">
     <a href="/auth/register">注册</a>
     <a href="/auth/login">登陆</a>
@@ -22,32 +24,57 @@
     <div class="container">
         <div class="logo">
             <i class="fa fa-shopping-bag"></i>
-            <h1><span></span>返利管理平台</h1>
+            <h1><span></span>注册账号</h1>
         </div>
-        <form class="form">
+        <form name="form">
             <div class="row">
-                <input id="txt_account" type="text" placeholder="用户名"/>
+                <input id="txt_account" type="text" name="UserName"  placeholder="用户名 4～10个小写英文字母或数字"/>
                 <i class="fa fa-user"></i>
             </div>
             <div class="row">
-                <input id="txt_password" type="password" placeholder="登录密码"/>
+                <input id="txt_password" type="password" name="UserPwd"  placeholder="密码 6～18个英文字母或数字"/>
                 <i class="fa fa-key"></i>
             </div>
+            <div class="row select-box">
+                <select id="accountType" name="accountType"  class="form-control required" onchange="changeType(this)">
+                    <option value="1">企业</option>
+                    <option value="2">个人</option>
+                </select>
+            </div>
+            <div class="row type">
+                <input id="txt_company" type="text" name="CompanyName"  placeholder="企业名"/>
+                <i class="fa fa-magic"></i>
+            </div>
             <div class="row">
-                <input id="txt_code" maxlength="4" type="text" placeholder="验证码" style="width: 190px; float: left;"/>
+                <input id="txt_trueName" type="text" name="TrueName"  placeholder="真实姓名 不可更改"/>
+                <i class="fa fa-adjust"></i>
+            </div>
+            <div class="row">
+                <input id="txt_email" type="email" name="UserMail"  placeholder="邮箱地址"/>
+                <i class="fa fa-envelope-o fa-fw"></i>
+            </div>
+            <div class="row">
+                <input id="txt_userqq" type="text" name="UserQQ"  placeholder="联系人QQ"/>
+                <i class="fa fa-qq"></i>
+            </div>
+            <div class="row">
+                <input id="txt_phone" type="text" name="UserPhone"  placeholder="移动电话"/>
+                <i class="fa fa-mobile"></i>
+            </div>
+            <div class="row">
+                <input id="txt_code" maxlength="6" type="text" placeholder="短信验证码" style="width: 190px; float: left;"/>
                 <div style="width: 110px; float: right; padding-top: 14px; padding-left: 14px;">
-                    看不清？<a id="switchCode" href="javascript:void(0);" style="text-decoration: none;">换一张</a>
-                    <img id="imgcode" class="authcode" th:src="@{/captcha/getAuthCode}" width="80" height="25" />
+                    <a id="switchCode" href="javascript:void(0);" style="text-decoration: none;" onclick="GetShortMessage()">获取短信验证码</a>
                 </div>
             </div>
             <div class="row">
-                <button id="login_button" type="button"><span>登录</span></button>
-                <a href="/Register/Forget"><span style="float:right;margin-top:5px;">忘记密码</span></a>
+                <button id="register_button" type="button"><span>注册</span></button>
             </div>
             <div class="row">
             </div>
         </form>
-        <div class="login_tips"></div>
+        <div class="login_tips">
+        </div>
     </div>
     <ul class="bg-bubbles">
         <li></li>
@@ -62,9 +89,6 @@
         <li></li>
     </ul>
 </div>
-<div class="copyright">
-    <span style="text-decoration:none;color:#fff;">Design By Panli</span>
-</div>
 
 <script src="https://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
         th:src="@{/vendor/jquery/jquery-2.1.1.min.js}"></script>
@@ -72,7 +96,7 @@
         th:src="@{/vendor/cookie/jquery.cookie.js}"></script>
 <script src="../../static/vendor/md5/jquery.md5.js"
         th:src="@{/vendor/md5/jquery.md5.js}"></script>
-<script th:src="@{/scripts/auth/login.js}"></script>
+<script th:src="@{/scripts/auth/register.js}"></script>
 <script th:src="@{/scripts/auth/index.js}"></script>
 </body>
 </html>
