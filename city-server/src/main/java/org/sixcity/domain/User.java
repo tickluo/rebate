@@ -1,6 +1,5 @@
 package org.sixcity.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -9,7 +8,7 @@ import java.util.List;
 
 @Data
 public class User {
-    @JsonIgnore
+
     private Long id;
     private String username;
     private String appkey;
@@ -18,10 +17,8 @@ public class User {
     private String actualName;
     private String phone;
     private BigDecimal amount;
-    @JsonIgnore
     private String password;
     private String email;
-    @JsonIgnore
     private List<String> roles;
     private Timestamp createTime;
     private Timestamp updateTime;

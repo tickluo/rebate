@@ -45,6 +45,14 @@
             <version>${jjwt.version}</version>
         </dependency>
 
+        <!-- JSON parser -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fast-json}</version>
+        </dependency>
+
+
         <!-- Redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -77,6 +85,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.sixcity</groupId>
+            <artifactId>city-common</artifactId>
+            <version>0.0.1</version>
         </dependency>
         <!--<spring-security>4.2.2.RELEASE</spring-security>
         <dependency>

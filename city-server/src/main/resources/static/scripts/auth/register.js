@@ -61,20 +61,7 @@
                 return false;
             }
 
-            var $userqq = $("#txt_userqq");
-            if ($userqq.val() == "") {
-                $userqq.focus();
-                $.register.formMessage('请输入QQ');
-                return false;
-            }
-
             var numRegx = /^[0-9]*$/;
-            var qqbo = numRegx.test($userqq.val());
-            if (!qqbo) {
-                $userqq.focus();
-                $.register.formMessage('QQ 数字格式');
-                return false;
-            }
 
             var $phone = $("#txt_phone");
             if ($phone.val() == "") {
@@ -105,11 +92,22 @@
             $("#register_button").attr('disabled', 'disabled').find('span').html("loading...");
             var companyName=$.trim($("#accountType").val())=="1"?$.trim($company.val()):"";
             $.ajax({
-                url: "/Register/Regist",
-                data: { username: $.trim($account.val()), userpwd: $.trim($paaword.val()), accouttype: $.trim($("#accountType").val()), company: companyName, truename: $.trim($truename.val()), email: $.trim($email.val()), userqq: $.trim($userqq.val()), phone: $.trim($phone.val()), code: $.trim($code.val()) },
+                url: "/auth/doRegister",
+                data: JSON.stringify({
+                    "username": $.trim($account.val()),
+                    "password": $.trim($paaword.val()),
+                    "accountType": $.trim($("#accountType").val()),
+                    "companyName": companyName,
+                    "actualName": $.trim($truename.val()),
+                    "email": $.trim($email.val()),
+                    "phone": $.trim($phone.val()),
+                    "code": $.trim($code.val())
+                }),
                 type: "post",
+                contentType:"application/json;charset=utf-8;",
                 dataType: "json",
                 success: function (data) {
+                    debugger;
                     if (data.state == "success") {
                         $("#register_button").find('span').html("注册成功，正在跳转...");
                         window.setTimeout(function () {
