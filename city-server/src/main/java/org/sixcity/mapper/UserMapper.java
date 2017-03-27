@@ -1,10 +1,13 @@
 package org.sixcity.mapper;
 
+import model.CrudDao;
+import org.apache.ibatis.annotations.Mapper;
 import org.sixcity.domain.User;
 
-public interface UserMapper {
+@Mapper
+public interface UserMapper extends CrudDao<User>{
 
-    User insert(User user);
+    int insert(User user);
 
     User findByUsername(String username);
 }

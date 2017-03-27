@@ -27,9 +27,11 @@ public class ExceptionResolver implements HandlerExceptionResolver {
         Result result = null;
         if (exception instanceof ApplicationException) {
             ApplicationException ae = (ApplicationException) exception;
-            result = Result.create(ae.getCode()).setMessage(ae.getMessage());
+            result = Result.create(ae.getCode());
+            result.setMessage(ae.getMessage());
         } else {
-            result = Result.create(ResultCode.ERROR).setMessage("未知错误");
+            result = Result.create(ResultCode.ERROR);
+            result.setMessage("未知错误");
             LOGGER.error(exception.getMessage(), exception);
         }
 

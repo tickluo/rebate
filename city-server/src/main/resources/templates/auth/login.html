@@ -34,7 +34,7 @@
                 <i class="fa fa-key"></i>
             </div>
             <div class="row">
-                <input id="txt_code" maxlength="4" type="text" placeholder="验证码" style="width: 190px; float: left;"/>
+                <input id="txt_code" maxlength="5" type="text" placeholder="验证码" style="width: 190px; float: left;"/>
                 <div style="width: 110px; float: right; padding-top: 14px; padding-left: 14px;">
                     看不清？<a id="switchCode" href="javascript:void(0);" style="text-decoration: none;">换一张</a>
                     <img id="imgcode" class="authcode" th:src="@{/captcha/getAuthCode}" width="80" height="25" />
@@ -72,6 +72,7 @@
         th:src="@{/vendor/cookie/jquery.cookie.js}"></script>
 <script src="../../static/vendor/md5/jquery.md5.js"
         th:src="@{/vendor/md5/jquery.md5.js}"></script>
+<script th:src="@{/scripts/request.js}"></script>
 <script th:src="@{/scripts/auth/login.js}"></script>
 <script th:src="@{/scripts/auth/index.js}"></script>
 </body>

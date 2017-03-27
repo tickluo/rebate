@@ -33,7 +33,8 @@ public class CaptchaService {
         }
     }
 
-    public void validCaptcha(String captcha) {
+    public boolean validCaptcha(String captcha) {
 
+        return false;
     }
 }

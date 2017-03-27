@@ -2,8 +2,9 @@ package org.sixcity.security.service;
 
 import org.sixcity.domain.User;
 
+//TODO: rebuild this service only for token
 public interface AuthService {
-    User register(User userToAdd);
+    /*int register(User userToAdd);*/
     String login(String username, String password);
     String refresh(String oldToken);
 }

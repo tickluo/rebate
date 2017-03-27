@@ -11,7 +11,7 @@
                 $.register.formMessage('请输入用户名');
                 return false;
             }
-            var accountregx =/^[a-z0-9]{4,10}$/;
+            var accountregx = /^[a-z0-9]{4,10}$/;
             var accountbo = accountregx.test($account.val());
             if (!accountbo) {
                 $account.focus();
@@ -90,37 +90,29 @@
                 return false;
             }
             $("#register_button").attr('disabled', 'disabled').find('span').html("loading...");
-            var companyName=$.trim($("#accountType").val())=="1"?$.trim($company.val()):"";
-            $.ajax({
-                url: "/auth/doRegister",
-                data: JSON.stringify({
-                    "username": $.trim($account.val()),
-                    "password": $.trim($paaword.val()),
-                    "accountType": $.trim($("#accountType").val()),
-                    "companyName": companyName,
-                    "actualName": $.trim($truename.val()),
-                    "email": $.trim($email.val()),
-                    "phone": $.trim($phone.val()),
-                    "code": $.trim($code.val())
-                }),
-                type: "post",
-                contentType:"application/json;charset=utf-8;",
-                dataType: "json",
-                success: function (data) {
-                    debugger;
-                    if (data.state == "success") {
-                        $("#register_button").find('span').html("注册成功，正在跳转...");
-                        window.setTimeout(function () {
-                            window.location.href = "/Home/Index";
-                        }, 3000);
-                    } else {
-                        $("#register_button").removeAttr('disabled').find('span').html("注册");
-                        $code.val('');
-                        $.register.formMessage(data.message);
-                    }
+            var companyName = $.trim($("#accountType").val()) == "1" ? $.trim($company.val()) : "";
+            postAjax("/auth/doRegister", {
+                "username": $.trim($account.val()),
+                "password": $.trim($paaword.val()),
+                "accountType": $.trim($("#accountType").val()),
+                "companyName": companyName,
+                "actualName": $.trim($truename.val()),
+                "email": $.trim($email.val()),
+                "phone": $.trim($phone.val()),
+                "code": $.trim($code.val())
+            }, function (data) {
+                if (data.state == "success") {
+                    $("#register_button").find('span').html("注册成功，正在跳转...");
+                    $.register.formMessage("");
+                    window.setTimeout(function () {
+                        window.location.href = "/Home/Index";
+                    }, 3000);
+                } else {
+                    $("#register_button").removeAttr('disabled').find('span').html("注册");
+                    $code.val('');
+                    $.register.formMessage(data.message);
                 }
-            });
-
+            })
         },
         init: function () {
             $("#register_button").click(function () {
@@ -162,7 +154,7 @@ function GetShortMessage() {
 
     $.ajax({
         url: "/captcha/GetAuthCode",
-        data: { UserPhone: $.trim($("#txt_phone").val()) },
+        data: {UserPhone: $.trim($("#txt_phone").val())},
         type: "post",
         dataType: "json",
         success: function (data) {

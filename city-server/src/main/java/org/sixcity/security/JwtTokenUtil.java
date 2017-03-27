@@ -1,6 +1,6 @@
 package org.sixcity.security;
 
-import org.sixcity.domain.User;
+import org.sixcity.security.model.JwtUser;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -99,7 +99,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        User user = (User) userDetails;
+        JwtUser user = (JwtUser) userDetails;
         final String username = getUsernameFromToken(token);
         //final Date expiration = getExpirationDateFromToken(token);
         return (

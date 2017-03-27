@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.sixcity.mapper.UserMapper">
+
+    <sql id="selectColumns">
+        SELECT
+            a.id,
+            a.username,
+            a.password,
+            a.phone,
+            a.mail,
+            a.actualName,
+            a.accountType,
+            a.companyName,
+            a.createTime,
+            a.updateTime,
+            a.amount,
+            a.appkey,
+            a.roles
+        FROM User_t a
+    </sql>
+
+    <!-- 插入用户 -->
+    <insert id="insert">
+        INSERT INTO User_t (
+            `UserName`,
+            `Password`,
+            `Phone`,
+            `Mail`,
+            `ActualName`,
+            `AccountType`,
+            `CompanyName`,
+            `CreateTime`,
+            `UpdateTime`,
+            `Amount`,
+            `AppKey`,
+            `roles`
+        ) VALUES (
+            #{username},
+            #{password},
+            #{phone},
+            #{email},
+            #{actualName},
+            #{accountType},
+            #{companyName},
+            #{createTime},
+            #{updateTime},
+            #{amount},
+            #{appkey},
+            #{roles}
+        )
+    </insert>
+
+    <select id="findByUsername" resultType="org.sixcity.domain.User">
+        <include refid="selectColumns"/>
+        WHERE UserName = #{username}
+    </select>
+
+    <!-- 修改用户
+    <update id="updateInfo">
+        UPDATE trip_user
+        <set>
+            `nickname` = #{nickname},
+            `gender` = #{gender},
+            `age` = #{age},
+            `update_date` = #{updateDate}
+        </set>
+        WHERE `id` = #{id}
+    </update>
+-->
+    <!-- 更新用户密码
+    <update id="updatePasswordByMobile">
+        UPDATE trip_user
+        SET
+            `password` = #{password}
+        WHERE `mobile` = #{mobile}
+    </update>
+-->
+</mapper>

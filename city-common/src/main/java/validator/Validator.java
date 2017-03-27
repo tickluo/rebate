@@ -9,7 +9,6 @@ public enum Validator {
      * 非空验证
      */
     NOT_BLANK {
-
         @Override
         public void validate(String name, String value) throws ValidateException {
             if (StringUtils.isBlank(value)) {
@@ -21,7 +20,6 @@ public enum Validator {
      * 中文验证
      */
     CHINESE {
-
         @Override
         public void validate(String name, String value) throws ValidateException {
             if (!ValidateUtils.isChinese(value)) {
@@ -44,7 +42,6 @@ public enum Validator {
      * 日期验证
      */
     DATE {
-
         @Override
         public void validate(String name, String value) throws ValidateException {
             if (!ValidateUtils.isDate(value)) {
@@ -56,7 +53,6 @@ public enum Validator {
      * 身份号验证
      */
     IDNO {
-
         @Override
         public void validate(String name, String value) throws ValidateException {
             if (!ValidateUtils.isIdNo(value)) {
@@ -65,7 +61,6 @@ public enum Validator {
         }
     },
     IP {
-
         @Override
         public void validate(String name, String value) throws ValidateException {
             if (!ValidateUtils.isIp(value)) {
@@ -77,7 +72,6 @@ public enum Validator {
      * 邮件验证
      */
     EMAIL {
-
         @Override
         public void validate(String name, String value) throws ValidateException {
             if (!ValidateUtils.isEmail(value)) {
@@ -89,7 +83,6 @@ public enum Validator {
      * 手机验证
      */
     MOBILE {
-
         @Override
         public void validate(String name, String value) throws ValidateException {
             if (!ValidateUtils.isMobile(value)) {
@@ -102,7 +95,6 @@ public enum Validator {
      * 密码验证
      */
     PASSWORD {
-
         @Override
         public void validate(String name, String value) throws ValidateException {
             if (!ValidateUtils.isPassword(value)) {
@@ -114,7 +106,6 @@ public enum Validator {
      * 姓名验证
      */
     PERSONNAME {
-
         @Override
         public void validate(String name, String value) throws ValidateException {
             if (!ValidateUtils.isPersonName(value)) {
@@ -127,7 +118,6 @@ public enum Validator {
      * 用户名验证
      */
     USERNAME {
-
         @Override
         public void validate(String name, String value) throws ValidateException {
             if (!ValidateUtils.isUsername(value)) {
@@ -141,7 +131,6 @@ public enum Validator {
      * 金额格式
      */
     MONEY {
-
         @Override
         public void validate(String name, String value) throws ValidateException {
             if (!ValidateUtils.isMoney(value)) {
@@ -149,13 +138,12 @@ public enum Validator {
             }
         }
     };
+
     /**
      * 参数校验
      *
-     * @param name
-     *            参数的中文名称
-     * @param value
-     *            参数的值
+     * @param name  参数的中文名称
+     * @param value 参数的值
      * @throws Exception
      */
     public abstract void validate(String name, String value) throws ValidateException;

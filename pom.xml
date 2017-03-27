@@ -40,6 +40,8 @@
         <simple-captcha>1.2.2</simple-captcha>
         <jjwt.version>0.7.0</jjwt.version>
         <fast-json>1.2.28</fast-json>
+        <commons-lang>3.5</commons-lang>
+        <spring-tx>4.3.7.RELEASE</spring-tx>
     </properties>
 
     <modules>

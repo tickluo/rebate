@@ -525,7 +525,7 @@ public class ValidateUtils {
      * 是否符合密码格式
      */
     public static boolean isPassword(String value) {
-        Pattern pattern = Pattern.compile("^(?!\\W*[0-9]+\\W*$)(?!\\W*[a-zA-Z]+\\W*$)[^\\s'\"]{6,16}$");// 先得判断是否含有特殊字符
+        Pattern pattern = Pattern.compile("^(?!\\W*[0-9]+\\W*$)(?!\\W*[a-zA-Z]+\\W*$)[^\\s'\"]{6,18}$");// 先得判断是否含有特殊字符
         Matcher matcher = pattern.matcher(value);
         return matcher.matches();
     }

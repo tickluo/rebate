@@ -12,7 +12,7 @@ public final class JwtUserFactory {
                 user.getId(),
                 user.getUsername(),
                 user.getPassword(),
-                user.getEmail()
+                user.getPhone()
         );
     }
 

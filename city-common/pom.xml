@@ -19,7 +19,21 @@
             <version>${fast-json}</version>
         </dependency>
 
-        <!-- 日志 -->
+        <!-- Common Lib-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang}</version>
+        </dependency>
+
+        <!-- transaction-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring-tx}</version>
+        </dependency>
+
+        <!-- logger -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

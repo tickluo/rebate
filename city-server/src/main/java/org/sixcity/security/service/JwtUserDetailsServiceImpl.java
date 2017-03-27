@@ -13,6 +13,10 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
     private UserMapper userMapper;
 
+    public JwtUserDetailsServiceImpl(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userMapper.findByUsername(username);

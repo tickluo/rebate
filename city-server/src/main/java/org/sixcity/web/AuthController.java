@@ -1,13 +1,46 @@
 package org.sixcity.web;
 
 import com.alibaba.fastjson.JSONObject;
+import model.Result;
+import model.ResultCode;
 import org.sixcity.domain.User;
+import org.sixcity.domain.dto.LoginForm;
+import org.sixcity.domain.dto.RegisterUserForm;
+
+import org.sixcity.security.service.AuthService;
+import org.sixcity.service.serviceimpl.CaptchaService;
+import org.sixcity.service.serviceimpl.ShortMessageService;
+import org.sixcity.service.serviceimpl.UserService;
+import org.sixcity.util.MessageHandleUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import util.RandomUtils;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/auth", method = RequestMethod.GET)
 public class AuthController {
+
+    private final ShortMessageService shortMessageService;
+    private final UserService userService;
+    private final AuthService authService;
+    private final CaptchaService captchaService;
+
+    @Autowired
+    public AuthController(ShortMessageService shortMessageService,
+                          UserService userService,
+                          AuthService authService,
+                          CaptchaService captchaService) {
+        this.shortMessageService = shortMessageService;
+        this.userService = userService;
+        this.authService = authService;
+        this.captchaService = captchaService;
+    }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
@@ -21,11 +54,51 @@ public class AuthController {
 
     @ResponseBody
     @RequestMapping(value = "/doRegister", method = RequestMethod.POST)
-    public String registerPost(@RequestBody JSONObject regFormData) {
-        User user = JSONObject.toJavaObject(regFormData, User.class);
+    public Result registerPost(@RequestBody @Valid RegisterUserForm user, BindingResult bindingResult) {
+        // valid params
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
+                    .setMessage(MessageHandleUtils.getControllerParamsInvalidMessage(fieldErrors));
+        }
+        if (userService.findByUsername(user.getUsername()) != null) {
+            return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
+                    .setMessage("用户名已注册");
+        }
+        // here valid shortMessageCode
+        if (shortMessageService.validCaptcha(user.getCode())) {
+            return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
+                    .setMessage("验证码错误，请重新输入");
+        }
+        //build User Entity
+        User userEntity = JSONObject.parseObject(JSONObject.toJSONString(user), User.class);
+        userEntity.setAppkey(RandomUtils.uuid());
+        //do register
+        userService.registerUser(userEntity);
+        return Result.createSuccessResult();
+    }
 
-        String code = regFormData.getString("code");
+    @ResponseBody
+    @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
+    public Result loginPost(@RequestBody @Valid LoginForm user, BindingResult bindingResult) {
+        // valid params
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
+                    .setMessage(MessageHandleUtils.getControllerParamsInvalidMessage(fieldErrors));
+        }
+        // here valid captcha
+        if (captchaService.validCaptcha(user.getCode())) {
+            return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
+                    .setMessage("验证码错误，请重新输入");
+        }
 
-        return "state";
+        //do login
+        /*if (!userService.checkLogin(user.getUsername(), user.getPassword())) {
+            return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
+                    .setMessage("密码错误，请重新输入");
+        }*/
+        final String token = authService.login(user.getUsername(), user.getPassword());
+        return Result.createSuccessResult(token,"登录成功");
     }
 }

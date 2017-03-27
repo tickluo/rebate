@@ -42,16 +42,20 @@
                 return false;
             } else {
                 $("#login_button").attr('disabled', 'disabled').find('span').html("loading...");
-                $.ajax({
-                    url: "/Login/CheckLogin",
-                    data: { username: $.trim($username.val()), password: $.md5($.trim($password.val())), code: $.trim($code.val()) },
-                    type: "post",
-                    dataType: "json",
-                    success: function (data) {
+                postAjax("/auth/doLogin", {
+                        username: $.trim($username.val()),
+                        password: $.trim($password.val()),
+                        code: $.trim($code.val())
+                    },
+                    function (data) {
                         if (data.state == "success") {
+                            setJwtToken(data.data);
                             $("#login_button").find('span').html("登录成功，正在跳转...");
                             window.setTimeout(function () {
-                                window.location.href = "/Home/Index";
+                                getAjax("/home/index",{},function () {
+
+                                });
+                                //window.location.href = "/home/index";
                             }, 500);
                         } else {
                             $("#login_button").removeAttr('disabled').find('span').html("登录");
@@ -59,8 +63,7 @@
                             $code.val('');
                             $.login.formMessage(data.message);
                         }
-                    }
-                });
+                    })
             }
         },
         init: function () {
@@ -81,7 +84,7 @@
                         $.login.formMessage("系统未知错误,请重新登录");
                         break;
                 }
-                top.$.cookie('city_login_error', '', { path: "/", expires: -1 });
+                top.$.cookie('city_login_error', '', {path: "/", expires: -1});
             }
             $("#login_button").click(function () {
                 $.login.loginClick();

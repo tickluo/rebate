@@ -1,6 +1,7 @@
 package org.sixcity.security.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.sixcity.constant.SecurityConst;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,10 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class JwtUser implements UserDetails {
-    /**
-     * 用户默认角色
-     */
-    private static final String TRIP_USER_ROLE = "ROLE_USER";
 
     private final Long id;
     private final String username;
@@ -35,7 +32,7 @@ public class JwtUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(TRIP_USER_ROLE));
+        authorities.add(new SimpleGrantedAuthority(SecurityConst.SECURITY_ROLE_USER));
         return authorities;
     }
 

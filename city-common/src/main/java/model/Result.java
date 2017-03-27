@@ -8,6 +8,11 @@ public class Result {
     protected Object data;
 
     /**
+     * web端标识
+     */
+    public String state;
+
+    /**
      * 状态码
      */
     protected Integer code;
@@ -35,20 +40,18 @@ public class Result {
      * @return
      */
     public static Result createSuccessResult() {
-        return create(ResultCode.SUCCESS);
+        return create(ResultCode.SUCCESS).setState();
     }
 
     /**
      * Description:创建一个成功的结果体
      *
-     * @param data
-     *            将要返回的数据
-     * @param message
-     *            消息信息
+     * @param data    将要返回的数据
+     * @param message 消息信息
      * @return
      */
     public static Result createSuccessResult(Object data, String message) {
-        return createSuccessResult().setData(message).setMessage(message);
+        return createSuccessResult().setData(data).setMessage(message);
     }
 
     /**
@@ -60,23 +63,26 @@ public class Result {
         return create(ResultCode.ERROR);
     }
 
+    public static Result createErrorResult(Integer code) {
+        return create(code);
+    }
+
     /**
      * Description:创建一个错误的结果体
      *
-     * @param data
-     *            将要返回的数据
-     * @param message
-     *            消息信息
-     * @return
+     * @param data    将要返回的数据
+     * @param message 消息信息
      */
     public static Result createErrorResult(Object data, String message) {
         return createErrorResult().setData(message).setMessage(message);
     }
 
+    public static Result createErrorResult(Integer code, Object data, String message) {
+        return createErrorResult(code).setData(message).setMessage(message);
+    }
+
     /**
      * Description:判断该结果体是否是处理成功状态
-     *
-     * @return
      */
     public boolean isSuccess() {
         return code != null && code.equals(ResultCode.SUCCESS);
@@ -108,4 +114,10 @@ public class Result {
         this.message = message;
         return this;
     }
+
+    public Result setState() {
+        this.state = "success";
+        return this;
+    }
+
 }

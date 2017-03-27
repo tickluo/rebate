@@ -7,16 +7,6 @@
 	       http://www.springframework.org/schema/mvc
     	   http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <!-- 自定义Json解析器 -->
-    <mvc:annotation-driven>
-        <mvc:argument-resolvers>
-            <bean class="resolver.MethodArgumentResolver"/>
-        </mvc:argument-resolvers>
-        <mvc:message-converters>
-            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter" />
-        </mvc:message-converters>
-    </mvc:annotation-driven>
-
     <!-- 自定义异常处理 -->
     <bean id="exceptionResolver" class="resolver.ExceptionResolver" />
 

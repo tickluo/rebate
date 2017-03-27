@@ -1,10 +1,12 @@
 package org.sixcity.security.service;
 
+import org.sixcity.constant.SecurityConst;
 import org.sixcity.domain.User;
 import org.sixcity.mapper.UserMapper;
 import org.sixcity.security.JwtTokenUtil;
 import org.sixcity.security.model.JwtUser;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,35 +25,32 @@ public class AuthServiceImpl implements AuthService {
     private AuthenticationManager authenticationManager;
     private UserDetailsService userDetailsService;
     private JwtTokenUtil jwtTokenUtil;
-    private UserMapper userMapper;
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
- /*   @Autowired
+    @Autowired
     public AuthServiceImpl(
             AuthenticationManager authenticationManager,
             UserDetailsService userDetailsService,
-            JwtTokenUtil jwtTokenUtil,
-            UserMapper userMapper) {
+            JwtTokenUtil jwtTokenUtil) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
-        this.userMapper = userMapper;
-    }*/
+    }
 
-    @Override
-    public User register(User userToAdd) {
+/*    @Override
+    public int register(User userToAdd) {
         final String username = userToAdd.getUsername();
         if (userMapper.findByUsername(username) != null) {
-            return null;
+            return 0;
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         final String rawPassword = userToAdd.getPassword();
         userToAdd.setPassword(encoder.encode(rawPassword));
-        userToAdd.setRoles(asList("ROLE_USER"));
+        userToAdd.setRoles(SecurityConst.SECURITY_ROLE_USER);
         return userMapper.insert(userToAdd);
-    }
+    }*/
 
     @Override
     public String login(String username, String password) {
