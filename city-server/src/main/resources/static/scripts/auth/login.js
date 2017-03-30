@@ -28,13 +28,13 @@
                 return false;
             }
 
-            //var passwordregx = /^[a-zA-Z0-9]{6,18}$/;
-            //var passwordbo = passwordregx.test($password.val());
-            //if (!passwordbo) {
-            //    $password.focus();
-            //    $.login.formMessage('密码 6～18个英文字母或数字');
-            //    return false;
-            //}
+            var passwordregx = /^[a-zA-Z0-9]{6,18}$/;
+            var passwordbo = passwordregx.test($password.val());
+            if (!passwordbo) {
+                $password.focus();
+                $.login.formMessage('密码 6～18个英文字母或数字');
+                return false;
+            }
 
             if ($code.val() == "") {
                 $code.focus();
@@ -49,13 +49,9 @@
                     },
                     function (data) {
                         if (data.state == "success") {
-                            setJwtToken(data.data);
                             $("#login_button").find('span').html("登录成功，正在跳转...");
                             window.setTimeout(function () {
-                                getAjax("/home/index",{},function () {
-
-                                });
-                                //window.location.href = "/home/index";
+                                window.location.href = "/home/index";
                             }, 500);
                         } else {
                             $("#login_button").removeAttr('disabled').find('span').html("登录");

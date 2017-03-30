@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="shared/layoutIndex::layoutIndex"></head>
+
+<link href="../../static/styles/tableUI.css"
+      th:href="@{/styles/tableUI.css}" rel="stylesheet"/>
+<script th:src="@{/vendor/FloatCompute.js}"></script>
+<script th:src="@{/scripts/rebate/rebateCash.js}"></script>
+
+<style>
+    .clear {
+        clear: both;
+        overflow: hidden
+    }
+
+    .fl {
+        float: left
+    }
+
+    .fr {
+        float: right
+    }
+</style>
+<div class="wrapper">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#a" data-toggle="tab">返利提现</a></li>
+    </ul>
+    <div class="tab-content" style="padding-top: 5px;">
+        <div id="a" class="tab-pane active" style="padding: 15px;">
+            <form name="form">
+                <ul class="pop-list">
+                    <li>
+                        <div style="background-color:bisque">
+                            公告：Panli全部返利为 <em id="all" style="color:orangered;font-size:medium"></em>
+                            元，现在Panli可以申请支付的返利是<em id="can" style="color:orangered;font-size:medium"></em> 元<br/>
+                            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 每次申请的提现,会于次月5日统一发放
+                        </div>
+                    </li>
+                    <li>
+                        <label>开户人</label>
+                        <select id="OpenAcountName" name="OpenAcountName" class="form-control required"
+                                style="width:240px" onchange="ChangeType()">
+                        </select>
+                    </li>
+                    <li>
+                        <label>银行名称</label>
+                        <label id="BankName"> </label>
+                    </li>
+                    <li class="company">
+                        <label>支行名称</label>
+                        <label id="BankBranchName"> </label>
+                    </li>
+                    <li>
+                        <label>银行卡号</label>
+                        <label id="BankNum"> </label>
+                    </li>
+                    <li>
+                        <label>预计到账时间</label>
+                        <label id="Arrival"> </label>
+                    </li>
+                    <li>
+                        <label>提现金额</label>
+                        <select id="Money" name="Money" class="form-control required" style="width:240px">
+                            <option value="100.00">100</option>
+                            <option value="200.00">200</option>
+                            <option value="300.00">300</option>
+                            <option value="400.00">400</option>
+                            <option value="500.00">500</option>
+                            <option value="600.00">600</option>
+                            <option value="700.00">700</option>
+                            <option value="800.00">800</option>
+                            <option value="900.00">900</option>
+                            <option value="1000.00">1000</option>
+                        </select>
+                        <div class="btn-group">
+                            <a id="NF-add" class="btn btn-primary dropdown-text" onclick="btn_Submit()">确认提交</a>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top:20px;">
+
+    <div style="float:right; clear:both;overflow:hidden">
+        <select id="txt_timeType" name="BankType" style="width:80px">
+            <option value="2017">2017</option>
+            <option value="2016">2016</option>
+        </select>
+    </div>
+    <div style="float:left; clear:both;overflow:hidden">
+        <div>
+            <label>>>返利产生/支付情况</label>
+        </div>
+    </div>
+
+    <table class="table" id="RebateProduce" style="border:1px solid rgb(221, 221, 221)">
+        <tr id="pro">
+            <th width="100">日期</th>
+            <th width="150">产生返利</th>
+            <th width="150">申请返利</th>
+            <th width="150">余额</th>
+        </tr>
+    </table>
+</div>
+
+
+<div style="margin-top:20px;">
+    <div style="float:right; clear:both;overflow:hidden">
+        <a href="" onclick="lookSite()">更多 >></a>
+    </div>
+    <div style="float:left; clear:both;overflow:hidden">
+        <div>
+            <label>>>申请提现详细记录</label>
+        </div>
+    </div>
+
+    <table class="table" id="ApplyRecord" style="border:1px solid rgb(221, 221, 221)">
+        <tr id="rec">
+            <th width="200">申请日期</th>
+            <th width="150">支付日期</th>
+            <th width="150">开户名</th>
+            <th width="150">银行名称</th>
+            <th width="150">银行账户</th>
+            <th width="150">申请金额</th>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    //打开提现记录
+    function lookSite() {
+        var id = "";
+        var name = "";
+        var url = "/Rebate/RebateManger/CashRecord";
+
+        var menus = top.clients.authorizeMenu;
+        menus.forEach(function (e) {
+            var nodes = e.ChildNodes;
+            nodes.forEach(function (a) {
+                if (a.City_UrlAddress == url) {
+                    name = a.City_FullName;
+                    id = a.City_Id;
+                }
+            });
+        });
+
+
+        var obj = {dataUrl: url, dataId: id, menuName: name}
+        top.wen.tabMenu(obj)
+    }
+</script>
+</html>
+
+
+

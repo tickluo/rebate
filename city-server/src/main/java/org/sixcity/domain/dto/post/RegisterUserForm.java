@@ -1,4 +1,4 @@
-package org.sixcity.domain.dto;
+package org.sixcity.domain.dto.post;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;

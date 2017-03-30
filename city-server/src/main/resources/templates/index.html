@@ -4,30 +4,21 @@
     <title>返利管理平台</title>
     <link href="../../static/styles/framework-font.css"
           th:href="@{/styles/framework-font.css}" rel="stylesheet"/>
-    <link href="../../static/styles/framework-theme.css"
-          th:href="@{/styles/framework-theme.css}" rel="stylesheet"/>
-    <link href="../../static/vendor/bootstrap/bootstrap.min.css"
-          th:href="@{/vendor/bootstrap/bootstrap.min.css}" rel="stylesheet"/>
-    <link href="../../static/vendor/wdtree/tree.css"
-          th:href="@{/vendor/wdtree/tree.css}" rel="stylesheet"/>
-    <link href="../../static/vendor/jqgrid/jqgrid.css"
-          th:href="@{/vendor/jqgrid/jqgrid.css}" rel="stylesheet"/>
-    <link href="../../static/styles/framework-ui.css"
-          th:href="@{/styles/framework-ui.css}" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
             th:src="@{/vendor/jquery/jquery-2.1.1.min.js}"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.ui/1.11.4/jquery-ui.min.js"
-            th:src="@{/vendor/jquery-ui/jquery-ui.min.js}"></script>
     <script th:src="@{/vendor/bootstrap/bootstrap.js}"></script>
+    <link href="../../static/vendor/bootstrap/bootstrap.min.css"
+          th:href="@{/vendor/bootstrap/bootstrap.min.css}" rel="stylesheet"/>
     <script th:src="@{/vendor/dialog/dialog.js}"></script>
     <script th:src="@{/vendor/cookie/jquery.cookie.js}"></script>
+    <link href="../../static/styles/framework-theme.css"
+          th:href="@{/styles/framework-theme.css}" rel="stylesheet"/>
     <script th:src="@{/vendor/framework-ui.js}"></script>
-    <script th:src="@{/vendor/framework-clientdata.js}"></script>
 </head>
 <body style="overflow: hidden;">
 
 <div id="ajax-loader" style="cursor: progress; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: #fff; z-index: 10000; overflow: hidden;">
-    <img src="~/Content/img/ajax-loader.gif" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;" />
+    <img th:src="@{/images/ajax-loader.gif}" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;" />
 </div>
 <div id="theme-wrapper">
     <header class="navbar" id="header-navbar">
@@ -58,11 +49,11 @@
                         </li>
                         <li class="dropdown profile-dropdown">
                             <a href="#" class="dropdown" data-toggle="dropdown">
-                                <img src="~/Content/img/img_app_icon.png" alt="" />
-                                <span class="hidden-xs">@CityRebate.Code.OperatorProvider.Provider.GetCurrent().UserCode</span>
+                                <img th:src="@{/images/img_app_icon.png}" alt="" />
+                                <span id="username_display" class="hidden-xs"></span>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a class="menuItem" data-id="userInfo" href="/SystemManage/User/Info"><i class="fa fa-user"></i>个人信息</a></li>
+                                <li><a class="menuItem" data-id="userInfo" href="/user/userInfo"><i class="fa fa-user"></i>个人信息</a></li>
                                 <li><a href="javascript:void(0);;"><i class="fa fa-inbox"></i>我的信箱</a></li>
                                 <li><a href="javascript:void(0);;" onclick="layer.msg('浏览器缓存清除成功');"><i class="fa fa-trash-o"></i>清空缓存</a></li>
                                 <li><a href="javascript:void(0);;"><i class="fa fa-paint-brush"></i>皮肤设置</a></li>
@@ -90,21 +81,7 @@
                         </div>-->
                         <div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
                             <ul class="nav nav-pills nav-stacked">
-                                @* <li class="nav-header hidden-sm hidden-xs">常用菜单
-                                <i class="fa fa-gear" style="color: #868b98; font-size: 12px; margin-top: -6px; position: absolute; right: 23px; top: 50%; cursor: pointer;"></i>
-                            </li>
-                                <li class="common">
-                                    <a href="#">
-                                        <i class="fa fa-star-o"></i>
-                                        <span>联系人</span>
-                                    </a>
-                                </li>
-                                <li class="common">
-                                    <a href="#">
-                                        <i class="fa fa-star-o"></i>
-                                        <span>客户</span>
-                                    </a>
-                                </li>*@
+
                             </ul>
                         </div>
                     </div>
@@ -117,7 +94,7 @@
                     </button>
                     <nav class="page-tabs menuTabs">
                         <div class="page-tabs-content" style="margin-left: 0px;">
-                            <a href="javascript:;" class="menuTab active" data-id="/Rebate/Report/DataReport">日期报表</a>
+                            <a href="javascript:;" class="menuTab active" data-id="/rebate/rebateCash">返利提现</a>
                             <!--<a href="javascript:;" class="menuTab" data-id="/Home/About" style="padding-right: 15px;">平台介绍</a>-->
                         </div>
                     </nav>
@@ -140,8 +117,9 @@
                 </div>
                 <div class="content-iframe" style="background-color: #f9f9f9; overflow: hidden;">
                     <div class="mainContent" id="content-main" style="margin: 10px; margin-bottom: 0px; padding: 0;">
-                        <iframe class="CityRebate_iframe" width="100%" height="100%" src="/Rebate/Report/DataReport" frameborder="0" data-id="/Rebate/Report/DataReport"></iframe>
-                        <iframe class="CityRebate_iframe" width="100%" height="100%" src="/Home/About" frameborder="0" data-id="/Home/About"></iframe>
+                        <iframe class="CityRebate_iframe" width="100%" height="100%" src="/rebate/rebateCash" frameborder="0" data-id="/rebate/rebateCash"></iframe>
+                        <!--<iframe class="CityRebate_iframe" width="100%" height="100%" src="/Rebate/Report/DataReport" frameborder="0" data-id="/Rebate/Report/DataReport"></iframe>-->
+                        <!--<iframe class="CityRebate_iframe" width="100%" height="100%" src="/about" frameborder="0" data-id="/Home/About"></iframe>-->
                     </div>
                 </div>
             </div>
@@ -152,8 +130,10 @@
     <div class="loading-shade"></div>
     <div class="loading-content" onclick="$.loading(false)">数据加载中，请稍后…</div>
 </div>
+<script th:src="@{/scripts/request.js}"></script>
+<script th:src="@{/scripts/framework-clientdata.js}"></script>
 <script th:src="@{/scripts/index.js}"></script>
-<script th:src="@{/scripts/indextab.js}"></script>
+<script th:src="@{/vendor/indextab.js}"></script>
 <script th:src="@{/vendor/loading/pace.min.js}"></script>
 </body>
 </html>

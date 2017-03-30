@@ -10,7 +10,7 @@ public class Result {
     /**
      * web端标识
      */
-    public String state;
+    protected String state;
 
     /**
      * 状态码
@@ -41,6 +41,10 @@ public class Result {
      */
     public static Result createSuccessResult() {
         return create(ResultCode.SUCCESS).setState();
+    }
+
+    public static Result createSuccessResult(String message) {
+        return createSuccessResult().setMessage(message);
     }
 
     /**
@@ -120,4 +124,7 @@ public class Result {
         return this;
     }
 
+    public String getState() {
+        return state;
+    }
 }

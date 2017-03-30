@@ -20,7 +20,6 @@ function postAjax(url, data, callback) {
         type: "post",
         contentType: "application/json;charset=utf-8;",
         dataType: "json",
-        headers: createAuthorizationTokenHeader(),
         success: callback
     })
 }
@@ -30,7 +29,6 @@ function getAjax(url, data, callback) {
         url: url,
         data: data,
         type: "get",
-        headers: createAuthorizationTokenHeader(),
         success: callback
     });
 }

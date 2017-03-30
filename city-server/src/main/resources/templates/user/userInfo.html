@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="shared/layoutIndex::layoutIndex"></head>
+
+<script th:src="@{/scripts/auth/index.js}"></script>
+<div class="wrapper">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#a" data-toggle="tab">基本信息</a></li>
+    </ul>
+    <div class="tab-content" style="padding-top: 5px;">
+        <div id="a" class="tab-pane active" style="padding: 15px;">
+            <form name="form">
+                <ul class="pop-list">
+                    <li>
+                        <label>用户名</label>
+                        <input type="text" class="form-control" value="" id="userName" readonly="readonly"
+                               style="background-color:ghostwhite"/>
+                    </li>
+                    <li>
+                        <label>账号性质</label>
+                        <input type="text" class="form-control" id="account" readonly="readonly"
+                               style="background-color:ghostwhite"/>
+                    </li>
+                    <li class="company">
+                        <label>企业名</label>
+                        <input type="text" class="form-control" id="company" readonly="readonly"
+                               style="background-color:ghostwhite"/>
+                    </li>
+                    <li>
+                        <label>联系人真实姓名</label>
+                        <input type="text" class="form-control" id="truename" readonly="readonly"
+                               style="background-color:ghostwhite"/>
+                    </li>
+                    <li class="line">
+
+                    </li>
+                    <li>
+                        <label>邮箱</label>
+                        <input type="text" class="form-control" id="email"/>
+                    </li>
+                    <li>
+                        <label>移动电话</label>
+                        <input type="text" class="form-control" id="phone"/>
+                    </li>
+                    <li>
+                        <div style="padding-left: 115px;">
+                            <a class="btn btn-primary" id="update_button"><i class="fa fa-save"
+                                                                             style="margin-right:5px;"></i>确认修改</a>
+                        </div>
+                        <div style="padding-left: 115px;">
+                            <label id="mes" style="color:red;margin-right:1px;"></label>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+
+    </div>
+</div>
+<script th:src="@{/scripts/user/userInfo.js}"></script>
+</html>

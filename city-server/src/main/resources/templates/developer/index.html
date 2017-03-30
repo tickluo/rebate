@@ -1,135 +1,139 @@
-<div th:include="layoutIndex" xmlns:th="http://www.thymeleaf.org">
-    <link href="../../static/styles/tableUI.css"
-          th:href="@{/styles/tableUI.css}" rel="stylesheet"/>
-    <div class="wrapper">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#a" data-toggle="tab">开发文档中心</a></li>
-        </ul>
-        <div class="tab-content" style="padding-top: 5px;">
-            <div id="a" class="tab-pane active" style="padding: 15px;">
-                <form name="form">
-                    <ul class="pop-list">
-                        <li>
-                            <div style="background-color:bisque">
-                                建议：不要使用第三方返利商品链接当做商品地址,(如果这么提交订单)商品地址我们将尽可能先转化为原始地址提交订单以保<br/>
-                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-                                证用户能正常下单以及让您返利,但这样也可能让您无法获得返利,关于6City提供的返利点详情可点击<a href="" style="color:blue"
-                                                                                   onclick="lookSite();">这里</a>查看
-                            </div>
-                        </li>
-                        <li>
-                            <label>专属AppKey：</label>
-                            <label>@ViewData["appkey"]</label>
-                        </li>
-                        <li style="margin-top:20px;">
-                            链接规则:<br/><br/>
-                            <table class="table" style="border:1px solid rgb(221, 221, 221)">
-                                <th style="width:120px">
-                                    标题
-                                </th>
-                                <th style="width:500px">
-                                    链接规则
-                                </th>
-                                <tr>
-                                    <td>
-                                        添加商品
-                                    </td>
-                                    <td>
-                                        http://s.6city.com/ProductCrawl/AddCart? 「crawlUrl = 商品地址」&「AppKey」
-                                    </td>
-                                </tr>
-                            </table>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 
-                        </li>
-                        <li style="margin-top:20px;">
-                            链接示例:<br/><br/>
-                            <table class="table" style="border:1px solid rgb(221, 221, 221)">
-                                <tr>
-                                    <td>
-                                        http://s.6city.com/ProductCrawl/AddCart?url=http://www.6pm.com/calvin-klein-benton?PID=7739958&AID=10536619&appkey=@ViewData["appkey"]
-                                    </td>
-                                </tr>
-                            </table>
+<head th:include="shared/layoutIndex::layoutIndex"></head>
+
+<link href="../../static/styles/tableUI.css"
+      th:href="@{/styles/tableUI.css}" rel="stylesheet"/>
+
+<div class="wrapper">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#a" data-toggle="tab">开发文档中心</a></li>
+    </ul>
+    <div class="tab-content" style="padding-top: 5px;">
+        <div id="a" class="tab-pane active" style="padding: 15px;">
+            <form name="form">
+                <ul class="pop-list">
+                    <li>
+                        <div style="background-color:bisque">
+                            建议：不要使用第三方返利商品链接当做商品地址,(如果这么提交订单)商品地址我们将尽可能先转化为原始地址提交订单以保<br/>
+                            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                            证用户能正常下单以及让您返利,但这样也可能让您无法获得返利,关于6City提供的返利点详情可点击<a href="" style="color:blue"
+                                                                               onclick="lookSite();">这里</a>查看
+                        </div>
+                    </li>
+                    <li>
+                        <label>专属AppKey：</label>
+                        <label>@ViewData["appkey"]</label>
+                    </li>
+                    <li style="margin-top:20px;">
+                        链接规则:<br/><br/>
+                        <table class="table" style="border:1px solid rgb(221, 221, 221)">
+                            <th style="width:120px">
+                                标题
+                            </th>
+                            <th style="width:500px">
+                                链接规则
+                            </th>
+                            <tr>
+                                <td>
+                                    添加商品
+                                </td>
+                                <td>
+                                    http://s.6city.com/ProductCrawl/AddCart? 「crawlUrl = 商品地址」&amp;「AppKey」
+                                </td>
+                            </tr>
+                        </table>
+
+                    </li>
+                    <li style="margin-top:20px;">
+                        链接示例:<br/><br/>
+                        <table class="table" style="border:1px solid rgb(221, 221, 221)">
+                            <tr>
+                                <td>
+                                    http://s.6city.com/ProductCrawl/AddCart?url=http://www.6pm.com/calvin-klein-benton?PID=7739958&amp;AID=10536619&amp;appkey=@ViewData["appkey"]
+                                </td>
+                            </tr>
+                        </table>
 
 
-                        </li>
-                        <li style="margin-top:20px;">
-                            参数说明:<br/><br/>
-                            <table class="table" style="border:1px solid rgb(221, 221, 221)">
-                                <th style="width:120px">
-                                    参数名
-                                </th>
-                                <th style="width:500px">
-                                    类型
-                                </th>
-                                <th style="width:500px">
-                                    说明
-                                </th>
-                                <th style="width:500px">
-                                    示例
-                                </th>
-                                <tr>
-                                    <td>
-                                        crawlUrl
-                                    </td>
-                                    <td>
-                                        string, 需要 encode
-                                    </td>
-                                    <td>
-                                        商品详情页url地址
-                                    </td>
-                                    <td>
-                                        Http://www.xxx.com/
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        AppKey
-                                    </td>
-                                    <td>
-                                        string
-                                    </td>
-                                    <td>
-                                        代表这个应用
-                                    </td>
-                                    <td>
-                                        auhsduahfiafjhiasfjioaf
-                                    </td>
-                                </tr>
-                            </table>
+                    </li>
+                    <li style="margin-top:20px;">
+                        参数说明:<br/><br/>
+                        <table class="table" style="border:1px solid rgb(221, 221, 221)">
+                            <th style="width:120px">
+                                参数名
+                            </th>
+                            <th style="width:480px">
+                                类型
+                            </th>
+                            <th style="width:480px">
+                                说明
+                            </th>
+                            <th style="width:480px">
+                                示例
+                            </th>
+                            <tr>
+                                <td>
+                                    crawlUrl
+                                </td>
+                                <td>
+                                    string, 需要 encode
+                                </td>
+                                <td>
+                                    商品详情页url地址
+                                </td>
+                                <td>
+                                    Http://www.xxx.com/
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    AppKey
+                                </td>
+                                <td>
+                                    string
+                                </td>
+                                <td>
+                                    代表这个应用
+                                </td>
+                                <td>
+                                    auhsduahfiafjhiasfjioaf
+                                </td>
+                            </tr>
+                        </table>
 
-                        </li>
-                        <li>
+                    </li>
+                    <li>
 
-                        </li>
-                    </ul>
-                </form>
-            </div>
-
+                    </li>
+                </ul>
+            </form>
         </div>
+
     </div>
-    <script type="text/javascript">
-        //打开各网站返利点
-        function lookSite() {
-            var id = "";
-            var name = "";
-            var url = "/Rebate/RebateManger/RebateSite";
-
-            var menus = top.clients.authorizeMenu;
-            menus.forEach(function (e) {
-                var nodes = e.ChildNodes;
-                nodes.forEach(function (a) {
-                    if (a.City_UrlAddress == url) {
-                        name = a.City_FullName;
-                        id = a.City_Id;
-                    }
-                });
-            });
-
-
-            var obj = {dataUrl: url, dataId: id, menuName: name}
-            top.wen.tabMenu(obj)
-        }
-    </script>
-
 </div>
+<script type="text/javascript">
+    //打开各网站返利点
+    function lookSite() {
+        var id = "";
+        var name = "";
+        var url = "/Rebate/RebateManger/RebateSite";
+
+        var menus = top.clients.authorizeMenu;
+        menus.forEach(function (e) {
+            var nodes = e.ChildNodes;
+            nodes.forEach(function (a) {
+                if (a.City_UrlAddress == url) {
+                    name = a.City_FullName;
+                    id = a.City_Id;
+                }
+            });
+        });
+
+
+        var obj = {dataUrl: url, dataId: id, menuName: name}
+        top.wen.tabMenu(obj)
+    }
+</script>
+</html>

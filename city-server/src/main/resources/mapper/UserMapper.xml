@@ -8,7 +8,7 @@
             a.username,
             a.password,
             a.phone,
-            a.mail,
+            a.email,
             a.actualName,
             a.accountType,
             a.companyName,
@@ -26,7 +26,7 @@
             `UserName`,
             `Password`,
             `Phone`,
-            `Mail`,
+            `Email`,
             `ActualName`,
             `AccountType`,
             `CompanyName`,
@@ -34,7 +34,7 @@
             `UpdateTime`,
             `Amount`,
             `AppKey`,
-            `roles`
+            `Roles`
         ) VALUES (
             #{username},
             #{password},
@@ -51,10 +51,32 @@
         )
     </insert>
 
+    <!-- 查找用户 -->
     <select id="findByUsername" resultType="org.sixcity.domain.User">
         <include refid="selectColumns"/>
         WHERE UserName = #{username}
     </select>
+    <select id="findById" resultType="org.sixcity.domain.User">
+        <include refid="selectColumns"/>
+        WHERE Id = #{id}
+    </select>
+
+    <!-- 更新用户密码 -->
+    <update id="updatePassword">
+        UPDATE User_t
+        SET
+        `Password` = #{password}
+        WHERE `UserName` = #{username}
+    </update>
+
+    <!-- 更新用户信息 -->
+    <update id="updateUser">
+        UPDATE User_t
+        SET
+            `Email` = #{email},
+            `Phone` = #{phone}
+        WHERE `UserName` = #{username}
+    </update>
 
     <!-- 修改用户
     <update id="updateInfo">

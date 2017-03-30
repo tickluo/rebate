@@ -4,21 +4,24 @@ import com.alibaba.fastjson.JSONObject;
 import model.Result;
 import model.ResultCode;
 import org.sixcity.domain.User;
-import org.sixcity.domain.dto.LoginForm;
-import org.sixcity.domain.dto.RegisterUserForm;
+import org.sixcity.domain.dto.post.LoginForm;
+import org.sixcity.domain.dto.post.RegisterUserForm;
 
 import org.sixcity.security.service.AuthService;
 import org.sixcity.service.serviceimpl.CaptchaService;
 import org.sixcity.service.serviceimpl.ShortMessageService;
 import org.sixcity.service.serviceimpl.UserService;
+import org.sixcity.util.CookieUtils;
 import org.sixcity.util.MessageHandleUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import util.RandomUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -41,6 +44,9 @@ public class AuthController {
         this.authService = authService;
         this.captchaService = captchaService;
     }
+
+    @Value("${cookie.token.name}")
+    private String cookieTokenName;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
@@ -74,13 +80,18 @@ public class AuthController {
         User userEntity = JSONObject.parseObject(JSONObject.toJSONString(user), User.class);
         userEntity.setAppkey(RandomUtils.uuid());
         //do register
-        userService.registerUser(userEntity);
+        if (userService.registerUser(userEntity) <= 0) {
+            return Result.createErrorResult(ResultCode.DAO_ERROR)
+                    .setMessage("注册失败，请重试");
+        }
         return Result.createSuccessResult();
     }
 
     @ResponseBody
     @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
-    public Result loginPost(@RequestBody @Valid LoginForm user, BindingResult bindingResult) {
+    public Result loginPost(@RequestBody @Valid LoginForm user,
+                            HttpServletResponse httpServletResponse,
+                            BindingResult bindingResult) {
         // valid params
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
@@ -99,6 +110,7 @@ public class AuthController {
                     .setMessage("密码错误，请重新输入");
         }*/
         final String token = authService.login(user.getUsername(), user.getPassword());
-        return Result.createSuccessResult(token,"登录成功");
+        CookieUtils.create(httpServletResponse, cookieTokenName, token);
+        return Result.createSuccessResult();
     }
 }

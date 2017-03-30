@@ -1,4 +1,13 @@
-var storage, fail, uid; try { uid = new Date; (storage = window.localStorage).setItem(uid, uid); fail = storage.getItem(uid) != uid; storage.removeItem(uid); fail && (storage = false); } catch (e) { }
+var storage, fail, uid;
+try {
+    uid = new Date;
+    (storage = window.localStorage).setItem(uid, uid);
+    fail = storage.getItem(uid) != uid;
+    storage.removeItem(uid);
+    fail && (storage = false);
+} catch (e) {
+}
+var globalUser = {};
 if (storage) {
     var usedSkin = localStorage.getItem('config-skin');
     if (usedSkin != '' && usedSkin != null) {
@@ -17,12 +26,15 @@ $(function () {
         try {
             var usedSkin = localStorage.getItem('config-skin');
             if (usedSkin != '') {
-                $('#skin-colors .skin-changer').removeClass('active'); $('#skin-colors .skin-changer[data-skin="' + usedSkin + '"]').addClass('active');
+                $('#skin-colors .skin-changer').removeClass('active');
+                $('#skin-colors .skin-changer[data-skin="' + usedSkin + '"]').addClass('active');
             }
         }
-        catch (e) { console.log(e); }
+        catch (e) {
+            console.log(e);
+        }
     }
-})
+});
 $.fn.removeClassPrefix = function (prefix) {
     this.each(function (i, el) {
         var classes = el.className.split(" ").filter(function (c) {
@@ -33,16 +45,21 @@ $.fn.removeClassPrefix = function (prefix) {
     return this;
 };
 $(function ($) {
-    $('#config-tool-cog').on('click', function () { $('#config-tool').toggleClass('closed'); }); $('#config-fixed-header').on('change', function () {
+    $('#config-tool-cog').on('click', function () {
+        $('#config-tool').toggleClass('closed');
+    });
+    $('#config-fixed-header').on('change', function () {
         var fixedHeader = '';
         if ($(this).is(':checked')) {
-            $('body').addClass('fixed-header'); fixedHeader = 'fixed-header';
+            $('body').addClass('fixed-header');
+            fixedHeader = 'fixed-header';
         }
         else {
             $('body').removeClass('fixed-header');
             if ($('#config-fixed-sidebar').is(':checked')) {
                 $('#config-fixed-sidebar').prop('checked', false);
-                $('#config-fixed-sidebar').trigger('change'); location.reload();
+                $('#config-fixed-sidebar').trigger('change');
+                location.reload();
             }
         }
     });
@@ -58,7 +75,9 @@ $(function ($) {
             try {
                 localStorage.setItem(key, value);
             }
-            catch (e) { console.log(e); }
+            catch (e) {
+                console.log(e);
+            }
         }
     }
 });
@@ -101,7 +120,7 @@ $(function ($) {
                     topPosition -= 6 * $(this).outerHeight();
                 }
                 $('#nav-col-submenu').html($item.children('.submenu').clone());
-                $('#nav-col-submenu > .submenu').css({ 'top': topPosition });
+                $('#nav-col-submenu > .submenu').css({'top': topPosition});
             }
 
             $item.addClass('open');
@@ -149,6 +168,15 @@ $(function ($) {
             $('#ajax-loader').fadeOut();
         }, 300);
     });
+});
+$(function () {
+    postAjax("/user/getUserInfoByToken", {},
+        function (data) {
+            if (data.state == "success") {
+                globalUser = data.data;
+                $('#username_display').text(globalUser.username);
+            }
+        });
 });
 function GetLoadNav() {
     var data = top.clients.authorizeMenu;

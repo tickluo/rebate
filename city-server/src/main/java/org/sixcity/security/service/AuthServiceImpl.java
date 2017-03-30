@@ -1,8 +1,5 @@
 package org.sixcity.security.service;
 
-import org.sixcity.constant.SecurityConst;
-import org.sixcity.domain.User;
-import org.sixcity.mapper.UserMapper;
 import org.sixcity.security.JwtTokenUtil;
 import org.sixcity.security.model.JwtUser;
 
@@ -14,10 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import static org.codehaus.groovy.runtime.InvokerHelper.asList;
 
 @Service
 public class AuthServiceImpl implements AuthService {

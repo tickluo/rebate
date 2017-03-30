@@ -24,11 +24,25 @@ public class UserService extends CrudService<UserMapper, User> {
         return getDao().insert(user);
     }
 
-    /*public boolean checkLogin(String username, String password) {
+    public boolean checkLogin(String username, String password) {
 
         User userFindByUsername = findByUsername(username);
         return passwordEncoder.matches(password, userFindByUsername.getPassword());
-    }*/
+    }
+
+    @Transactional(readOnly = false)
+    public int modifyPasswordById(Long id, String password) {
+        return getDao().updatePassword(id, passwordEncoder.encode(password));
+    }
+
+    @Transactional(readOnly = false)
+    public int modifyUserInfoById(Long id, String email, String phone) {
+        return getDao().updateUser(id, email, phone);
+    }
+
+    public User findById(Long id) {
+        return getDao().findById(id);
+    }
 
     public User findByUsername(String username) {
         return getDao().findByUsername(username);
