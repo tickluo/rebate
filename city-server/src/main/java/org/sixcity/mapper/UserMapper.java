@@ -10,13 +10,11 @@ public interface UserMapper extends CrudDao<User> {
 
     int insert(User user);
 
-    int updatePassword(@Param("id")Long id, @Param("password") String password);
+    int updatePassword(@Param("id") Long id, @Param("password") String password);
 
-    int updateUser(@Param("id")Long id,
-                   @Param("email") String email,
-                   @Param("phone") String phone);
+    int updateUser(User user);
 
     User findByUsername(String username);
 
-    User findById(Long id);
+    User findById(@Param("id") Long id);
 }

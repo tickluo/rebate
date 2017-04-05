@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.sixcity.mapper.BankMapper">
+
+    <sql id="selectColumns">
+        SELECT
+            a.id,
+            a.UserId,
+            a.BankNo,
+            a.BankName,
+            a.BankProvince,
+            a.BankCity,
+            a.BankDistrict,
+            a.BankBranchName,
+            a.BankNum,
+            a.BankType,
+            a.OpenAccountName,
+            a.LicenceNum,
+            a.LicencePositive,
+            a.LicenceSide,
+            a.CreateTime,
+            a.UpdateTime
+        FROM Bank_Information_t a
+    </sql>
+
+    <!-- 插入银行信息 -->
+    <insert id="insert">
+        INSERT INTO Bank_Information_t (
+            UserId,
+            BankNo,
+            BankName,
+            BankProvince,
+            BankCity,
+            BankDistrict,
+            BankBranchName,
+            BankNum,
+            BankType,
+            OpenAccountName,
+            LicenceNum,
+            LicencePositive,
+            LicenceSide,
+            CreateTime,
+            UpdateTime
+        ) VALUES (
+            #{userId,},
+            #{bankNo,},
+            #{bankName,},
+            #{bankProvince,},
+            #{bankCity,},
+            #{bankDistrict,},
+            #{bankBranchName,},
+            #{bankNum,},
+            #{bankType,},
+            #{openAccountName,},
+            #{licenceNum,},
+            #{licencePositive,},
+            #{licenceSide,},
+            #{createTime,},
+            #{updateTime}
+        )
+    </insert>
+
+    <!-- 查找银行信息 -->
+    <select id="findByUserId" resultType="org.sixcity.domain.Bank">
+        <include refid="selectColumns"/>
+        WHERE UserId = #{userId}
+    </select>
+
+    <select id="checkBankExist" resultType="boolean">
+        SELECT CASE WHEN count(Id) > 0 THEN 1 ELSE 0 END
+        FROM Bank_Information_t
+        WHERE BankNum = #{bankNum}
+    </select>
+
+    <!-- 更新 -->
+    <update id="updatePassword">
+        UPDATE User_t
+        SET
+            `Password` = #{password}
+        WHERE `Id` = #{id}
+    </update>
+
+    <!-- 更新 -->
+    <update id="updateUser">
+        UPDATE User_t
+        SET
+            `Email`      = #{email},
+            `Phone`      = #{phone},
+            `UpdateTime` = #{updateTime}
+        WHERE `Id` = #{id}
+    </update>
+
+</mapper>
