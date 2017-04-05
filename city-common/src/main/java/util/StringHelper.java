@@ -1,21 +1,23 @@
 package util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public class StringUtils {
+public class StringHelper extends StringUtils {
 
     /**
      * 验证可能为空格或者""及null的字符串
      *
      * <pre>
-     *   StringUtils.isBlank(null)      = true
-     *   StringUtils.isBlank(&quot;&quot;)        = true
-     *   StringUtils.isBlank(&quot; &quot;)       = true
-     *   StringUtils.isBlank(&quot;bob&quot;)     = false
-     *   StringUtils.isBlank(&quot;  bob  &quot;) = false
+     *   StringHelper.isBlank(null)      = true
+     *   StringHelper.isBlank(&quot;&quot;)        = true
+     *   StringHelper.isBlank(&quot; &quot;)       = true
+     *   StringHelper.isBlank(&quot;bob&quot;)     = false
+     *   StringHelper.isBlank(&quot;  bob  &quot;) = false
      * </pre>
      *
      * @param cs

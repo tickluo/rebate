@@ -68,7 +68,7 @@ public class UserController {
         }
         JwtUser jwtUser = WebUtils.getCurrentUser();
         if (!userService.checkLogin(jwtUser.getUsername(), form.getOldPassword())) {
-            return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
+            return Result.createErrorResult(ResultCode.SERVICE_ERROR)
                     .setMessage("旧密码错误，请重新输入");
         }
 

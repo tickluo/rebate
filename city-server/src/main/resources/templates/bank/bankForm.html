@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="shared/layoutForm::layoutForm"></head>
+<script th:src="@{/vendor/Provinceslinkage/jquery.cityselect.js}"></script>
+<script th:src="@{/scripts/bank/bankForm.js}"></script>
+
+<div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#">基本信息</a></li>
+    </ul>
+    <div style="padding-top: 20px; margin-right: 50px;">
+        <table class="form">
+            <tr>
+                <th class="formTitle">银行名称</th>
+                <td class="formValue">
+                    <select id="BankName" name="BankName" class="form-control required" style="width:240px"
+                            onchange="ChangeBank()">
+                        <option value="0">请选择提现用的银行</option>
+                        <option value="1">交通银行</option>
+                        <option value="2">民生银行</option>
+                        <option value="3">招商银行</option>
+                        <option value="4">中国建设银行</option>
+                        <option value="5">中国工商银行</option>
+                        <option value="6">中国农业银行</option>
+                        <option value="7">中信银行</option>
+                        <option value="8">兴业银行</option>
+                        <option value="9">中国银行</option>
+                        <option value="10">其它</option>
+                    </select>
+                </td>
+                <td></td>
+                <td>
+                    <em style="color:green"> 如没有列出您的银行卡, 请选择其他. 请不要在这里设置信用卡</em>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">银行所在省市</th>
+                <td class="formValue">
+                    <div id="city_4" style="width:240px;">
+                        <select class="prov" id="BankProvince" name="BankProvince"></select>
+                        <select class="city" id="BankCity" name="BankCity" disabled="disabled"></select>
+                        <select class="dist" id="BankDistrict" name="BankDistrict" disabled="disabled">
+                        </select>
+                    </div>
+                </td>
+                <td></td>
+                <td>
+                    <em style="color:green">为了您可以正常收款，请仔细填写</em>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">开户支行名称</th>
+                <td class="formValue">
+                    <input id="BankBranchName" name="BankBranchName" type="text" class="form-control required"
+                           style="width:240px" placeholder="请输入开户支行名称"/>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">银行账号</th>
+                <td class="formValue">
+                    <input id="BankNum" name="BankNum" type="text" class="form-control required" style="width:240px"
+                           placeholder="请输入银行账号"/>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">账号性质</th>
+                <td class="formValue">
+                    <select id="BankType" name="BankType" class="form-control required" style="width:240px"
+                            onchange="ChangeType()">
+                        <option value="1">企业</option>
+                        <option value="2">个人</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle company">公司账户名称</th>
+                <th class="formTitle person">开户人</th>
+                <td class="formValue">
+                    <input id="OpenAcountName" name="OpenAcountName" type="text" class="form-control required"
+                           style="width:240px" placeholder=""/>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle company">营业执照号</th>
+                <th class="formTitle person">身份证号</th>
+                <td class="formValue">
+                    <input id="LicenceNum" name="LicenceNum" type="text" class="form-control required"
+                           style="width:240px" placeholder=""/>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle company">营业执正面</th>
+                <th class="formTitle person">身份证正面</th>
+
+                <td class="formValue">
+                    <form action="/" id="fileForm1" method="post" enctype="multipart/form-data">
+                        <input type="file" name="image" id="FileUpload1" style="width:170px"/>
+                    </form>
+                </td>
+
+                <td>
+                    <label id="res1" style="color:red"></label>
+                    <input id="LicencePositive" name="LicencePositive" type="text" placeholder="请输入" hidden="hidden"/>
+                </td>
+                <td>
+                    <em style="color:green">请上传 jpg、png、gif 格式的扫描件，大小不超过 10M</em>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle company">开户许可证</th>
+                <th class="formTitle person">身份证反面</th>
+                <td class="formValue">
+                    <form action="/" id="fileForm2" method="post" enctype="multipart/form-data">
+                        <input type="file" name="image" id="FileUpload2" style="width:170px"/>
+                    </form>
+                </td>
+
+                <td>
+                    <label id="res2" style="color:red"></label>
+                    <input id="LicenceSide" name="LicenceSide" type="text" placeholder="请输入" hidden="hidden"/>
+                </td>
+                <td>
+                    <em style="color:green">请上传 jpg、png、gif 格式的扫描件，大小不超过 10M</em>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle "></th>
+                <td class="formValue">
+                    <label id="mes" style="color:red"></label>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</html>
+  
