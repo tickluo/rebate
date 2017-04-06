@@ -24,7 +24,7 @@
                     </li>
                     <li>
                         <label>专属AppKey：</label>
-                        <label id="user_app_display"></label>
+                        <label>@ViewData["appkey"]</label>
                     </li>
                     <li style="margin-top:20px;">
                         链接规则:<br/><br/>
@@ -114,18 +114,6 @@
     </div>
 </div>
 <script type="text/javascript">
-
-    $(function () {
-        var globalUser = {};
-        postAjax("/user/getUserInfoByToken", {},
-            function (data) {
-                if (data.state == "success") {
-                    globalUser = data.data;
-                    $("#user_app_display").text(globalUser.appkey)
-                }
-            });
-    });
-
     //打开各网站返利点
     function lookSite() {
         var id = "";

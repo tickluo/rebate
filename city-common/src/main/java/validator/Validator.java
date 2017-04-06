@@ -1,7 +1,7 @@
 package validator;
 
 import exception.ValidateException;
-import util.StringHelper;
+import util.StringUtils;
 import util.ValidateUtils;
 
 public enum Validator {
@@ -11,7 +11,7 @@ public enum Validator {
     NOT_BLANK {
         @Override
         public void validate(String name, String value) throws ValidateException {
-            if (StringHelper.isBlank(value)) {
+            if (StringUtils.isBlank(value)) {
                 throw new ValidateException(name + "不能为空！");
             }
         }

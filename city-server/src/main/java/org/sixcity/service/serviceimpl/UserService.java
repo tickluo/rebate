@@ -37,12 +37,7 @@ public class UserService extends CrudService<UserMapper, User> {
 
     @Transactional(readOnly = false)
     public int modifyUserInfoById(Long id, String email, String phone) {
-        User user = new User();
-        user.preUpdate();
-        user.setId(id);
-        user.setEmail(email);
-        user.setPhone(phone);
-        return getDao().updateUser(user);
+        return getDao().updateUser(id, email, phone);
     }
 
     public User findById(Long id) {

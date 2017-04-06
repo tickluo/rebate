@@ -18,7 +18,7 @@ required:必选项
 
 		// 默认值
 		settings=$.extend({
-		    url: "../../vendor/Provinceslinkage/city.min.js",
+		    url: "../../Content/js/Provinceslinkage/city.min.js",
 			prov:null,
 			city:null,
 			dist:null,

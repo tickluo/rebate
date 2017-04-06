@@ -65,18 +65,17 @@
     <update id="updatePassword">
         UPDATE User_t
         SET
-            `Password` = #{password}
-        WHERE `Id` = #{id}
+        `Password` = #{password}
+        WHERE `UserName` = #{username}
     </update>
 
     <!-- 更新用户信息 -->
     <update id="updateUser">
         UPDATE User_t
         SET
-            `Email`      = #{email},
-            `Phone`      = #{phone},
-            `UpdateTime` = #{updateTime}
-        WHERE `Id` = #{id}
+            `Email` = #{email},
+            `Phone` = #{phone}
+        WHERE `UserName` = #{username}
     </update>
 
     <!-- 修改用户
