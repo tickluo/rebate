@@ -1,17 +1,10 @@
 var openAccountList;
+var globalUser = {};
+
 $(function () {
 
     //得到开户人
     GetOpenAccount();
-
-    //返利的产生
-    GetProduce(0);
-
-    //提现记录
-    GetRecord();
-
-    //时间选择
-    ChangeTimeType();
 
     //用户的余额查询
     GetUserAmount();
@@ -19,114 +12,34 @@ $(function () {
     //预计到账时间
     GetArrivalsTime();
 });
-//返利的产生
-function GetProduce(type) {
-    var year = $("#txt_timeType").val();
-    if (type == 1) {
-        year = $("#txt_timeType").val();
-    }
 
-    $.ajax({
-        url: "/RebateManger/GetRebateProduceList?year=" + year,
-        type: "Get",
-        dataType: "json",
-        success: function (data) {
-            if (data.List.length > 0) {
-
-                var html = '';
-                for (var i = 0; i < data.List.length; i++) {
-                    var ch = new Array;
-                    ch = data.List[i].PDate.split("-");
-                    var date = ch[0] + "-" + ch[1];
-
-                    html = html + "<tr id='pro" + i + "'>" +
-                        "<td>" + date + "</td>" +
-                        "<td>" + data.List[i].RebateMoney.toFixed(2) + "</td>" +
-                        "<td>" + data.List[i].ApplyMoney.toFixed(2) + "</td>" +
-                        "<td>" + data.List[i].balance.toFixed(2) + "</td>" +
-                        "</tr>";
-                }
-
-                html = html + "<tr id='proLast' style=\"border:1px solid rgb(221, 221, 221)\">" +
-                    "<td >总结</td>" +
-                    "<td>" + data.AllRebateMon.toFixed(2) + "</td>" +
-                    "<td>" + data.AllAplplyMon.toFixed(2) + "</td>" +
-                    "<td>" + data.AllBalance.toFixed(2) + "</td>" +
-                    "</tr>";
-
-                $("#pro").after(html);
-            } else {
-                $("#proNoData").empty();
-                var html = "";
-                html = html + "<tr id='proNoData' style=\"border:1px solid rgb(221, 221, 221)\">" +
-                    "<td colspan='4'>暂时还没有数据....</td>" +
-                    "</tr>";
-                $("#pro").after(html);
-            }
-        }
-
-    });
-
-}
-//提现记录
-function GetRecord() {
-    var year = 2016;
-    $.ajax({
-        url: "/RebateManger/GetCashRecordList",
-        type: "Get",
-        dataType: "json",
-        success: function (data) {
-
-            if (data.length > 0) {
-                var html = '';
-                for (var i = 0; i < data.length; i++) {
-                    var payTime = data[i].PayTime == null ? "" : data[i].PayTime;
-                    html = html + "<tr id='rec" + i + "'>" +
-                        "<td>" + data[i].ApplyTime + "</td>" +
-                        "<td>" + payTime + "</td>" +
-                        "<td>" + data[i].AcountName + "</td>" +
-                        "<td>" + data[i].BankName + "</td>" +
-                        "<td>" + data[i].BankNum + "</td>" +
-                        "<td>" + data[i].ApplyGold + "</td>" +
-                        "</tr>";
-                }
-                $("#rec").after(html);
-
-            } else {
-                $("#cesNoData").empty();
-                var html = "";
-                html = html + "<tr id='cesNoData'>" +
-                    "<td colspan='6'>暂时还没有数据....</td>" +
-                    "</tr>";
-                $("#rec").after(html);
-            }
-        }
-    });
-}
 //开户人
 function GetOpenAccount() {
     $.ajax({
-        url: "/RebateManger/GetOpenAcountName",
+        url: "/bank/getOpenAccountName",
         type: "Get",
         dataType: "json",
         success: function (data) {
-            if (data.length > 0) {
-                openAccountList = data;
-
+            if (data.success && data.data.length > 0) {
+                openAccountList = data.data;
+                var list = data.data;
                 var ddl = $("#OpenAcountName");
                 //转成Json对象
-                var result = eval(data);
+                var result = eval(list);
 
                 //循环遍历 下拉框绑定
                 $(result).each(function (key) {
                     //第一种方法
-                    var opt = $("<option></option>").text(result[key].OpenAcountName).val(result[key].BankID);
+                    var opt = $("<option></option>").text(result[key].openAccountName).val(result[key].id);
                     ddl.append(opt);
                 });
 
-                $("#BankName").text(data[0]["BankName"]);
-                $("#BankBranchName").text(data[0]["BankBranchName"]);
-                $("#BankNum").text(data[0]["BankNum"]);
+                $("#BankName").text(list[0]["bankName"]);
+                $("#BankBranchName").text(list[0]["bankBranchName"]);
+                $("#BankNum").text(list[0]["bankNum"]);
+            }
+            else {
+                $("#errMes").text(data.message);
             }
         }
 
@@ -136,86 +49,84 @@ function GetOpenAccount() {
 function ChangeType() {
     var id = $("#OpenAcountName").val();
     $(openAccountList).each(function (key) {
-        if (id == openAccountList[key].BankID) {
-            $("#BankName").text(openAccountList[key]["BankName"]);
-            $("#BankBranchName").text(openAccountList[key]["BankBranchName"]);
-            $("#BankNum").text(openAccountList[key]["BankNum"]);
+        if (id == openAccountList[key].id) {
+            $("#BankName").text(openAccountList[key]["bankName"]);
+            $("#BankBranchName").text(openAccountList[key]["bankBranchName"]);
+            $("#BankNum").text(openAccountList[key]["bankNum"]);
         }
     });
 }
 //提交申请
 function btn_Submit() {
     if (openAccountList != null) {
-        $.ajax({
-            url: "/Rebate/RebateManger/SetCashRecord",
-            data: {BankID: $.trim($("#OpenAcountName").val()), money: $("#Money").val()},
-            type: "post",
-            dataType: "json",
-            success: function (data) {
-                if (data.state == 1) {
-                    //金额显示减掉
-                    var canMoney = $("#can").text();
-                    var money = $("#Money").val();
+        var $money = $("#Money");
+        if ($money.val() == "") {
+            $money.focus();
+            $("#errMes").text("请输入提现金额");
+            return false;
+        }
+        if (!checkMoney($money.val())) {
+            $money.focus();
+            $("#errMes").text("请输入有效的金额");
+            return false;
+        }
+        postAjax("/rebate/doRebateCash", {
+            bankId: $.trim($("#OpenAcountName").val()),
+            applyMoney: $money.val()
+        }, function (data) {
+            if (data.state == "success") {
+                //金额显示减掉
+                var $can = $("#can");
+                var canMoney = $can.text();
+                var money = $("#Money").val();
 
-                    var mm = sub(canMoney, money);
-                    $("#can").text(mm.toFixed(2));
-                    //记录插入一行
-                    var myDate = new Date();
-                    var time = myDate.getFullYear() + "-" + myDate.getMonth() + 1 + "-" + myDate.getDay() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds();
+                var mm = sub(canMoney, money);
+                $can.text(mm.toFixed(2));
+                //记录插入一行
+                var myDate = new Date();
+                var time = myDate.getFullYear() + "-" + myDate.getMonth() + 1 + "-" + myDate.getDay() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds();
 
-                    //获取开户人
-                    var text = "";
-                    var obj = document.getElementById("OpenAcountName");
-                    for (i = 0; i < obj.length; i++) {//下拉框的长度就是它的选项数.
-                        if (obj[i].selected == true) {
-                            text = obj[i].text;//获取当前选择项的文本.
-                        }
+                //获取开户人
+                var text = "";
+                var obj = document.getElementById("OpenAcountName");
+                for (i = 0; i < obj.length; i++) {//下拉框的长度就是它的选项数.
+                    if (obj[i].selected == true) {
+                        text = obj[i].text;//获取当前选择项的文本.
                     }
-
-                    var html = "<tr id='recadd'>" +
-                        "<td>" + time + "</td>" +
-                        "<td></td>" +
-                        "<td>" + text + "</td>" +
-                        "<td>" + $("#BankName").text() + "</td>" +
-                        "<td>" + $("#BankNum").text() + "</td>" +
-                        "<td>" + money + "</td>" +
-                        "</tr>";
-
-                    $("#rec").after(html);
-                    alert("提现成功");
-                } else {
-                    alert(data.message);
                 }
+
+                var html = "<tr id='recadd'>" +
+                    "<td>" + time + "</td>" +
+                    "<td></td>" +
+                    "<td>" + text + "</td>" +
+                    "<td>" + $("#BankName").text() + "</td>" +
+                    "<td>" + $("#BankNum").text() + "</td>" +
+                    "<td>" + money + "</td>" +
+                    "</tr>";
+
+                $("#rec").after(html);
+                $("#errMes").text("提现成功");
+            } else {
+                $("#errMes").text(data.message);
             }
         });
-
     } else {
         alert("请先填写银行信息");
     }
 
 }
-//时间选择
-function ChangeTimeType() {
 
-    //时间选择
-    $("#txt_timeType").change(function () {
-        $("#RebateProduce tr:gt(0)").empty();
-        GetProduce(1);
-    });
-}
 //用户的余额查询
 function GetUserAmount() {
-    $.ajax({
-        url: "/RebateManger/GetUserAmount",
-        type: "Get",
-        dataType: "json",
-        success: function (data) {
-            $("#all").text(data.MonthAllMount.toFixed(2));
-            $("#can").text(data.CanWithdrawMount.toFixed(2));
-        }
-
-    });
+    postAjax("/user/getUserInfoByToken", {},
+        function (data) {
+            if (data.state == "success") {
+                globalUser = data.data;
+                $("#can").text(globalUser.amount)
+            }
+        });
 }
+
 //预计到账时间
 function GetArrivalsTime() {
     var myDate = new Date();
@@ -228,5 +139,11 @@ function GetArrivalsTime() {
         month = month + 1;
     }
     $("#Arrival").text(year + "-" + month + "-5");
+
+}
+
+function checkMoney(money) {
+    var regex = /^\s*-?[1-9]\d*(\.\d{1,2})?\s*$/;
+    return regex.test(money)
 
 }

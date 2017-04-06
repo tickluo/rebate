@@ -25,6 +25,11 @@
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang}</version>
         </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io}</version>
+        </dependency>
 
         <!-- transaction-->
         <dependency>
@@ -54,6 +59,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
         </dependency>
     </dependencies>
 

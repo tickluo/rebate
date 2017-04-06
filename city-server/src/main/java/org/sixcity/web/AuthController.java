@@ -73,7 +73,7 @@ public class AuthController {
         }
         // here valid shortMessageCode
         if (shortMessageService.validCaptcha(user.getCode())) {
-            return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
+            return Result.createErrorResult(ResultCode.SERVICE_ERROR)
                     .setMessage("验证码错误，请重新输入");
         }
         //build User Entity
@@ -100,7 +100,7 @@ public class AuthController {
         }
         // here valid captcha
         if (captchaService.validCaptcha(user.getCode())) {
-            return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
+            return Result.createErrorResult(ResultCode.SERVICE_ERROR)
                     .setMessage("验证码错误，请重新输入");
         }
 
