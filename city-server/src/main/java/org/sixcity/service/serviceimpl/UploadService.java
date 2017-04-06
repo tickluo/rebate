@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 public class UploadService {
 
     private static Path getRootPath() {
-        return Paths.get(PathConst.User_UPLOAD_ROOT);
+        return Paths.get(PathConst.USER_UPLOAD_ROOT);
     }
 
     public String saveTempImage(MultipartFile image) {

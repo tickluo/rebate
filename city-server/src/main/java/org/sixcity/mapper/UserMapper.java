@@ -14,6 +14,8 @@ public interface UserMapper extends CrudDao<User> {
 
     int updateUser(User user);
 
+    int updateAmount(User user);
+
     User findByUsername(String username);
 
     User findById(@Param("id") Long id);

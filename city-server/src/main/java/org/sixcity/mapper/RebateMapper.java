@@ -14,6 +14,8 @@ public interface RebateMapper extends CrudDao<CashOut> {
 
     int Update(CashOut cash);
 
+    int getRebateCountByUserId(@Param("userId") Long userId);
+
     List<CashOut> findByUserId(@Param("userId") Long userId);
 
 }

@@ -8,6 +8,8 @@ import service.CrudService;
 
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 /**
  * 用户服务实现
  */
@@ -43,6 +45,14 @@ public class UserService extends CrudService<UserMapper, User> {
         user.setEmail(email);
         user.setPhone(phone);
         return getDao().updateUser(user);
+    }
+
+    @Transactional(readOnly = false)
+    public int modifyAmountById(Long id, BigDecimal amount) {
+        User user = new User();
+        user.setId(id);
+        user.setAmount(amount);
+        return getDao().updateAmount(user);
     }
 
     public User findById(Long id) {

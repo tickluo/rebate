@@ -66,6 +66,12 @@
         WHERE UserId = #{userId}
     </select>
 
+    <select id="findById" resultType="org.sixcity.domain.Bank">
+        <include refid="selectColumns"/>
+        WHERE Id = #{id}
+    </select>
+
+    <!-- 查找银行信息是否存在-->
     <select id="checkBankExist" resultType="boolean">
         SELECT CASE WHEN count(Id) > 0 THEN 1 ELSE 0 END
         FROM Bank_Information_t

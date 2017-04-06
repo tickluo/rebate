@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.sixcity.mapper.RebateMapper">
+
+    <sql id="selectColumns">
+        SELECT
+            a.Id,
+            a.UserId,
+            a.AccountName,
+            a.BankName,
+            a.BankId,
+            a.BankNum,
+            a.ApplyMoney,
+            a.PayTime,
+            a.State,
+            a.CreateTime,
+            a.UpdateTime
+        FROM Cashout_Record_t a
+    </sql>
+
+    <!-- 插入银行信息 -->
+    <insert id="insert">
+        INSERT INTO Cashout_Record_t (
+            UserId,
+            AccountName,
+            BankName,
+            BankId,
+            BankNum,
+            ApplyMoney,
+            PayTime,
+            State,
+            CreateTime,
+            UpdateTime
+        ) VALUES (
+            #{userId},
+            #{accountName},
+            #{bankName},
+            #{bankId},
+            #{bankNum},
+            #{applyMoney},
+            #{payTime},
+            #{state},
+            #{createTime},
+            #{updateTime}
+        )
+    </insert>
+
+    <!-- 查找银行信息 -->
+    <select id="findByUserId" resultType="org.sixcity.domain.CashOut">
+        <include refid="selectColumns"/>
+        WHERE UserId = #{userId}
+    </select>
+
+    <select id="findById" resultType="org.sixcity.domain.CashOut">
+        <include refid="selectColumns"/>
+        WHERE Id = #{id}
+    </select>
+
+    <!-- 查询用户提现次数 -->
+    <select id="getRebateCountByUserId" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM Cashout_Record_t
+        WHERE YEAR(CreateTime) = YEAR(now())
+              AND MONTH(CreateTime) = MONTH(now())
+              AND UserId = #{userId}
+    </select>
+
+</mapper>

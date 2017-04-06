@@ -9,6 +9,9 @@ $(function () {
     //用户的余额查询
     GetUserAmount();
 
+    //用户本月提现次数查询
+    GetUserRebateTimes();
+
     //预计到账时间
     GetArrivalsTime();
 });
@@ -60,6 +63,7 @@ function ChangeType() {
 function btn_Submit() {
     if (openAccountList != null) {
         var $money = $("#Money");
+        var $rebateCount = $("#rebateCount");
         if ($money.val() == "") {
             $money.focus();
             $("#errMes").text("请输入提现金额");
@@ -68,6 +72,10 @@ function btn_Submit() {
         if (!checkMoney($money.val())) {
             $money.focus();
             $("#errMes").text("请输入有效的金额");
+            return false;
+        }
+        if ($rebateCount.text() <= 0) {
+            $("#errMes").text("您本月提现次数已经用完，请等待下月");
             return false;
         }
         postAjax("/rebate/doRebateCash", {
@@ -82,29 +90,9 @@ function btn_Submit() {
 
                 var mm = sub(canMoney, money);
                 $can.text(mm.toFixed(2));
-                //记录插入一行
-                var myDate = new Date();
-                var time = myDate.getFullYear() + "-" + myDate.getMonth() + 1 + "-" + myDate.getDay() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds();
+                //提现次数减一
+                $rebateCount.text($rebateCount.text() - 1);
 
-                //获取开户人
-                var text = "";
-                var obj = document.getElementById("OpenAcountName");
-                for (i = 0; i < obj.length; i++) {//下拉框的长度就是它的选项数.
-                    if (obj[i].selected == true) {
-                        text = obj[i].text;//获取当前选择项的文本.
-                    }
-                }
-
-                var html = "<tr id='recadd'>" +
-                    "<td>" + time + "</td>" +
-                    "<td></td>" +
-                    "<td>" + text + "</td>" +
-                    "<td>" + $("#BankName").text() + "</td>" +
-                    "<td>" + $("#BankNum").text() + "</td>" +
-                    "<td>" + money + "</td>" +
-                    "</tr>";
-
-                $("#rec").after(html);
                 $("#errMes").text("提现成功");
             } else {
                 $("#errMes").text(data.message);
@@ -123,6 +111,15 @@ function GetUserAmount() {
             if (data.state == "success") {
                 globalUser = data.data;
                 $("#can").text(globalUser.amount)
+            }
+        });
+}
+
+function GetUserRebateTimes() {
+    postAjax("/rebate/getUserRebateTimes", {},
+        function (data) {
+            if (data.state == "success") {
+                $("#rebateCount").text(10 - data.data)
             }
         });
 }

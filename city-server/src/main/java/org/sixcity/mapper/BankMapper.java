@@ -15,6 +15,8 @@ public interface BankMapper extends CrudDao<Bank> {
 
     List<Bank> findByUserId(@Param("userId") Long userId);
 
+    Bank findById(@Param("id") Long id);
+
     Boolean checkBankExist(@Param("bankNum") String bankNumber);
 
 }

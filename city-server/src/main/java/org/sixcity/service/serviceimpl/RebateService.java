@@ -21,5 +21,11 @@ public class RebateService extends CrudService<RebateMapper, CashOut> {
         return getDao().update(cashOut);
     }
 
+    /**
+     * 获取用户当月提现次数
+     */
+    public int getUserRebateTimes(Long userId) {
+        return getDao().getRebateCountByUserId(userId);
+    }
 
 }

@@ -31,10 +31,9 @@ public class CashOut extends DataEntity {
     @NotBlank(message = "申请金额不能为空")
     private BigDecimal applyMoney;
 
-    @NotBlank(message = "申请时间不能为空")
-    private Date applyTime;
-
     @NotBlank(message = "支付时间不能为空")
     private Date payTime;
 
+    @NotBlank(message = "提现状态不能为空")
+    private Integer state;
 }

@@ -79,6 +79,14 @@
         WHERE `Id` = #{id}
     </update>
 
+    <!-- 更新用户余额 -->
+    <update id="updateAmount">
+        UPDATE User_t
+        SET
+            `Amount` = #{amount}
+        WHERE `Id` = #{id}
+    </update>
+
     <!-- 修改用户
     <update id="updateInfo">
         UPDATE trip_user
