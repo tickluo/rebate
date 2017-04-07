@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="shared/layoutForm::layoutForm"></head>
+<link href="../../static/vendor/select2/select2.min.css"
+      th:href="@{/vendor/select2/select2.min.css}" rel="stylesheet"/>
+<script th:src="@{/vendor/select2/select2.min.js}"></script>
+<script th:src="@{/scripts/rebate/rebateSiteForm.js}"></script>
+
+<div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#">网站返点设置</a></li>
+    </ul>
+    <div style="padding-top: 20px; margin-right: 50px;">
+        <table class="form">
+            <tr>
+                <th class="formTitle">网站名称</th>
+                <td class="formValue">
+                    <select class="js-data-example-ajax">
+                        <option value="3620194" selected="selected">--请选择--</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">银行账号</th>
+                <td class="formValue">
+                    <input id="BankNum" name="BankNum" type="text" class="form-control required" style="width:240px"
+                           placeholder="请输入银行账号"/>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle "></th>
+                <td class="formValue">
+                    <label id="mes" style="color:red"></label>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</html>

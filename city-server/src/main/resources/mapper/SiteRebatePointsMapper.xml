@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.sixcity.mapper.SiteRebatePointsMapper">
+
+    <sql id="selectColumns">
+        SELECT
+            a.Id,
+            a.SiteName,
+            a.SiteUrl,
+            a.SitePoints,
+            a.CreateTime,
+            a.UpdateTime
+        FROM Site_Points_t a
+    </sql>
+
+    <!-- 插入网站返点信息 -->
+    <insert id="insert">
+        INSERT INTO Site_Points_t (
+            SiteName,
+            SiteUrl,
+            SitePoints,
+            CreateTime,
+            UpdateTime
+        ) VALUES (
+            #{siteName},
+            #{siteUrl},
+            #{sitePoints},
+            #{createTime},
+            #{updateTime}
+        )
+    </insert>
+
+    <!-- 更新网站返点 -->
+    <update id="update">
+        UPDATE Site_Points_t
+        SET
+            `SitePoints` = #{sitePoints}
+        WHERE `Id` = #{id}
+    </update>
+
+    <!-- 查找网站返点 -->
+    <select id="findAllList" resultType="org.sixcity.domain.SiteRebatePoints">
+        <include refid="selectColumns"/>
+        WHERE 1=1
+    </select>
+
+</mapper>

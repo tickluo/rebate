@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import service.CrudService;
 
+import java.util.List;
+
 @Service
 public class RebateService extends CrudService<RebateMapper, CashOut> {
 
@@ -26,6 +28,13 @@ public class RebateService extends CrudService<RebateMapper, CashOut> {
      */
     public int getUserRebateTimes(Long userId) {
         return getDao().getRebateCountByUserId(userId);
+    }
+
+    /**
+     * 获取提现记录列表
+     */
+    public List<CashOut> getCashRecordList(Long userId) {
+        return getDao().findByUserId(userId);
     }
 
 }

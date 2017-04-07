@@ -41,19 +41,19 @@ public abstract class DataEntity extends BaseEntity {
         this.updateTime = new Date();
     }
 
-    public Date getCreateDate() {
+    public Date getCreateTime() {
         return createTime == null ? null : (Date) createTime.clone();
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime == null ? null : (Date) createTime.clone();
     }
 
-    public Date getUpdateDate() {
+    public Date getUpdateTime() {
         return updateTime == null ? null : (Date) updateTime.clone();
     }
 
-    public void setUpdateDate(Date updateDate) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime == null ? null : (Date) updateTime.clone();
     }
 }

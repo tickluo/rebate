@@ -5,11 +5,13 @@ import model.ResultCode;
 import org.sixcity.constant.state.CashOutConst;
 import org.sixcity.domain.Bank;
 import org.sixcity.domain.CashOut;
+import org.sixcity.domain.SiteRebatePoints;
 import org.sixcity.domain.User;
 import org.sixcity.domain.dto.post.RebateCashForm;
 import org.sixcity.security.model.JwtUser;
 import org.sixcity.service.serviceimpl.BankService;
 import org.sixcity.service.serviceimpl.RebateService;
+import org.sixcity.service.serviceimpl.SiteRebatePointsService;
 import org.sixcity.service.serviceimpl.UserService;
 import org.sixcity.util.MessageHandleUtils;
 import org.sixcity.util.WebUtils;
@@ -38,12 +40,17 @@ public class RebateController {
     private final UserService userService;
     private final BankService bankService;
     private final RebateService rebateService;
+    private final SiteRebatePointsService siteRebatePointsService;
 
     @Autowired
-    public RebateController(UserService userService, BankService bankService, RebateService rebateService) {
+    public RebateController(UserService userService,
+                            BankService bankService,
+                            RebateService rebateService,
+                            SiteRebatePointsService siteRebatePointsService) {
         this.userService = userService;
         this.bankService = bankService;
         this.rebateService = rebateService;
+        this.siteRebatePointsService = siteRebatePointsService;
     }
 
     @RequestMapping(value = "rebateCash", method = RequestMethod.GET)
@@ -59,6 +66,18 @@ public class RebateController {
     @RequestMapping(value = "rebateSite", method = RequestMethod.GET)
     public String rebateSite() {
         return "rebate/rebateSite";
+    }
+
+    @RequestMapping(value = "rebateSiteForm", method = RequestMethod.GET)
+    public String rebateSiteForm() {
+        return "rebate/rebateSiteForm";
+    }
+
+    @RequestMapping(value = "getCashRecordList", method = RequestMethod.GET)
+    @ResponseBody
+    public List<CashOut> cashRecordList() {
+        JwtUser jwtUser = WebUtils.getCurrentUser();
+        return rebateService.getCashRecordList(jwtUser.getId());
     }
 
     @RequestMapping(value = "getUserRebateTimes", method = RequestMethod.POST)
@@ -121,4 +140,12 @@ public class RebateController {
         userService.modifyAmountById(userEntity.getId(),userEntity.getAmount().subtract(form.getApplyMoney()));
         return Result.createSuccessResult("添加成功");
     }
+
+    @RequestMapping(value = "getSiteRebateList", method = RequestMethod.GET)
+    @ResponseBody
+    public List<SiteRebatePoints> siteRebateList() {
+        JwtUser jwtUser = WebUtils.getCurrentUser();
+        return siteRebatePointsService.getFinalUserSitePoint(jwtUser.getId());
+    }
+
 }
