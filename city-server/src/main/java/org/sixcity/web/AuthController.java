@@ -15,11 +15,11 @@ import org.sixcity.util.CookieUtils;
 import org.sixcity.util.MessageHandleUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import util.RandomUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -60,7 +60,9 @@ public class AuthController {
 
     @ResponseBody
     @RequestMapping(value = "/doRegister", method = RequestMethod.POST)
-    public Result registerPost(@RequestBody @Valid RegisterUserForm user, BindingResult bindingResult) {
+    public Result registerPost(@RequestBody @Valid RegisterUserForm user,
+                               HttpServletResponse httpServletResponse,
+                               BindingResult bindingResult) {
         // valid params
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
@@ -69,7 +71,7 @@ public class AuthController {
         }
         if (userService.findByUsername(user.getUsername()) != null) {
             return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
-                    .setMessage("用户名已注册");
+                    .setMessage("该用户名已注册");
         }
         // here valid shortMessageCode
         if (shortMessageService.validCaptcha(user.getCode())) {
@@ -78,11 +80,18 @@ public class AuthController {
         }
         //build User Entity
         User userEntity = JSONObject.parseObject(JSONObject.toJSONString(user), User.class);
-        userEntity.setAppkey(RandomUtils.uuid());
+
         //do register
-        if (userService.registerUser(userEntity) <= 0) {
+        if (!userService.registerUser(userEntity)) {
             return Result.createErrorResult(ResultCode.DAO_ERROR)
                     .setMessage("注册失败，请重试");
+        }
+        try {
+            final String token = authService.login(user.getUsername(), user.getPassword());
+            CookieUtils.create(httpServletResponse, cookieTokenName, token);
+        } catch (AuthenticationException exception) {
+            return Result.createErrorResult(ResultCode.SSO_PERMISSION_ERROR)
+                    .setMessage("用户名或密码错误");
         }
         return Result.createSuccessResult();
     }
@@ -109,8 +118,20 @@ public class AuthController {
             return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
                     .setMessage("密码错误，请重新输入");
         }*/
-        final String token = authService.login(user.getUsername(), user.getPassword());
-        CookieUtils.create(httpServletResponse, cookieTokenName, token);
+        try {
+            final String token = authService.login(user.getUsername(), user.getPassword());
+            CookieUtils.create(httpServletResponse, cookieTokenName, token);
+        } catch (AuthenticationException exception) {
+            return Result.createErrorResult(ResultCode.SSO_PERMISSION_ERROR)
+                    .setMessage("用户名或密码错误");
+        }
         return Result.createSuccessResult();
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(HttpServletResponse httpServletResponse) {
+
+        CookieUtils.clear(httpServletResponse, cookieTokenName);
+        return "redirect:login";
     }
 }

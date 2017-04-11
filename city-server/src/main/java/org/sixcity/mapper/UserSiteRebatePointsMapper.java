@@ -16,4 +16,7 @@ public interface UserSiteRebatePointsMapper extends CrudDao<UserSiteRebatePoints
     int update(UserSiteRebatePoints points);
 
     List<UserSiteRebatePoints> findByUserId(@Param("userId") Long userId);
+
+    Boolean checkSiteRebatePointsExist(@Param("userId") Long userId, @Param("siteId") Long siteId);
+
 }

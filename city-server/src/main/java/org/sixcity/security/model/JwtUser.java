@@ -1,14 +1,10 @@
 package org.sixcity.security.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.sixcity.constant.SecurityConst;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 public class JwtUser implements UserDetails {
 
@@ -16,25 +12,29 @@ public class JwtUser implements UserDetails {
     private final String username;
     private final String password;
     private final String phone;
+    private Collection<SimpleGrantedAuthority> authorities;
 
     public JwtUser(
             Long id,
             String username,
             String password,
-            String phone) {
+            String phone,
+            Collection<SimpleGrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.phone = phone;
+        this.authorities = authorities;
     }
 
     //返回分配给用户的角色列表
-    @Override
+
+   /* @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(SecurityConst.SECURITY_ROLE_USER));
         return authorities;
-    }
+    }*/
 
     @JsonIgnore
     public Long getId() {
@@ -78,5 +78,14 @@ public class JwtUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setAuthorities(Collection<SimpleGrantedAuthority> authorities) {
+        this.authorities = authorities;
+    }
+
+    @Override
+    public Collection<SimpleGrantedAuthority> getAuthorities() {
+        return authorities;
     }
 }

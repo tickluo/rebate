@@ -33,19 +33,6 @@ public class AuthServiceImpl implements AuthService {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-/*    @Override
-    public int register(User userToAdd) {
-        final String username = userToAdd.getUsername();
-        if (userMapper.findByUsername(username) != null) {
-            return 0;
-        }
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        final String rawPassword = userToAdd.getPassword();
-        userToAdd.setPassword(encoder.encode(rawPassword));
-        userToAdd.setRoles(SecurityConst.SECURITY_ROLE_USER);
-        return userMapper.insert(userToAdd);
-    }*/
-
     @Override
     public String login(String username, String password) {
         UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
@@ -63,4 +50,5 @@ public class AuthServiceImpl implements AuthService {
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
         return jwtTokenUtil.refreshToken(token);
     }
+
 }

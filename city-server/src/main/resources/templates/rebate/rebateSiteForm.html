@@ -16,22 +16,41 @@
             <tr>
                 <th class="formTitle">网站名称</th>
                 <td class="formValue">
-                    <select class="js-data-example-ajax">
+                    <select id="siteName" class="form-control required" style="width:240px">
                         <option value="3620194" selected="selected">--请选择--</option>
                     </select>
                 </td>
+                <td></td>
             </tr>
             <tr>
-                <th class="formTitle">银行账号</th>
+                <th class="formTitle">用户</th>
                 <td class="formValue">
-                    <input id="BankNum" name="BankNum" type="text" class="form-control required" style="width:240px"
-                           placeholder="请输入银行账号"/>
+                    <select id="siteUser" class="form-control required" style="width:240px">
+                        <option value="3620194" selected="selected">--请选择--</option>
+                    </select>
                 </td>
+                <td></td>
+            </tr>
+            <tr>
+                <th class="formTitle">网站返利点</th>
+                <td class="formValue">
+                    <input id="sitePoints" name="sitePoints" type="text" class="form-control required"
+                           style="width:260px"
+                           placeholder="请输入返利点"/>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <th class="formTitle">网站Url</th>
+                <td class="formValue">
+                    <label id="siteUrl"></label>
+                </td>
+                <td></td>
             </tr>
             <tr>
                 <th class="formTitle "></th>
                 <td class="formValue">
-                    <label id="mes" style="color:red"></label>
+                    <label id="siteFormMes" style="color:red"></label>
                 </td>
             </tr>
         </table>

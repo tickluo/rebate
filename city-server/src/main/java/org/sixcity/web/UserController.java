@@ -2,6 +2,7 @@ package org.sixcity.web;
 
 import model.Result;
 import model.ResultCode;
+import org.sixcity.constant.SecurityConst;
 import org.sixcity.domain.dto.post.ResetPasswordForm;
 import org.sixcity.domain.dto.post.UserInfoForm;
 import org.sixcity.security.JwtTokenUtil;
@@ -13,6 +14,7 @@ import org.sixcity.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -23,7 +25,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "user")
-@PreAuthorize("hasRole('ROLE_USER')")
+@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN')")
 public class UserController {
 
     private final UserService userService;
@@ -55,6 +57,13 @@ public class UserController {
         JwtUser jwtUser = WebUtils.getCurrentUser();
 
         return Result.createSuccessResult(userService.findById(jwtUser.getId()), "用户信息");
+    }
+
+    @RequestMapping(value = "getAllMerchant", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @ResponseBody
+    public Result getAllMerchant() {
+        return Result.createSuccessResult(userService.getAllMerchant(), "商户列表");
     }
 
     @RequestMapping(value = "resetPassword", method = RequestMethod.POST)

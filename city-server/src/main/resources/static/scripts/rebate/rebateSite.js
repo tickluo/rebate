@@ -46,3 +46,16 @@ function btn_add() {
         }
     });
 }
+
+
+var layerSu = function () {
+
+    setTimeout(function () {
+
+        $.modalMsg("保存成功", "success")
+
+    },500)
+
+};
+
+window.layerSu = layerSu;

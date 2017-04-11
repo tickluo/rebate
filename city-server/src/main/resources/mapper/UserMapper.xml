@@ -15,7 +15,7 @@
             a.createTime,
             a.updateTime,
             a.amount,
-            a.appkey,
+            a.AppId,
             a.roles
         FROM User_t a
     </sql>
@@ -33,7 +33,7 @@
             `CreateTime`,
             `UpdateTime`,
             `Amount`,
-            `AppKey`,
+            `AppId`,
             `Roles`
         ) VALUES (
             #{username},
@@ -46,8 +46,25 @@
             #{createTime},
             #{updateTime},
             #{amount},
-            #{appkey},
+            #{appId},
             #{roles}
+        )
+    </insert>
+
+    <!-- 插入商户 -->
+    <insert id="insertMerchant">
+        INSERT INTO Merchant_t (
+            `AppId`,
+            `AppKey`,
+            `AppSecret`,
+            `CreateTime`,
+            `UpdateTime`
+        ) VALUES (
+            #{appId},
+            #{appKey},
+            #{appSecret},
+            #{createTime},
+            #{updateTime}
         )
     </insert>
 
@@ -59,6 +76,12 @@
     <select id="findById" resultType="org.sixcity.domain.User">
         <include refid="selectColumns"/>
         WHERE Id = #{id}
+    </select>
+
+    <!-- 获取所有商户-->
+    <select id="getAllMerchant" resultType="org.sixcity.domain.User">
+        <include refid="selectColumns"/>
+        WHERE Roles = 'ROLE_USER'
     </select>
 
     <!-- 更新用户密码 -->

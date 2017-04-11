@@ -105,7 +105,7 @@
                     $("#register_button").find('span').html("注册成功，正在跳转...");
                     $.register.formMessage("");
                     window.setTimeout(function () {
-                        window.location.href = "/Home/Index";
+                        window.location.href = "/home/index";
                     }, 3000);
                 } else {
                     $("#register_button").removeAttr('disabled').find('span').html("注册");

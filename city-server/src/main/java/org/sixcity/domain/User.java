@@ -25,8 +25,8 @@ public class User extends DataEntity {
     @Size(max = 10, min = 4, message = "用户名为4-10个英文字母或者数字")
     private String username;
 
-    @NotBlank(message = "Key不能为空")
-    private String appkey;
+    @NotBlank(message = "appId不能为空")
+    private String appId;
 
     @NotBlank(message = "账户类型不能为空")
     private String accountType;
@@ -51,6 +51,6 @@ public class User extends DataEntity {
     private String email;
 
     @NotBlank(message = "用户权限不能为空")
-    private String roles = SecurityConst.SECURITY_ROLE_USER;
+    private String roles;
 }
 

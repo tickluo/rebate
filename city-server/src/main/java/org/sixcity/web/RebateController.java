@@ -3,10 +3,7 @@ package org.sixcity.web;
 import model.Result;
 import model.ResultCode;
 import org.sixcity.constant.state.CashOutConst;
-import org.sixcity.domain.Bank;
-import org.sixcity.domain.CashOut;
-import org.sixcity.domain.SiteRebatePoints;
-import org.sixcity.domain.User;
+import org.sixcity.domain.*;
 import org.sixcity.domain.dto.post.RebateCashForm;
 import org.sixcity.security.model.JwtUser;
 import org.sixcity.service.serviceimpl.BankService;
@@ -34,7 +31,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/rebate")
-@PreAuthorize("hasRole('ROLE_USER')")
+@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN')")
 public class RebateController {
 
     private final UserService userService;
@@ -84,7 +81,7 @@ public class RebateController {
     @ResponseBody
     public Result rebateTimes() {
         JwtUser jwtUser = WebUtils.getCurrentUser();
-        return Result.createSuccessResult(rebateService.getUserRebateTimes(jwtUser.getId()),"提现次数");
+        return Result.createSuccessResult(rebateService.getUserRebateTimes(jwtUser.getId()), "提现次数");
     }
 
     @RequestMapping(value = "doRebateCash", method = RequestMethod.POST)
@@ -115,7 +112,7 @@ public class RebateController {
                     ResultCode.SERVICE_ERROR, "银行卡不存在");
         }
         //check user rebate times
-        if(rebateService.getUserRebateTimes(jwtUser.getId()) >= 10){
+        if (rebateService.getUserRebateTimes(jwtUser.getId()) >= 10) {
             return Result.createErrorResult(
                     ResultCode.SERVICE_ERROR, "提现次数已经用完");
         }
@@ -133,11 +130,11 @@ public class RebateController {
 
         //insert into cash out table
         //TODO:need transaction & amount parallel problem
-        if(rebateService.addCashOutRecord(cashOutEntity) < 1){
+        if (rebateService.addCashOutRecord(cashOutEntity) < 1) {
             return Result.createErrorResult(
                     ResultCode.DAO_ERROR, "添加失败");
         }
-        userService.modifyAmountById(userEntity.getId(),userEntity.getAmount().subtract(form.getApplyMoney()));
+        userService.modifyAmountById(userEntity.getId(), userEntity.getAmount().subtract(form.getApplyMoney()));
         return Result.createSuccessResult("添加成功");
     }
 
@@ -148,4 +145,19 @@ public class RebateController {
         return siteRebatePointsService.getFinalUserSitePoint(jwtUser.getId());
     }
 
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @RequestMapping(value = "saveSiteRebatePoint", method = RequestMethod.POST)
+    @ResponseBody
+    public Result siteRebatePointsPost(@RequestBody @Valid UserSiteRebatePoints form, BindingResult bindingResult) {
+        // valid params
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
+                    .setMessage(MessageHandleUtils.getControllerParamsInvalidMessage(fieldErrors));
+        }
+        if(!siteRebatePointsService.saveSiteRebatePoints(form)){
+            return Result.createErrorResult(ResultCode.DAO_ERROR).setMessage("保存失败");
+        }
+        return Result.createSuccessResult("添加成功");
+    }
 }

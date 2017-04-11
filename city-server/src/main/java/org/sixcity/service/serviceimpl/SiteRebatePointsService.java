@@ -8,6 +8,7 @@ import org.sixcity.domain.SiteRebatePoints;
 import org.sixcity.mapper.SiteRebatePointsMapper;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -57,5 +58,30 @@ public class SiteRebatePointsService {
         });
 
         return siteList;
+    }
+
+    /**
+     * 检查用户网站返利点是否已经设置
+     *
+     * @param userId
+     * @param siteId
+     * @return
+     */
+    public Boolean checkSiteRebatePointsExist(Long userId, Long siteId) {
+        return userSiteRebatePointsMapper.checkSiteRebatePointsExist(userId, siteId);
+    }
+
+    /**
+     * 保存用户网站返利点
+     *
+     * @param userSiteRebatePoints
+     * @return
+     */
+    @Transactional(readOnly = false)
+    public Boolean saveSiteRebatePoints(UserSiteRebatePoints userSiteRebatePoints) {
+        if (checkSiteRebatePointsExist(userSiteRebatePoints.getUserId(), userSiteRebatePoints.getSiteId())) {
+            return userSiteRebatePointsMapper.update(userSiteRebatePoints) > 0;
+        }
+        return userSiteRebatePointsMapper.insert(userSiteRebatePoints) > 0;
     }
 }

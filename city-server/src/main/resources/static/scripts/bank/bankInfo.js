@@ -50,9 +50,9 @@ var layerSu = function () {
 
     setTimeout(function () {
 
-        $.modalMsg("操作成功", "success")
+        $.modalMsg("添加成功", "success")
 
-    },1000)
+    },500)
 
 };
 

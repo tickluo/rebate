@@ -1,5 +1,7 @@
 package org.sixcity.service.serviceimpl;
 
+import org.sixcity.constant.SecurityConst;
+import org.sixcity.domain.Merchant;
 import org.sixcity.domain.User;
 import org.sixcity.mapper.UserMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -7,8 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import service.CrudService;
 
 import org.springframework.stereotype.Service;
+import util.RandomUtils;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 用户服务实现
@@ -19,11 +24,27 @@ public class UserService extends CrudService<UserMapper, User> {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Transactional(readOnly = false)
-    public int registerUser(User user) {
+    public Boolean registerUser(User user) {
+        //generate merchant keys
+        String appKey = RandomUtils.uuid();
+        String appSecret = RandomUtils.uuid();
+        String appId = "1088".concat(String.valueOf(new Date().getTime()));
 
+        //build User
         user.preInsert();
+        user.setAppId(appId);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return getDao().insert(user);
+        user.setRoles(SecurityConst.SECURITY_ROLE_USER);
+        //build Merchant
+        Merchant merchant = new Merchant();
+        merchant.setAppId(appId);
+        merchant.setAppKey(appKey);
+        merchant.setAppSecret(appSecret);
+        merchant.preInsert();
+
+        int addUser = getDao().insert(user);
+        int addMerchant = getDao().insertMerchant(merchant);
+        return addUser > 0 && addMerchant > 0;
     }
 
     public boolean checkLogin(String username, String password) {
@@ -63,4 +84,7 @@ public class UserService extends CrudService<UserMapper, User> {
         return getDao().findByUsername(username);
     }
 
+    public List<User> getAllMerchant() {
+        return getDao().getAllMerchant();
+    }
 }

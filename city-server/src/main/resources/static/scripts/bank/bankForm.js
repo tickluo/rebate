@@ -111,7 +111,6 @@ function submitForm() {
         return false;
     }
     var $BankDistrict = $("#BankDistrict").val() == null ? "" : $("#BankDistrict").val();
-    console.log($BankDistrict);
 
     postAjax("/bank/addBankInfo",{
         bankNo: $.trim($BankName.val()),
@@ -127,7 +126,7 @@ function submitForm() {
         licencePositive: $.trim($LicencePositive.val()),
         licenceSide: $.trim($LicenceSide.val())
     },function (data) {
-        if (data.statue == "1") {
+        if (data.state == "success") {
             $("#mes").text("新添加成功");
             $.currentWindow().$("#gridList").trigger("reloadGrid");
 
