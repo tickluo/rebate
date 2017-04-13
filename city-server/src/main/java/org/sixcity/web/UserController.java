@@ -90,7 +90,6 @@ public class UserController {
         return Result.createSuccessResult("修改成功");
     }
 
-
     @RequestMapping(value = "updateUserInfo", method = RequestMethod.POST)
     @ResponseBody
     public Result userInfoPost(@RequestBody @Valid UserInfoForm form, BindingResult bindingResult) {
@@ -109,4 +108,13 @@ public class UserController {
 
         return Result.createSuccessResult("修改成功");
     }
+
+    @RequestMapping(value = "getUserRebateAmount", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @ResponseBody
+    public Result getUserRebateAmount() {
+
+        return Result.createSuccessResult(userService.getAllMerchant(), "商户列表");
+    }
+
 }

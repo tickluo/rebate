@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="shared/layoutIndex::layoutIndex"></head>
+
+<head>
+    <base target="_blank"/>
+</head>
+
+<script th:src="@{/vendor/My97DatePicker/WdatePicker.js}"></script>
+<script th:src="@{/scripts/report/cpsReport.js}"></script>
+
+<div class="topPanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+    </div>
+    <div class="search">
+        <table>
+            <tr>
+                <td style="padding-left: 4px;">
+                    <div id="txt_timeType" class="btn-group">
+                        <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择时间</a>
+                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="javascript:void(0);" data-value="0"> 无限制</a></li>
+                            <li><a href="javascript:void(0);" data-value="1">下单时间</a></li>
+                            <li><a href="javascript:void(0);" data-value="2">转运时间</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <div class="input-group">
+                        <input id="txt_startTime" type="text" class="form-control" placeholder="请选择开始时间" onfocus="WdatePicker({dateFmt:'yyyy年MM月dd日'})" style="width: 200px;"/>
+                        <input id="txt_endTime" type="text" class="form-control" placeholder="请选择结束时间" onfocus="WdatePicker({dateFmt:'yyyy年MM月dd日'})" style="width: 200px;"/>
+                    </div>
+                </td>
+                <td style="padding-left: 4px;">
+                    <div id="txt_statue" class="btn-group">
+                        <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择状态</a>
+                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="javascript:void(0);" data-value="0">全部状态</a></li>
+                            <li><a href="javascript:void(0);" data-value="10">待付款</a></li>
+                            <li><a href="javascript:void(0);" data-value="11">已取消</a></li>
+                            <li><a href="javascript:void(0);" data-value="12">等待官网发货</a></li>
+                            <li><a href="javascript:void(0);" data-value="13">官方已发货</a></li>
+                            <li><a href="javascript:void(0);" data-value="14">转运中(可结算)</a></li>
+                            <li><a href="javascript:void(0);" data-value="15">已收货(可结算)</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td style="padding-left: 4px;">
+                    <div class="input-group">
+                        <input id="txt_keyword" type="text" class="form-control" placeholder="请输入要查询商品编号" style="width: 200px;"/>
+                        <span class="input-group-btn">
+                            <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </td>
+                <td style="padding-left: 4px;">
+                    <div class="input-group">
+                        <button id="btn_exist" type="button" class="btn  btn-primary" onclick="ExportData()">导出所有搜索结果</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridList"></table>
+    <div id="gridPager"></div>
+</div>
+
+<div style="margin-top:5px;">
+    <span>可申请返利: ￥<em style="font-size:medium;color:red" id="mon" >0.00</em> </span>
+</div>
+
+</html>

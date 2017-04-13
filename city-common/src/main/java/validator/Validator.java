@@ -33,18 +33,29 @@ public enum Validator {
     INT {
         @Override
         public void validate(String name, String value) throws ValidateException {
-            if (!ValidateUtils.isInteger(value)) {
+            if (!"".equals(value) &&!ValidateUtils.isInteger(value)) {
                 throw new ValidateException(name + "必须为整数！");
+            }
+        }
+    },
+    /**
+     * 日期验证 YYYY-MM-DD
+     */
+    DATE {
+        @Override
+        public void validate(String name, String value) throws ValidateException {
+            if (!ValidateUtils.isDate(value)) {
+                throw new ValidateException(name + "格式不对！");
             }
         }
     },
     /**
      * 日期验证
      */
-    DATE {
+    DATETIME {
         @Override
         public void validate(String name, String value) throws ValidateException {
-            if (!ValidateUtils.isDate(value)) {
+            if (!ValidateUtils.isDateTime(value)) {
                 throw new ValidateException(name + "格式不对！");
             }
         }

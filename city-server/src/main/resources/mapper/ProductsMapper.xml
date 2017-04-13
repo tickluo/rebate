@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.sixcity.mapper.ProductsMapper">
+
+    <sql id="selectColumns">
+        SELECT
+        a.Id,
+        a.ItemId,
+        a.TransId,
+        a.UserId,
+        a.Name,
+        a.Url,
+        a.Quantity,
+        a.Price,
+        a.ActuallyPay,
+        a.RebatePoint,
+        a.RebateTotalPrice,
+        a.Settlemented,
+        a.SettlementState,
+        a.SettlementTime,
+        a.ProductStatus,
+        a.OrderTime,
+        a.ArrivedTime,
+        a.TransTime,
+        a.CancelTime,
+        a.CreateTime,
+        a.UpdateTime
+        FROM Product_t a
+    </sql>
+
+    <!-- 插入商品信息 -->
+    <insert id="insert">
+        INSERT INTO Product_t (
+        ItemId,
+        TransId,
+        UserId,
+        Name,
+        Url,
+        Quantity,
+        Price,
+        ActuallyPay,
+        RebatePoint,
+        RebateTotalPrice,
+        Settlemented,
+        SettlementState,
+        SettlementTime,
+        ProductStatus,
+        OrderTime,
+        ArrivedTime,
+        TransTime,
+        CancelTime
+        ) VALUES (
+        #{ItemId},
+        #{TransId},
+        #{UserId},
+        #{Name},
+        #{Url},
+        #{Quantity},
+        #{Price},
+        #{ActuallyPay},
+        #{RebatePoint},
+        #{RebateTotalPrice},
+        #{Settlemented},
+        #{SettlementState},
+        #{SettlementTime},
+        #{ProductStatus},
+        #{OrderTime},
+        #{ArrivedTime},
+        #{TransTime},
+        #{CancelTime}
+        )
+    </insert>
+
+    <!-- 查找日期报表信息 -->
+    <select id="getDateReportList"  statementType="CALLABLE" resultType="org.sixcity.domain.dto.view.DateReport">
+         <![CDATA[
+        {CALL proc_DataReport(
+                #{timeType,mode=IN,jdbcType=INTEGER},
+                #{userId,mode=IN,jdbcType=INTEGER},
+                #{startTime,mode=IN,jdbcType=VARCHAR},
+                #{endTime,mode=IN,jdbcType=VARCHAR}
+        )}
+        ]]>
+    </select>
+
+    <!-- 查询商品列表-->
+    <select id="findList" resultType="org.sixcity.domain.Product">
+        <include refid="selectColumns"/>
+        WHERE
+        <if test="condition.userId!=null">
+             UserId = #{condition.userId}
+        </if>
+        <if test="condition.itemId != null and condition.itemId != ''">
+            and ItemId = #{condition.itemId}
+        </if>
+        <if test="condition.startTime!=null">
+            <if test="condition.timeType == 0">
+                and ( OrderTime &gt;= #{condition.startTime} OR TransTime &gt;= #{condition.startTime})
+            </if>
+            <if test="condition.timeType == 1">
+                and OrderTime &gt;= #{condition.startTime}
+            </if>
+            <if test="condition.timeType == 2">
+                and TransTime &gt;= #{condition.startTime}
+            </if>
+        </if>
+        <if test="condition.endTime!=null">
+            <if test="condition.timeType == 0">
+                and ( OrderTime &lt; #{condition.endTime} OR TransTime &lt; #{condition.endTime})
+            </if>
+            <if test="condition.timeType == 1">
+                and OrderTime &lt; #{condition.endTime}
+            </if>
+            <if test="condition.timeType == 2">
+                and TransTime &lt; #{condition.endTime}
+            </if>
+        </if>
+        ORDER BY OrderTime DESC
+    </select>
+
+</mapper>
