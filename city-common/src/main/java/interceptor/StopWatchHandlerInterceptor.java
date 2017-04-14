@@ -11,6 +11,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 /**
  * 性能监控拦截
  */
+
 public class StopWatchHandlerInterceptor extends HandlerInterceptorAdapter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StopWatchHandlerInterceptor.class);

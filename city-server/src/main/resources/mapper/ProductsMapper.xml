@@ -90,8 +90,9 @@
     <select id="findList" resultType="org.sixcity.domain.Product">
         <include refid="selectColumns"/>
         WHERE
+        1 = 1
         <if test="condition.userId!=null">
-            UserId = #{condition.userId}
+            and UserId = #{condition.userId}
         </if>
         <if test="condition.itemId != null and condition.itemId != ''">
             and ItemId = #{condition.itemId}
@@ -121,7 +122,15 @@
         <if test="condition.productStatus != null and condition.productStatus != 0">
             and ProductStatus = #{condition.productStatus}
         </if>
-        ORDER BY OrderTime DESC
+        <choose>
+            <when test="condition.orderBy != null and condition.orderBy != ''">
+                ORDER BY ${condition.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY OrderTime DESC
+            </otherwise>
+        </choose>
+
     </select>
 
     <!-- 查询商品列表in Status-->

@@ -1,5 +1,7 @@
 package org.sixcity.service.serviceimpl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.sixcity.constant.state.ProductStatusConst;
 import org.sixcity.domain.Product;
 import org.sixcity.domain.dto.query.CpsReportQuery;
@@ -32,24 +34,14 @@ public class ReportService {
     /**
      * 查询全部日期列表
      *
-     * @param startTime
-     * @param endTime
-     * @param userId
+     * @param cpsReportQuery
      * @return
-     * @throws ParseException
      */
-    public List<DateReport> getALLDateReportList(String startTime,
-                                                 String endTime,
-                                                 Long userId) throws ParseException {
+    public PageInfo<DateReport> getALLDateReportList(CpsReportQuery cpsReportQuery) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-        CpsReportQuery cpsReportQuery = new CpsReportQuery();
-        cpsReportQuery.setUserId(userId);
-        if (startTime != null && !"".equals(startTime)) cpsReportQuery.setStartTime(formatter.parse(startTime));
-        if (endTime != null && !"".equals(endTime)) cpsReportQuery.setEndTime(formatter.parse(endTime));
-        List<Product> reportList = productService.getProductByQuery(cpsReportQuery);
-
-        return reportList.stream().map(r -> {
+        PageInfo<Product> reportList = productService.getProductByQuery(cpsReportQuery);
+        PageInfo<DateReport> resultList = new PageInfo<>(reportList.getList().stream().map(r -> {
             boolean flag = !r.getProductStatus().equals(ProductStatusConst.WAIT_PAYS)
                     && !r.getProductStatus().equals(ProductStatusConst.CANCELED);
             DateReport dr = new DateReport();
@@ -62,7 +54,14 @@ public class ReportService {
             dr.setAllRebatePrice(r.getRebateTotalPrice());
             dr.setValidRebatePrice(flag ? r.getRebateTotalPrice() : new BigDecimal(0));
             return dr;
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toList()));
+        resultList.setPageSize(reportList.getPageSize());
+        resultList.setPageNum(reportList.getPageNum());
+        resultList.setEndRow(reportList.getEndRow());
+        resultList.setPages(reportList.getPages());
+        resultList.setSize(reportList.getSize());
+        resultList.setTotal(reportList.getTotal());
+        return resultList;
     }
 
     /**
@@ -75,36 +74,16 @@ public class ReportService {
      * @return
      */
     public List<DateReport> getDateReportList(int timeType,
-                                              String startTime,
-                                              String endTime,
-                                              Long userId) {
-        /*if (startTime == null || "".equals(startTime)) startTime = "0000-00-00";
-        if (endTime == null || "".equals(endTime)) endTime = "0000-00-00";*/
+                                                  String startTime,
+                                                  String endTime,
+                                                  Long userId) {
+        if (startTime == null || "".equals(startTime)) startTime = "0000-00-00";
+        if (endTime == null || "".equals(endTime)) endTime = "0000-00-00";
         return productsMapper.getDateReportList(timeType, userId, startTime, endTime);
     }
 
-    public List<Product> getCpsReportList(String timeType,
-                                          String startTime,
-                                          String endTime,
-                                          String itemId,
-                                          String productStatus,
-                                          Long userId) throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    public PageInfo<Product> getCpsReportList(CpsReportQuery condition) throws ParseException {
 
-        CpsReportQuery condition = new CpsReportQuery();
-        //set timeType
-        int type = 0;
-        if (timeType != null) type = Integer.parseInt(timeType);
-        condition.setTimeType(type);
-        //set status
-        int status = 0;
-        if (productStatus != null) status = Integer.parseInt(productStatus);
-        condition.setProductStatus(status);
-
-        condition.setItemId(itemId);
-        if (startTime != null && !"".equals(startTime)) condition.setStartTime(formatter.parse(startTime));
-        if (endTime != null && !"".equals(endTime)) condition.setEndTime(formatter.parse(endTime));
-        if (userId != null) condition.setUserId(userId);
         return productService.getProductByQuery(condition);
     }
 }

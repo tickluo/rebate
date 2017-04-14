@@ -1,4 +1,3 @@
-
 $(function () {
     gridList();
 });
@@ -8,14 +7,14 @@ function gridList() {
         url: "/bank/getBankList",
         height: $(window).height() - 128,
         colModel: [
-            { label: '主键', name: 'id', hidden: true },
-            { label: '开户人/公司账户名称', name: 'openAccountName', width: 120, align: 'left' },
-            { label: '身份证号/营业执照号', name: 'licenceNum', width: 150, align: 'left' },
-            { label: '银行名称', name: 'bankName', width: 120, align: 'left' },
-            { label: '支行名称', name: 'bankBranchName', width: 120, align: 'left' },
-            { label: '银行账号', name: 'bankNum', width: 150, align: 'left' },
+            {label: '主键', name: 'id', hidden: true},
+            {label: '开户人/公司账户名称', name: 'openAccountName', width: 120, align: 'left', sortable: false},
+            {label: '身份证号/营业执照号', name: 'licenceNum', width: 150, align: 'left', sortable: false},
+            {label: '银行名称', name: 'bankName', width: 120, align: 'left', sortable: false},
+            {label: '支行名称', name: 'bankBranchName', width: 120, align: 'left', sortable: false},
+            {label: '银行账号', name: 'bankNum', width: 150, align: 'left', sortable: false},
             {
-                label: '操作', name: 'bankName', width: 80, align: 'left',
+                label: '操作', name: 'bankName', width: 80, align: 'left', sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
                     return "不可修改";
                 }
@@ -28,7 +27,7 @@ function gridList() {
 
     $("#btn_search").click(function () {
         $gridList.jqGrid('setGridParam', {
-            postData: { keyword: $("#txt_keyword").val() }
+            postData: {keyword: $("#txt_keyword").val()}
         }).trigger('reloadGrid');
     });
 }
@@ -52,7 +51,7 @@ var layerSu = function () {
 
         $.modalMsg("添加成功", "success")
 
-    },500)
+    }, 500)
 
 };
 

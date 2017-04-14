@@ -1,5 +1,6 @@
 package org.sixcity.service.serviceimpl;
 
+import com.github.pagehelper.PageHelper;
 import org.sixcity.domain.CashOut;
 import org.sixcity.mapper.RebateMapper;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,10 @@ public class RebateService extends CrudService<RebateMapper, CashOut> {
     /**
      * 获取提现记录列表
      */
-    public List<CashOut> getCashRecordList(Long userId) {
+    public List<CashOut> getCashRecordList(Long userId, String rows, String page) {
+        if (rows != null && !"".equals(rows) && page != null && !"".equals(page)) {
+            PageHelper.startPage(Integer.parseInt(page), Integer.parseInt(rows));
+        }
         return getDao().findByUserId(userId);
     }
 

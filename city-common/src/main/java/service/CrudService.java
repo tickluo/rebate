@@ -1,8 +1,11 @@
 package service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import model.CrudDao;
 import model.DataEntity;
 
+import model.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,11 +72,11 @@ public abstract class CrudService<D extends CrudDao<T>, T extends DataEntity> {
      * @param entity 实体对象
      * @return 分页数据
      */
-   /* public PageInfo<T> findPage(Paging page, T entity) {
-        PageHelper.startPage(page.getPageNum(), page.getPageSize(), page.getOrderBy());
+    public PageInfo<T> findPage(Paging page, T entity) {
+        PageHelper.startPage(page.getPageNum(), page.getPageSize());
         List<T> list = dao.findList(entity);
         return new PageInfo<>(list);
-    }*/
+    }
 
     /**
      * 查询分页数据
@@ -82,11 +85,11 @@ public abstract class CrudService<D extends CrudDao<T>, T extends DataEntity> {
      * @param queryMap 查询条件
      * @return 分页数据
      */
-   /* public PageInfo<T> queryPage(Paging page, Map<String, Object> queryMap) {
-        PageHelper.startPage(page.getPageNum(), page.getPageSize(), page.getOrderBy());
+    public PageInfo<T> queryPage(Paging page, Map<String, Object> queryMap) {
+        PageHelper.startPage(page.getPageNum(), page.getPageSize());
         List<T> list = dao.queryList(queryMap);
         return new PageInfo<>(list);
-    }*/
+    }
 
     /**
      * 保存数据（插入或更新）

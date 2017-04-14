@@ -1,5 +1,7 @@
 package org.sixcity.service.serviceimpl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.sixcity.constant.state.ProductStatusConst;
 import org.sixcity.domain.Product;
 import org.sixcity.domain.dto.query.CpsReportQuery;
@@ -23,6 +25,7 @@ public class ProductService extends CrudService<ProductsMapper, Product> {
 
     /**
      * 获取用户可申请返利额
+     *
      * @param userId
      * @param startTime
      * @param endTime
@@ -51,8 +54,10 @@ public class ProductService extends CrudService<ProductsMapper, Product> {
      * @param condition
      * @return
      */
-    public List<Product> getProductByQuery(CpsReportQuery condition) {
-        return getDao().findList(condition);
+    public PageInfo<Product> getProductByQuery(CpsReportQuery condition) {
+        //do pagination
+        PageHelper.startPage(condition.getPageNum(), condition.getPageSize());
+        return new PageInfo<>(getDao().findList(condition));
     }
 
 }

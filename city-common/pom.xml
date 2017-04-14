@@ -19,6 +19,13 @@
             <version>${fast-json}</version>
         </dependency>
 
+        <!-- page helper -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${page-helper}</version>
+        </dependency>
+
         <!-- Common Lib-->
         <dependency>
             <groupId>org.apache.commons</groupId>

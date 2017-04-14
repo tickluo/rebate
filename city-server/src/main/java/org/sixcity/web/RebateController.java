@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import validator.Validator;
+import validator.annotation.ValidateParam;
 
 import javax.validation.Valid;
 import java.util.Date;
@@ -72,9 +74,11 @@ public class RebateController {
 
     @RequestMapping(value = "getCashRecordList", method = RequestMethod.GET)
     @ResponseBody
-    public List<CashOut> cashRecordList() {
+    public List<CashOut> cashRecordList(
+            @ValidateParam(name = "每页行数", validators = {Validator.INT}) String rows,
+            @ValidateParam(name = "当前页码", validators = {Validator.INT}) String page) {
         JwtUser jwtUser = WebUtils.getCurrentUser();
-        return rebateService.getCashRecordList(jwtUser.getId());
+        return rebateService.getCashRecordList(jwtUser.getId(), rows, page);
     }
 
     @RequestMapping(value = "getUserRebateTimes", method = RequestMethod.POST)
@@ -103,7 +107,7 @@ public class RebateController {
             );
         }
         //check jwtUser if bankId valid
-        List<Bank> bankList = bankService.findByUserId(jwtUser.getId());
+        List<Bank> bankList = bankService.findByUserId(jwtUser.getId(), "", "");
         Optional<Bank> currentBank = bankList.stream()
                 .filter(p -> Objects.equals(p.getId(), form.getBankId()))
                 .findAny();
@@ -155,7 +159,7 @@ public class RebateController {
             return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
                     .setMessage(MessageHandleUtils.getControllerParamsInvalidMessage(fieldErrors));
         }
-        if(!siteRebatePointsService.saveSiteRebatePoints(form)){
+        if (!siteRebatePointsService.saveSiteRebatePoints(form)) {
             return Result.createErrorResult(ResultCode.DAO_ERROR).setMessage("保存失败");
         }
         return Result.createSuccessResult("添加成功");

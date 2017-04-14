@@ -49,6 +49,7 @@
     <select id="findByUserId" resultType="org.sixcity.domain.CashOut">
         <include refid="selectColumns"/>
         WHERE UserId = #{userId}
+        ORDER BY CreateTime DESC
     </select>
 
     <select id="findById" resultType="org.sixcity.domain.CashOut">

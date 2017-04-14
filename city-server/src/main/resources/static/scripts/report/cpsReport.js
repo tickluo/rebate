@@ -81,7 +81,6 @@ function gridList() {
 
         ],
         pager: "#gridPager",
-        sortname: 'CreateTime desc',
         viewrecords: true
     });
 

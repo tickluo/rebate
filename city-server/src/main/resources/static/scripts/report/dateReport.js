@@ -13,35 +13,34 @@ function gridList() {
         colModel: [
             {label: '主键', name: 'Data', hidden: true},
             {label: '日期', name: 'orderTime', width: 200, align: 'left'},
-            {label: '全部订单数', name: 'allOrderNum', width: 100, align: 'left'},
-            {label: '可结算订单数', name: 'validOrderNum', width: 100, align: 'left'},
+            {label: '全部订单数', name: 'allOrderNum', width: 100, align: 'left', sortable: false},
+            {label: '可结算订单数', name: 'validOrderNum', width: 100, align: 'left', sortable: false},
             {
-                label: '全部订单额', name: 'allOrderPrice', width: 130, align: 'left',
+                label: '全部订单额', name: 'allOrderPrice', width: 130, align: 'left', sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
                     return cellvalue.toFixed(2);
                 }
             },
             {
-                label: '可结算订单额', name: 'validOrderPrice', width: 130, align: 'left',
+                label: '可结算订单额', name: 'validOrderPrice', width: 130, align: 'left', sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
                     return cellvalue.toFixed(2);
                 }
             },
             {
-                label: '全部返利总额', name: 'allRebatePrice', width: 130, align: 'left',
+                label: '全部返利总额', name: 'allRebatePrice', width: 130, align: 'left', sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
                     return cellvalue.toFixed(2);
                 }
             },
             {
-                label: '有效返利总额', name: 'validRebatePrice', width: 150, align: 'left',
+                label: '有效返利总额', name: 'validRebatePrice', width: 150, align: 'left', sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
                     return cellvalue.toFixed(2);
                 }
             }
         ],
         pager: "#gridPager",
-        sortname: 'OrderTime desc',
         viewrecords: true
 
     });
@@ -105,7 +104,7 @@ function ExportData() {
 //得到当前用户的返利总额
 function GetUserRebateMoney() {
     getAjax("/user/getUserRebateAmount", {}, function (data) {
-        if(data.state == 'success'){
+        if (data.state == 'success') {
             $("#mon").text(data.data.toFixed(2));
         }
         else $("#mon").text('获取失败');

@@ -1,5 +1,6 @@
 package org.sixcity.service.serviceimpl;
 
+import com.github.pagehelper.PageHelper;
 import org.sixcity.domain.Bank;
 import org.sixcity.mapper.BankMapper;
 import service.CrudService;
@@ -25,7 +26,10 @@ public class BankService extends CrudService<BankMapper, Bank> {
         return getDao().checkBankExist(bankNum);
     }
 
-    public List<Bank> findByUserId(Long userId) {
+    public List<Bank> findByUserId(Long userId, String rows, String page) {
+        if (rows != null && !"".equals(rows) && page != null && !"".equals(page)) {
+            PageHelper.startPage(Integer.parseInt(page), Integer.parseInt(rows));
+        }
         return getDao().findByUserId(userId);
     }
 }

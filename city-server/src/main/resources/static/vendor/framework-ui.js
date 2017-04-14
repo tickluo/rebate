@@ -412,7 +412,15 @@ $.fn.dataGrid = function (options) {
         shrinkToFit: false,
         gridview: true,
         rowNum: 30,
-        rowList: [10, 30, 50]
+        prmNames:{sort:'sort'},
+        rowList: [10, 30, 50],
+        jsonReader:
+            {
+                root: "list",
+                page: "pageNum",
+                total: "pages",
+                records: "total"
+            }
     };
     var options = $.extend(defaults, options);
     var $element = $(this);

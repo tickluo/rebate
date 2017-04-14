@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import validator.Validator;
+import validator.annotation.ValidateParam;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -54,17 +56,19 @@ public class BankController {
 
     @RequestMapping(value = "getBankList", method = RequestMethod.GET)
     @ResponseBody
-    public List<Bank> getBankListByUserId() {
+    public List<Bank> getBankListByUserId(
+            @ValidateParam(name = "每页行数", validators = {Validator.INT}) String rows,
+            @ValidateParam(name = "当前页码", validators = {Validator.INT}) String page) {
 
         JwtUser jwtUser = WebUtils.getCurrentUser();
-        return bankService.findByUserId(jwtUser.getId());
+        return bankService.findByUserId(jwtUser.getId(), rows, page);
     }
 
     @RequestMapping(value = "getOpenAccountName", method = RequestMethod.GET)
     @ResponseBody
     public Result getOpenAccountNameByUserId() {
         JwtUser jwtUser = WebUtils.getCurrentUser();
-        List<Bank> bankList = bankService.findByUserId(jwtUser.getId());
+        List<Bank> bankList = bankService.findByUserId(jwtUser.getId(), "", "");
         if (bankList.size() < 1) {
             return Result.createErrorResult(ResultCode.SERVICE_ERROR, "该用户还未添加银行卡");
         }
