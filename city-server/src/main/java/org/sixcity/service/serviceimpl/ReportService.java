@@ -42,12 +42,11 @@ public class ReportService {
                                                  String endTime,
                                                  Long userId) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        if (startTime == null || "".equals(startTime)) startTime = "0000-00-00";
-        if (endTime == null || "".equals(endTime)) endTime = "0000-00-00";
+
         CpsReportQuery cpsReportQuery = new CpsReportQuery();
         cpsReportQuery.setUserId(userId);
-        cpsReportQuery.setStartTime(formatter.parse(startTime));
-        cpsReportQuery.setEndTime(formatter.parse(endTime));
+        if (startTime != null && !"".equals(startTime)) cpsReportQuery.setStartTime(formatter.parse(startTime));
+        if (endTime != null && !"".equals(endTime)) cpsReportQuery.setEndTime(formatter.parse(endTime));
         List<Product> reportList = productService.getProductByQuery(cpsReportQuery);
 
         return reportList.stream().map(r -> {
@@ -79,8 +78,33 @@ public class ReportService {
                                               String startTime,
                                               String endTime,
                                               Long userId) {
-        if ("".equals(startTime)) startTime = "0000-00-00";
-        if ("".equals(endTime)) endTime = "0000-00-00";
+        /*if (startTime == null || "".equals(startTime)) startTime = "0000-00-00";
+        if (endTime == null || "".equals(endTime)) endTime = "0000-00-00";*/
         return productsMapper.getDateReportList(timeType, userId, startTime, endTime);
+    }
+
+    public List<Product> getCpsReportList(String timeType,
+                                          String startTime,
+                                          String endTime,
+                                          String itemId,
+                                          String productStatus,
+                                          Long userId) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        CpsReportQuery condition = new CpsReportQuery();
+        //set timeType
+        int type = 0;
+        if (timeType != null) type = Integer.parseInt(timeType);
+        condition.setTimeType(type);
+        //set status
+        int status = 0;
+        if (productStatus != null) status = Integer.parseInt(productStatus);
+        condition.setProductStatus(status);
+
+        condition.setItemId(itemId);
+        if (startTime != null && !"".equals(startTime)) condition.setStartTime(formatter.parse(startTime));
+        if (endTime != null && !"".equals(endTime)) condition.setEndTime(formatter.parse(endTime));
+        if (userId != null) condition.setUserId(userId);
+        return productService.getProductByQuery(condition);
     }
 }

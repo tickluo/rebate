@@ -3,17 +3,17 @@ $(function () {
 
     //得到当前用户的返利总额
     GetUserRebateMoney();
-})
+});
 function gridList() {
     var $gridList = $("#gridList");
     $gridList.dataGrid({
-        url: "/Rebate/Report/GetItemData",
+        url: "/report/getCpsReportList",
         height: $(window).height() - 160,
         colModel: [
-            { label: '主键', name: 'ID', hidden: true },
-            { label: '商品编号', name: 'ItemID', width: 125, align: 'left' },
+            {label: '主键', name: 'ID', hidden: true},
+            {label: '商品编号', name: 'itemId', width: 125, align: 'left'},
             {
-                label: '商品状态', name: 'ItemStatue', width: 100, align: 'left',
+                label: '商品状态', name: 'productStatus', width: 100, align: 'left',
                 formatter: function (cellvalue, options, rowObject) {
                     if (cellvalue == 9) {
                         return "已下单";
@@ -36,38 +36,48 @@ function gridList() {
                 }
             },
             {
-                label: '商品名称', name: 'ItemName', width: 320, align: 'left',
+                label: '商品名称', name: 'name', width: 320, align: 'left',
                 formatter: function (cellvalue, options, rowObject) {
                     return "<a href='" + rowObject.ItemUrl + "'   style='text-decoration:none;color:blue;font-weight:bold;'><u>" + cellvalue + "</u></a>";
                 }
             },
-            { label: '数量', name: 'ItemNum', width: 100, align: 'left' },
+            {label: '数量', name: 'quantity', width: 100, align: 'left'},
             {
-                label: '外币价格(单价)', name: 'ItemPrice', width: 130, align: 'left',
+                label: '外币价格(单价)', name: 'price', width: 130, align: 'left',
                 formatter: function (cellvalue, options, rowObject) {
-                    return rowObject.PriceType +" "+"<label style='color:red'>"+cellvalue.toFixed(2)+"</label>";
+                    return rowObject.currency || "" + " " + "<label style='color:red'>" + cellvalue.toFixed(2) + "</label>";
                 }
             },
             {
-                label: '实付价格(单价:元)', name: 'ItemActuallyPay', width: 130, align: 'left',
+                label: '实付价格(单价:元)', name: 'actuallyPay', width: 130, align: 'left',
                 formatter: function (cellvalue, options, rowObject) {
                     return cellvalue.toFixed(2);
                 }
             },
             {
-                label: '返点', name: 'RebatesPoint', width: 100, align: 'left',
+                label: '返点', name: 'rebatePoint', width: 100, align: 'left',
                 formatter: function (cellvalue, options, rowObject) {
                     return cellvalue + "%";
                 }
             },
             {
-                label: '返利金额(总价:元)', name: 'RebateAllPrice', width: 130, align: 'left',
+                label: '返利金额(总价:元)', name: 'rebateTotalPrice', width: 130, align: 'left',
                 formatter: function (cellvalue, options, rowObject) {
                     return cellvalue.toFixed(2);
                 }
             },
-            { label: '下单时间', name: 'ItemOrderTime', width: 150, align: 'left' },
-            { label: '转运时间', name: 'ItemTransTime', width: 150, align: 'left' },
+            {
+                label: '下单时间', name: 'orderTime', width: 150, align: 'left',
+                formatter: "date",
+                formatoptions: {srcformat: 'U', newformat: 'Y-m-d H:i:s'}
+            },
+            {
+                label: '转运时间', name: 'transTime', width: 150, align: 'left',
+                formatter: function (cellvalue, options, rowObject) {
+                    if (!cellvalue || cellvalue == '') return '未转运';
+                    return getLocalTime(cellvalue);
+                }
+            }
 
         ],
         pager: "#gridPager",
@@ -90,15 +100,19 @@ function gridList() {
 
     //搜索
     $("#btn_search").click(function () {
-        var queryJson = {
-            statue: $("#txt_statue").find('.dropdown-text').attr('data-value'),
-            keyword: $("#txt_keyword").val(),
-            timeType: $("#txt_timeType").find('.dropdown-text').attr('data-value'),
-            startTime: $("#txt_startTime").val(),
-            endTime: $("#txt_endTime").val(),
-        }
+        var timeType = $("#txt_timeType").find('.dropdown-text').attr('data-value') || 0;
+        var startTime = $.trim($("#txt_startTime").val().replace('年', '-').replace('月', '-').replace('日', ''));
+        var endTime = $.trim($("#txt_endTime").val().replace('年', '-').replace('月', '-').replace('日', ''));
+        var productStatus = $("#txt_statue").find('.dropdown-text').attr('data-value');
+        var itemId = $("#txt_keyword").val();
         $gridList.jqGrid('setGridParam', {
-            postData: { queryJson: JSON.stringify(queryJson) },
+            postData: {
+                productStatus: productStatus,
+                itemId: itemId,
+                timeType: timeType,
+                startTime: startTime,
+                endTime: endTime
+            }
         }).trigger('reloadGrid');
     });
 }
@@ -131,17 +145,14 @@ function ExportData() {
 
 //得到当前用户的返利总额
 function GetUserRebateMoney() {
-    $.ajax({
-        url: "/Report/GetUserRebateMoney",
-        type: "Get",
-        dataType: "json",
-        success: function (data) {
-            $("#mon").text(data.money.toFixed(2));
-        },
-        error: function () {
-
+    getAjax("/user/getUserRebateAmount", {}, function (data) {
+        if (data.state == 'success') {
+            $("#mon").text(data.data.toFixed(2));
         }
-
+        else $("#mon").text('获取失败');
     });
+}
 
+function getLocalTime(nS) {
+    return new Date(parseInt(nS)).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ").replace(/上午/g, "");
 }

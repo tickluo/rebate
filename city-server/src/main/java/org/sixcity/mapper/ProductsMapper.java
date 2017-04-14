@@ -6,6 +6,7 @@ import org.sixcity.domain.Product;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.sixcity.domain.dto.query.CpsReportQuery;
+import org.sixcity.domain.dto.query.ProductStatusQuery;
 import org.sixcity.domain.dto.view.DateReport;
 
 import java.util.List;
@@ -14,6 +15,8 @@ import java.util.List;
 public interface ProductsMapper extends CrudDao<Product> {
 
     int insert(Product product);
+
+    List<Product> findListInStatus(@Param("condition") ProductStatusQuery condition);
 
     List<Product> findList(@Param("condition") CpsReportQuery condition);
 

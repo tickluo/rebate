@@ -2,11 +2,11 @@ package org.sixcity.web;
 
 import model.Result;
 import model.ResultCode;
-import org.sixcity.constant.SecurityConst;
 import org.sixcity.domain.dto.post.ResetPasswordForm;
 import org.sixcity.domain.dto.post.UserInfoForm;
 import org.sixcity.security.JwtTokenUtil;
 import org.sixcity.security.model.JwtUser;
+import org.sixcity.service.serviceimpl.ProductService;
 import org.sixcity.service.serviceimpl.UserService;
 
 import org.sixcity.util.MessageHandleUtils;
@@ -14,13 +14,13 @@ import org.sixcity.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
 import java.util.List;
 
 @Controller
@@ -29,14 +29,16 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final ProductService productService;
     private final JwtTokenUtil jwtTokenUtil;
 
     @Value("${cookie.token.name}")
     private String cookieTokenName;
 
     @Autowired
-    public UserController(UserService userService, JwtTokenUtil jwtTokenUtil) {
+    public UserController(UserService userService, ProductService productService, JwtTokenUtil jwtTokenUtil) {
         this.userService = userService;
+        this.productService = productService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -110,11 +112,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "getUserRebateAmount", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @ResponseBody
-    public Result getUserRebateAmount() {
+    public Result getUserRebateAmount() throws ParseException {
+        JwtUser jwtUser = WebUtils.getCurrentUser();
 
-        return Result.createSuccessResult(userService.getAllMerchant(), "商户列表");
+        return Result.createSuccessResult(
+                productService.getUserRebateAmount(jwtUser.getId(), null, null), "用户可申请返利"
+        );
     }
 
 }

@@ -1,5 +1,6 @@
 package org.sixcity.web;
 
+import org.sixcity.domain.Product;
 import org.sixcity.domain.dto.view.DateReport;
 import org.sixcity.security.model.JwtUser;
 import org.sixcity.service.serviceimpl.ReportService;
@@ -45,11 +46,24 @@ public class ReportController {
             @ValidateParam(name = "结束日期", validators = {Validator.DATE}) String endTime
     ) throws ParseException {
         JwtUser jwtUser = WebUtils.getCurrentUser();
-        int type;
-        if (timeType == null || "".equals(timeType)) type = 0;
-        else type = Integer.parseInt(timeType);
+        int type = 0;
+        if (timeType != null) type = Integer.parseInt(timeType);
         if (type == 0) return reportService.getALLDateReportList(startTime, endTime, jwtUser.getId());
 
         return reportService.getDateReportList(type, startTime, endTime, jwtUser.getId());
+    }
+
+    @RequestMapping(value = "getCpsReportList", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Product> cpsReportList(
+            @ValidateParam(name = "日期类型", validators = {Validator.INT}) String timeType,
+            @ValidateParam(name = "开始日期", validators = {Validator.DATE}) String startTime,
+            @ValidateParam(name = "结束日期", validators = {Validator.DATE}) String endTime,
+            @ValidateParam(name = "结束日期") String itemId,
+            @ValidateParam(name = "结束日期", validators = {Validator.INT}) String productStatus
+    ) throws ParseException {
+        JwtUser jwtUser = WebUtils.getCurrentUser();
+
+        return reportService.getCpsReportList(timeType, startTime, endTime, itemId, productStatus, jwtUser.getId());
     }
 }

@@ -410,7 +410,9 @@ $.fn.dataGrid = function (options) {
         autowidth: true,
         rownumbers: true,
         shrinkToFit: false,
-        gridview: true
+        gridview: true,
+        rowNum: 30,
+        rowList: [10, 30, 50]
     };
     var options = $.extend(defaults, options);
     var $element = $(this);

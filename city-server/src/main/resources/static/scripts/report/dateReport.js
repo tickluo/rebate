@@ -104,7 +104,10 @@ function ExportData() {
 
 //得到当前用户的返利总额
 function GetUserRebateMoney() {
-    getAjax("/report/getUserRebateAmount", {}, function (data) {
-        $("#mon").text(data.money.toFixed(2));
+    getAjax("/user/getUserRebateAmount", {}, function (data) {
+        if(data.state == 'success'){
+            $("#mon").text(data.data.toFixed(2));
+        }
+        else $("#mon").text('获取失败');
     });
 }

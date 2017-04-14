@@ -3,17 +3,14 @@ package org.sixcity.domain.dto.query;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
-public class CpsReportQuery {
+public class ProductStatusQuery {
 
     private Long userId;
 
-    private Integer timeType = 0;
-
-    private String itemId;
-
-    private Integer productStatus;
+    private List<Integer> productStatus;
 
     private Date startTime;
 

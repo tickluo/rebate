@@ -4,75 +4,78 @@
 
     <sql id="selectColumns">
         SELECT
-        a.Id,
-        a.ItemId,
-        a.TransId,
-        a.UserId,
-        a.Name,
-        a.Url,
-        a.Quantity,
-        a.Price,
-        a.ActuallyPay,
-        a.RebatePoint,
-        a.RebateTotalPrice,
-        a.Settlemented,
-        a.SettlementState,
-        a.SettlementTime,
-        a.ProductStatus,
-        a.OrderTime,
-        a.ArrivedTime,
-        a.TransTime,
-        a.CancelTime,
-        a.CreateTime,
-        a.UpdateTime
+            a.Id,
+            a.ItemId,
+            a.TransId,
+            a.UserId,
+            a.Name,
+            a.Url,
+            a.Quantity,
+            a.Price,
+            a.Currency,
+            a.ActuallyPay,
+            a.RebatePoint,
+            a.RebateTotalPrice,
+            a.Settlemented,
+            a.SettlementState,
+            a.SettlementTime,
+            a.ProductStatus,
+            a.OrderTime,
+            a.ArrivedTime,
+            a.TransTime,
+            a.CancelTime,
+            a.CreateTime,
+            a.UpdateTime
         FROM Product_t a
     </sql>
 
     <!-- 插入商品信息 -->
     <insert id="insert">
         INSERT INTO Product_t (
-        ItemId,
-        TransId,
-        UserId,
-        Name,
-        Url,
-        Quantity,
-        Price,
-        ActuallyPay,
-        RebatePoint,
-        RebateTotalPrice,
-        Settlemented,
-        SettlementState,
-        SettlementTime,
-        ProductStatus,
-        OrderTime,
-        ArrivedTime,
-        TransTime,
-        CancelTime
+            ItemId,
+            TransId,
+            UserId,
+            Name,
+            Url,
+            Quantity,
+            Price,
+            currency,
+            ActuallyPay,
+            RebatePoint,
+            RebateTotalPrice,
+            Settlemented,
+            SettlementState,
+            SettlementTime,
+            ProductStatus,
+            OrderTime,
+            ArrivedTime,
+            TransTime,
+            CancelTime
         ) VALUES (
-        #{ItemId},
-        #{TransId},
-        #{UserId},
-        #{Name},
-        #{Url},
-        #{Quantity},
-        #{Price},
-        #{ActuallyPay},
-        #{RebatePoint},
-        #{RebateTotalPrice},
-        #{Settlemented},
-        #{SettlementState},
-        #{SettlementTime},
-        #{ProductStatus},
-        #{OrderTime},
-        #{ArrivedTime},
-        #{TransTime},
-        #{CancelTime}
+            #{ItemId},
+            #{TransId},
+            #{UserId},
+            #{Name},
+            #{Url},
+            #{Quantity},
+            #{Price},
+            #{currency},
+            #{ActuallyPay},
+            #{RebatePoint},
+            #{RebateTotalPrice},
+            #{Settlemented},
+            #{SettlementState},
+            #{SettlementTime},
+            #{ProductStatus},
+            #{OrderTime},
+            #{ArrivedTime},
+            #{TransTime},
+            #{CancelTime}
         )
     </insert>
 
     <!-- 查找日期报表信息 -->
-    <select id="getDateReportList"  statementType="CALLABLE" resultType="org.sixcity.domain.dto.view.DateReport">
+    <select id="getDateReportList" statementType="CALLABLE" resultType="org.sixcity.domain.dto.view.DateReport">
          <![CDATA[
         {CALL proc_DataReport(
                 #{timeType,mode=IN,jdbcType=INTEGER},
@@ -88,7 +91,7 @@
         <include refid="selectColumns"/>
         WHERE
         <if test="condition.userId!=null">
-             UserId = #{condition.userId}
+            UserId = #{condition.userId}
         </if>
         <if test="condition.itemId != null and condition.itemId != ''">
             and ItemId = #{condition.itemId}
@@ -115,7 +118,31 @@
                 and TransTime &lt; #{condition.endTime}
             </if>
         </if>
+        <if test="condition.productStatus != null and condition.productStatus != 0">
+            and ProductStatus = #{condition.productStatus}
+        </if>
         ORDER BY OrderTime DESC
     </select>
 
+    <!-- 查询商品列表in Status-->
+    <select id="findListInStatus" resultType="org.sixcity.domain.Product">
+        <include refid="selectColumns"/>
+        WHERE
+        <if test="condition.userId!=null">
+            UserId = #{condition.userId}
+        </if>
+        <if test="condition.startTime!=null">
+            and ( OrderTime &gt;= #{condition.startTime} OR TransTime &gt;= #{condition.startTime})
+        </if>
+        <if test="condition.endTime!=null">
+            and ( OrderTime &lt; #{condition.endTime} OR TransTime &lt; #{condition.endTime})
+        </if>
+        <if test="condition.productStatus != null and condition.productStatus.size() > 0">
+            and ProductStatus in
+            <foreach item="item" index="index" collection="condition.productStatus" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY OrderTime DESC
+    </select>
 </mapper>

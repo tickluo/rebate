@@ -34,6 +34,9 @@ public class Product extends DataEntity {
     @NotBlank(message = "商品价格不能为空")
     private BigDecimal price;
 
+    @NotBlank(message = "币种不能为空")
+    private String currency;
+
     @NotBlank(message = "商品实际单价不能为空")
     private BigDecimal actuallyPay;
 
