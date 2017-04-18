@@ -1,18 +1,19 @@
 package org.sixcity.web;
 
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import org.sixcity.service.serviceimpl.CaptchaService;
+import org.sixcity.util.CookieUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import cn.apiclub.captcha.Captcha;
 
@@ -20,28 +21,29 @@ import cn.apiclub.captcha.Captcha;
 @RequestMapping("captcha")
 public class CaptchaController {
 
-    private final RedisTemplate<String, String> redisTemplate;
-
+    //private final RedisTemplate<String, String> redisTemplate;
     private final CaptchaService captchaService;
 
     @Autowired
-    public CaptchaController(CaptchaService captchaService, RedisTemplate<String, String> redisTemplate) {
+    public CaptchaController(CaptchaService captchaService) {
         this.captchaService = captchaService;
-        this.redisTemplate = redisTemplate;
     }
 
     @RequestMapping(value = "/getAuthCode", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-    public byte[] getCaptcha(HttpServletResponse response) {
+    public byte[] getCaptcha(HttpServletRequest request) {
         String uuid = UUID.randomUUID().toString();
 
         Captcha captcha = captchaService.generateCaptcha(uuid);
 
         //将验证码以<key,value>形式缓存到redis
-        int captchaExpires = 3 * 60;
-        redisTemplate.opsForValue().set(uuid, captcha.getAnswer(), captchaExpires, TimeUnit.SECONDS);
+       /* int captchaExpires = 3 * 60;
+        redisTemplate.opsForValue().set(uuid, captcha.getAnswer(), captchaExpires, TimeUnit.SECONDS);*/
+        HttpSession session = request.getSession();
+        session.removeAttribute(Captcha.NAME);
+        session.setAttribute(Captcha.NAME, captcha.getAnswer());
+        session.setMaxInactiveInterval(5*60);
 
-        Cookie cookie = new Cookie("CaptchaCode", uuid);
-        response.addCookie(cookie);
+        //CookieUtils.create(response, Captcha.NAME, uuid);
         return captchaService.sendCaptcha(captcha);
     }
 

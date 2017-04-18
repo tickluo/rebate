@@ -21,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
@@ -100,6 +101,7 @@ public class AuthController {
     @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
     public Result loginPost(@RequestBody @Valid LoginForm user,
                             HttpServletResponse httpServletResponse,
+                            HttpServletRequest httpServletRequest,
                             BindingResult bindingResult) {
         // valid params
         if (bindingResult.hasErrors()) {
@@ -108,16 +110,11 @@ public class AuthController {
                     .setMessage(MessageHandleUtils.getControllerParamsInvalidMessage(fieldErrors));
         }
         // here valid captcha
-        if (captchaService.validCaptcha(user.getCode())) {
+        if (!captchaService.validCaptcha(httpServletRequest, user.getCode())) {
             return Result.createErrorResult(ResultCode.SERVICE_ERROR)
                     .setMessage("验证码错误，请重新输入");
         }
-
         //do login
-        /*if (!userService.checkLogin(user.getUsername(), user.getPassword())) {
-            return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
-                    .setMessage("密码错误，请重新输入");
-        }*/
         try {
             final String token = authService.login(user.getUsername(), user.getPassword());
             CookieUtils.create(httpServletResponse, cookieTokenName, token);

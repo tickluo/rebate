@@ -4,14 +4,22 @@ import cn.apiclub.captcha.Captcha;
 import cn.apiclub.captcha.backgrounds.GradiatedBackgroundProducer;
 import cn.apiclub.captcha.gimpy.FishEyeGimpyRenderer;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class CaptchaService {
+
+    private Map<String, Object> AuthCodes = new ConcurrentHashMap<String, Object>();
 
     public Captcha generateCaptcha(String uuid) {
         int captchaW = 200;
@@ -33,8 +41,9 @@ public class CaptchaService {
         }
     }
 
-    public boolean validCaptcha(String captcha) {
-
-        return false;
+    public boolean validCaptcha(HttpServletRequest httpServletRequest, String captcha) {
+        HttpSession session = httpServletRequest.getSession();
+        Object captchaCode = session.getAttribute(Captcha.NAME);
+        return captchaCode != null && captchaCode.equals(captcha);
     }
 }

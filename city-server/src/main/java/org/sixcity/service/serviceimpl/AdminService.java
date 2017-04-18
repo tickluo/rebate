@@ -12,17 +12,14 @@ public class AdminService {
 
     private static JwtUser jwtUser;
 
-    @CachePut(value = "adminAsMerchant", key = "#user.username")
     public void setAdminAsMerchant(JwtUser user) {
         jwtUser = user;
     }
 
-    @Cacheable(value = "adminAsMerchant", key = "user.username")
     public static JwtUser getAdminAsMerchant() {
         return jwtUser;
     }
 
-    @CacheEvict(value = "adminAsMerchant")
     public void remove(Long id) {
         jwtUser = null;
     }

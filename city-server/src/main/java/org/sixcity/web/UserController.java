@@ -69,7 +69,6 @@ public class UserController {
     @RequestMapping(value = "getUserInfoByToken", method = RequestMethod.POST)
     @ResponseBody
     public Result getUserInfoByToken() {
-
         JwtUser jwtUser = WebUtils.getActualUser();
 
         return Result.createSuccessResult(userService.findMerchantUserById(jwtUser.getId()), "用户信息");

@@ -52,7 +52,6 @@
             <version>${fast-json}</version>
         </dependency>
 
-
         <!-- Redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
