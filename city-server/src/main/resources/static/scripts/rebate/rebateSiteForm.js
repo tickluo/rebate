@@ -53,28 +53,29 @@ $(document).ready(function () {
 
 //form 表单提交
 function submitForm() {
-    $("#siteFormMes").text("");
+    var $siteFormMes = $("#siteFormMes");
+    $siteFormMes.text("");
 
     var $siteName = $("#siteName option:selected");
     if (!$siteName.val()) {
-        $("#siteFormMes").text("请选择网站");
+        $siteFormMes.text("请选择网站");
         return false;
     }
 
     var $siteUser = $("#siteUser option:selected");
     if (!$siteUser.val()) {
-        $("#siteFormMes").text("请选择用户");
+        $siteFormMes.text("请选择用户");
         return false;
     }
 
     var $sitePoints = $("#sitePoints");
     var sitePoints = $sitePoints.val();
     if (sitePoints == "") {
-        $("#siteFormMes").text("请输入网站返利点");
+        $siteFormMes.text("请输入网站返利点");
         return false;
     }
     if (!validatePercentage(sitePoints)) {
-        $("#siteFormMes").text("请输入正确的返利点");
+        $siteFormMes.text("请输入正确的返利点");
         return false;
     }
 
@@ -84,14 +85,14 @@ function submitForm() {
         sitePoints: $.trim($sitePoints.val())
     }, function (data) {
         if (data.state == "success") {
-            $("#siteFormMes").text("保存成功");
+            $siteFormMes.text("保存成功");
             $.currentWindow().$("#gridList").trigger("reloadGrid");
 
             $.currentWindow().layerSu();
 
             top.layer.closeAll();
         } else {
-            $("#siteFormMes").text(data.message);
+            $siteFormMes.text(data.message);
         }
 
     });

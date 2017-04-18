@@ -26,6 +26,10 @@
                         <label>专属AppKey：</label>
                         <label id="user_app_display"></label>
                     </li>
+                    <li>
+                        <label>专属AppSecret：</label>
+                        <label id="user_app_secret"></label>
+                    </li>
                     <li style="margin-top:20px;">
                         链接规则:<br/><br/>
                         <table class="table" style="border:1px solid rgb(221, 221, 221)">
@@ -117,11 +121,12 @@
 
     $(function () {
         var globalUser = {};
-        postAjax("/user/getUserInfoByToken", {},
+        postAjax("/user/getUserInfoIncludeAdmin", {},
             function (data) {
                 if (data.state == "success") {
                     globalUser = data.data;
-                    $("#user_app_display").text(globalUser.appkey)
+                    $("#user_app_display").text(globalUser.appKey);
+                    $("#user_app_secret").text(globalUser.appSecret);
                 }
             });
     });
@@ -130,7 +135,7 @@
     function lookSite() {
         var id = "";
         var name = "";
-        var url = "/Rebate/RebateManger/RebateSite";
+        var url = "/rebate/rebateSite";
 
         var menus = top.clients.authorizeMenu;
         menus.forEach(function (e) {

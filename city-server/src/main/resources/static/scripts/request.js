@@ -24,6 +24,18 @@ function postAjax(url, data, callback) {
     })
 }
 
+function postSyncAjax(url, data, callback) {
+    return $.ajax({
+        url: url,
+        data: JSON.stringify(data),
+        type: "post",
+        async: false,
+        contentType: "application/json;charset=utf-8;",
+        dataType: "json",
+        success: callback
+    })
+}
+
 function getAjax(url, data, callback) {
     return $.ajax({
         url: url,

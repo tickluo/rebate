@@ -64,6 +64,11 @@ public class RebateController {
 
     @RequestMapping(value = "rebateSite", method = RequestMethod.GET)
     public String rebateSite() {
+        JwtUser jwtUser = WebUtils.getActualUser();
+
+        if ("ROLE_SUPER_ADMIN".equals(WebUtils.getUserAuthority(jwtUser.getAuthorities()))){
+            return "rebate/adminRebateSite";
+        }
         return "rebate/rebateSite";
     }
 
@@ -97,7 +102,7 @@ public class RebateController {
             return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
                     .setMessage(MessageHandleUtils.getControllerParamsInvalidMessage(fieldErrors));
         }
-        JwtUser jwtUser = WebUtils.getCurrentUser();
+        JwtUser jwtUser = WebUtils.getActualUser();
         //check user balance
         User userEntity = userService.findById(jwtUser.getId());
         if (userEntity.getAmount().compareTo(form.getApplyMoney()) < 0) {

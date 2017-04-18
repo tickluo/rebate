@@ -51,4 +51,7 @@ public class AuthServiceImpl implements AuthService {
         return jwtTokenUtil.refreshToken(token);
     }
 
+    public JwtUser getUserByUsername(String username) {
+        return (JwtUser) userDetailsService.loadUserByUsername(username);
+    }
 }

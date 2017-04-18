@@ -2,7 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.sixcity.mapper.UserMapper">
 
-    <sql id="selectColumns">
+    <sql id="selectUserAndMerchant">
+        SELECT
+            a.id,
+            a.username,
+            a.password,
+            a.phone,
+            a.email,
+            a.actualName,
+            a.accountType,
+            a.companyName,
+            a.createTime,
+            a.updateTime,
+            a.amount,
+            a.AppId,
+            a.roles,
+            b.AppKey,
+            b.AppSecret
+        FROM User_t a LEFT JOIN
+            Merchant_t b ON
+                             a.AppId = b.AppId
+    </sql>
+
+    <sql id="selectUser">
         SELECT
             a.id,
             a.username,
@@ -18,6 +40,17 @@
             a.AppId,
             a.roles
         FROM User_t a
+    </sql>
+
+    <sql id="selectMerchant">
+        SELECT
+            a.id,
+            a.AppId,
+            a.AppKey,
+            a.AppSecret,
+            a.createTime,
+            a.updateTime
+        FROM Merchant_t a
     </sql>
 
     <!-- 插入用户 -->
@@ -68,19 +101,32 @@
         )
     </insert>
 
+
+    <!-- 查找商户用户 -->
+    <select id="findMerchantUserById" resultType="org.sixcity.domain.dto.view.MerchantUser">
+        <include refid="selectUserAndMerchant"/>
+        WHERE a.Id = #{id}
+    </select>
+
     <!-- 查找用户 -->
     <select id="findByUsername" resultType="org.sixcity.domain.User">
-        <include refid="selectColumns"/>
+        <include refid="selectUser"/>
         WHERE UserName = #{username}
     </select>
     <select id="findById" resultType="org.sixcity.domain.User">
-        <include refid="selectColumns"/>
+        <include refid="selectUser"/>
         WHERE Id = #{id}
+    </select>
+
+    <!-- 查找商户 -->
+    <select id="findByAppId" resultType="org.sixcity.domain.Merchant">
+        <include refid="selectMerchant"/>
+        WHERE AppId = #{appId}
     </select>
 
     <!-- 获取所有商户-->
     <select id="getAllMerchant" resultType="org.sixcity.domain.User">
-        <include refid="selectColumns"/>
+        <include refid="selectUser"/>
         WHERE Roles = 'ROLE_USER'
     </select>
 
@@ -110,24 +156,4 @@
         WHERE `Id` = #{id}
     </update>
 
-    <!-- 修改用户
-    <update id="updateInfo">
-        UPDATE trip_user
-        <set>
-            `nickname` = #{nickname},
-            `gender` = #{gender},
-            `age` = #{age},
-            `update_date` = #{updateDate}
-        </set>
-        WHERE `id` = #{id}
-    </update>
--->
-    <!-- 更新用户密码
-    <update id="updatePasswordByMobile">
-        UPDATE trip_user
-        SET
-            `password` = #{password}
-        WHERE `mobile` = #{mobile}
-    </update>
--->
 </mapper>

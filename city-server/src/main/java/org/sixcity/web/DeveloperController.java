@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping(value = "/developer")
+@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN')")
 public class DeveloperController {
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_USER')")
     public String index() {
         return "developer/index";
     }

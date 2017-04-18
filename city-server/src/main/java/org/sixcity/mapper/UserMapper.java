@@ -6,6 +6,7 @@ import org.sixcity.domain.User;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.sixcity.domain.dto.view.MerchantUser;
 
 import java.util.List;
 
@@ -23,6 +24,8 @@ public interface UserMapper extends CrudDao<User> {
     int updateAmount(User user);
 
     User findByUsername(String username);
+
+    MerchantUser findMerchantUserById(Long id);
 
     User findById(@Param("id") Long id);
 

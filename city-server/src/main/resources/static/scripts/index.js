@@ -81,7 +81,57 @@ $(function ($) {
         }
     }
 });
-$(function ($) {
+$(function () {
+    postSyncAjax("/user/getUserInfoByToken", {},
+        function (data) {
+            if (data.state == "success") {
+                globalUser = data.data;
+                clients = $.clientsInit();
+                $initSideBar();
+                $('#username_display').text(globalUser.username);
+                if (globalUser.roles === 'ROLE_SUPER_ADMIN') {
+                    //set tab
+                    var $tabTitle = $('#tabTitle');
+                    var $tabCurrent = $('#tabCurrent');
+                    $tabTitle.attr('data-id', '/user/selectMerchant');
+                    $tabTitle.text('商户选取');
+                    $tabCurrent.attr('data-id', '/user/selectMerchant');
+                    $tabCurrent.attr('src', '/user/selectMerchant');
+                }
+
+            }
+        });
+});
+function GetLoadNav() {
+    var data = top.clients.authorizeMenu;
+    var _html = "";
+    $.each(data, function (i) {
+        var row = data[i];
+        if (row.City_ParentId == "0") {
+            _html += '<li>';
+            _html += '<a data-id="' + row.City_Id +
+                '" href="' + (row.City_IsMenu ? row.City_UrlAddress : "") +
+                '" class="' + (row.City_IsMenu ? "menuItem" : "dropdown-toggle") + '">' +
+                '<i class="' + row.City_Icon + '"></i>' +
+                '<span>' + row.City_FullName + (row.City_IsMenu ? '</span></a>' : '</span><i class="fa fa-angle-right drop-icon"></i></a>');
+            var childNodes = row.ChildNodes;
+            if (childNodes.length > 0) {
+                _html += '<ul class="submenu">';
+                $.each(childNodes, function (i) {
+                    var subrow = childNodes[i];
+                    _html += '<li>';
+                    _html += '<a class="menuItem" data-id="' + subrow.City_Id + '" href="' + subrow.City_UrlAddress + '" data-index="' + subrow.City_SortCode + '">' + subrow.City_FullName + '</a>';
+                    _html += '</li>';
+                });
+                _html += '</ul>';
+            }
+            _html += '</li>';
+        }
+    });
+    $("#sidebar-nav ul").prepend(_html);
+}
+
+var $initSideBar = function () {
     $("#content-wrapper").find('.mainContent').height($(window).height() - 100);
     $(window).resize(function (e) {
         $("#content-wrapper").find('.mainContent').height($(window).height() - 100);
@@ -168,38 +218,5 @@ $(function ($) {
             $('#ajax-loader').fadeOut();
         }, 300);
     });
-});
-$(function () {
-    postAjax("/user/getUserInfoByToken", {},
-        function (data) {
-            if (data.state == "success") {
-                globalUser = data.data;
-                $('#username_display').text(globalUser.username);
-            }
-        });
-});
-function GetLoadNav() {
-    var data = top.clients.authorizeMenu;
-    var _html = "";
-    $.each(data, function (i) {
-        var row = data[i];
-        if (row.City_ParentId == "0") {
-            _html += '<li>';
-            _html += '<a data-id="' + row.City_Id + '" href="#" class="dropdown-toggle"><i class="' + row.City_Icon + '"></i><span>' + row.City_FullName + '</span><i class="fa fa-angle-right drop-icon"></i></a>';
-            var childNodes = row.ChildNodes;
-            if (childNodes.length > 0) {
-                _html += '<ul class="submenu">';
-                $.each(childNodes, function (i) {
-                    var subrow = childNodes[i];
-                    _html += '<li>';
-                    _html += '<a class="menuItem" data-id="' + subrow.City_Id + '" href="' + subrow.City_UrlAddress + '" data-index="' + subrow.City_SortCode + '">' + subrow.City_FullName + '</a>';
-                    _html += '</li>';
-                });
-                _html += '</ul>';
-            }
-            _html += '</li>';
-        }
-    });
-    $("#sidebar-nav ul").prepend(_html);
-}
+};
 

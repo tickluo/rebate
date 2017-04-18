@@ -10,7 +10,7 @@ var userMenu = [
         "City_Icon": "fa fa-bar-chart-o",
         "City_UrlAddress": "fa fa-bar-chart-o",
         "City_Target": "expand",
-        "City_IsMenu": true,
+        "City_IsMenu": false,
         "City_IsExpand": true,
         "City_IsPublic": false,
         "City_AllowEdit": true,
@@ -346,19 +346,20 @@ var userMenu = [
 ];
 var superAdminMenu = [
     {
+        "City_ParentId": "0",
         "City_Id": "b2d1bbc7-c5df-409f-9a9d-bce52sa0ec42",
         "City_Layers": null,
         "City_EnCode": null,
         "City_FullName": "商户选取",
-        "City_Icon": null,
-        "City_UrlAddress": "/user/userInfo",
+        "City_UrlAddress": "/user/selectMerchant",
         "City_Target": "iframe",
+        "City_Icon": "fa fa-user",
         "City_IsMenu": true,
         "City_IsExpand": false,
         "City_IsPublic": false,
         "City_AllowEdit": false,
         "City_AllowDelete": false,
-        "City_SortCode": 1,
+        "City_SortCode": 56,
         "City_DeleteMark": null,
         "City_EnabledMark": true,
         "City_Description": "商户选取",
@@ -379,7 +380,7 @@ var superAdminMenu = [
         "City_Icon": "fa fa-bar-chart-o",
         "City_UrlAddress": "fa fa-bar-chart-o",
         "City_Target": "expand",
-        "City_IsMenu": true,
+        "City_IsMenu": false,
         "City_IsExpand": true,
         "City_IsPublic": false,
         "City_AllowEdit": true,
@@ -715,7 +716,6 @@ var superAdminMenu = [
 ];
 
 $(function () {
-    clients = $.clientsInit();
 });
 $.clientsInit = function () {
     var dataJson = {
@@ -727,12 +727,11 @@ $.clientsInit = function () {
         authorizeMenu: [],
         authorizeButton: []
     };
-    dataJson.authorizeMenu = userMenu;
-    /*if (globalUser.roles === 'ROLE_USER') {
+    if (globalUser.roles === 'ROLE_USER') {
         dataJson.authorizeMenu = userMenu;
     }
     if (globalUser.roles === 'ROLE_SUPER_ADMIN') {
         dataJson.authorizeMenu = superAdminMenu;
-    }*/
+    }
     return dataJson;
 };

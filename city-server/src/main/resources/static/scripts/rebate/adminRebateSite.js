@@ -33,3 +33,29 @@ function gridList() {
         }).trigger('reloadGrid');
     });
 }
+
+function btn_add() {
+    $.modalOpen({
+        id: "Form",
+        title: "新增网址",
+        url: "/rebate/rebateSiteForm",
+        width: "700px",
+        height: "610px",
+        callBack: function (iframeId) {
+            top.frames[iframeId].submitForm();
+        }
+    });
+}
+
+
+var layerSu = function () {
+
+    setTimeout(function () {
+
+        $.modalMsg("保存成功", "success")
+
+    },500)
+
+};
+
+window.layerSu = layerSu;

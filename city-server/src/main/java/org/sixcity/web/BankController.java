@@ -32,7 +32,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "bank")
-@PreAuthorize("hasRole('ROLE_USER')")
+@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN')")
 public class BankController {
 
     private final BankService bankService;
@@ -89,7 +89,7 @@ public class BankController {
                     .setMessage("此银行卡已存在");
         }
         //build Bank Entity
-        JwtUser jwtUser = WebUtils.getCurrentUser();
+        JwtUser jwtUser = WebUtils.getActualUser();
         Bank bankEntity = JSONObject.parseObject(JSONObject.toJSONString(form), Bank.class);
         bankEntity.setUserId(jwtUser.getId());
         try {

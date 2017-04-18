@@ -3,6 +3,7 @@ package org.sixcity.service.serviceimpl;
 import org.sixcity.constant.SecurityConst;
 import org.sixcity.domain.Merchant;
 import org.sixcity.domain.User;
+import org.sixcity.domain.dto.view.MerchantUser;
 import org.sixcity.mapper.UserMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,6 +83,10 @@ public class UserService extends CrudService<UserMapper, User> {
 
     public User findByUsername(String username) {
         return getDao().findByUsername(username);
+    }
+
+    public MerchantUser findMerchantUserById(Long id) {
+        return getDao().findMerchantUserById(id);
     }
 
     public List<User> getAllMerchant() {

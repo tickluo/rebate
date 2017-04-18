@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="shared/layoutIndex::layoutIndex"></head>
+<link href="../../static/vendor/select2/select2.min.css"
+      th:href="@{/vendor/select2/select2.min.css}" rel="stylesheet"/>
+<script th:src="@{/vendor/select2/select2.min.js}"></script>
+<script th:src="@{/scripts/auth/index.js}"></script>
+<div class="wrapper">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#a" data-toggle="tab">基本信息</a></li>
+    </ul>
+    <div class="tab-content" style="padding-top: 5px;">
+        <div id="a" class="tab-pane active" style="padding: 15px;">
+            <form name="form">
+                <ul class="pop-list">
+                    <li>
+                        <label>商户列表</label>
+
+                    </li>
+                    <div style="width:250px">
+                        <select id="SelectMerchant">
+                          <!--  <option value="3620194" selected="selected">&#45;&#45;&#45;&#45;请选择&#45;&#45;&#45;&#45;</option>-->
+                        </select>
+                    </div>
+                    <li class="line">
+
+                    </li>
+                    <li>
+                        <label>用户名</label>
+                        <label id="MerchantUsername"> </label>
+                    </li>
+                    <li class="company">
+                        <label>真实名称</label>
+                        <label id="MerchantActualName"> </label>
+                    </li>
+                    <li>
+                        <label>公司名称</label>
+                        <label id="MerchantCompanyName"> </label>
+                    </li>
+                    <li>
+                        <div style="padding-left: 15px;">
+                            <a class="btn btn-primary" id="DoSelect">
+                                <i class="fa fa-save" style="margin-right:5px;"></i>选择商户</a>
+                        </div>
+                        <div style="padding-left: 115px;">
+                            <label id="mes" style="color:red;margin-right:1px;"></label>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+
+    </div>
+</div>
+<script th:src="@{/scripts/user/selectMerchant.js}"></script>
+</html>
