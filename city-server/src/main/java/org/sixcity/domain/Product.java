@@ -14,10 +14,10 @@ import java.util.Date;
 public class Product extends DataEntity {
 
     @NotBlank(message = "商品id不能为空")
-    private Long itemId;
+    private String itemId;
 
     @NotBlank(message = "transId不能为空")
-    private String transId;
+    private Long transId;
 
     @NotBlank(message = "用户id不能为空")
     private Long userId;

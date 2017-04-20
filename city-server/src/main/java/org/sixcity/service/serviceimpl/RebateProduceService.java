@@ -1,8 +1,8 @@
 package org.sixcity.service.serviceimpl;
 
-import org.sixcity.domain.Product;
-import org.sixcity.domain.RebateProduce;
-import org.sixcity.domain.User;
+import org.sixcity.constant.state.ConsumptionType;
+import org.sixcity.constant.state.ProductOperationConst;
+import org.sixcity.domain.*;
 import org.sixcity.mapper.RebateProduceMapper;
 import service.CrudService;
 
@@ -17,11 +17,17 @@ public class RebateProduceService extends CrudService<RebateProduceMapper, Rebat
 
     private final UserService userService;
     private final ProductService productService;
+    private final ProductRecordService productRecordService;
+    private final ConsumptionRecordService consumptionRecordService;
 
     public RebateProduceService(UserService userService,
-                                ProductService productService) {
+                                ProductService productService,
+                                ProductRecordService productRecordService,
+                                ConsumptionRecordService consumptionRecordService) {
         this.userService = userService;
         this.productService = productService;
+        this.productRecordService = productRecordService;
+        this.consumptionRecordService = consumptionRecordService;
     }
 
     /**
@@ -42,10 +48,31 @@ public class RebateProduceService extends CrudService<RebateProduceMapper, Rebat
         });
         //update product
         productList.forEach(product -> {
+            User user = userService.findById(product.getUserId());
+
             product.setSettlemented(true);
             product.setSettlementTime(new Date());
             product.setSettlementState(product.getProductStatus());
             productService.updateProduct(product);
+            //insert product record
+            ProductRecord productRecord = new ProductRecord();
+            productRecord.setTransId(product.getTransId());
+            productRecord.setOperateName("系统自动结算");
+            productRecord.setOperateType(ProductOperationConst.SIGN_SETTLED);
+            productRecord.setNewValue("1");
+            productRecord.setOldValue("");
+            productRecord.setRemark("标记商品结算, 变为 已结算");
+            productRecordService.addProductRecord(productRecord);
+
+            ConsumptionRecord consumptionRecord = new ConsumptionRecord();
+            consumptionRecord.setUserId(product.getUserId());
+            consumptionRecord.setTransId(product.getTransId());
+            consumptionRecord.setTypeId(ConsumptionType.PRODUCT);
+            consumptionRecord.setAmount(product.getRebateTotalPrice());
+            consumptionRecord.setNewBalance(user.getAmount());
+            consumptionRecord.setRemark("结算商品号:".concat(product.getItemId()));
+            consumptionRecordService.addConsumptionRecord(consumptionRecord);
+
         });
     }
 
