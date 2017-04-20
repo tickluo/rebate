@@ -5,6 +5,7 @@ import model.ResultCode;
 import org.sixcity.constant.state.CashOutConst;
 import org.sixcity.domain.*;
 import org.sixcity.domain.dto.post.RebateCashForm;
+import org.sixcity.domain.dto.query.CashRecordQuery;
 import org.sixcity.security.model.JwtUser;
 import org.sixcity.service.serviceimpl.BankService;
 import org.sixcity.service.serviceimpl.RebateService;
@@ -66,7 +67,7 @@ public class RebateController {
     public String rebateSite() {
         JwtUser jwtUser = WebUtils.getActualUser();
 
-        if ("ROLE_SUPER_ADMIN".equals(WebUtils.getUserAuthority(jwtUser.getAuthorities()))){
+        if ("ROLE_SUPER_ADMIN".equals(WebUtils.getUserAuthority(jwtUser.getAuthorities()))) {
             return "rebate/adminRebateSite";
         }
         return "rebate/rebateSite";
@@ -83,7 +84,12 @@ public class RebateController {
             @ValidateParam(name = "每页行数", validators = {Validator.INT}) String rows,
             @ValidateParam(name = "当前页码", validators = {Validator.INT}) String page) {
         JwtUser jwtUser = WebUtils.getCurrentUser();
-        return rebateService.getCashRecordList(jwtUser.getId(), rows, page);
+        CashRecordQuery condition = new CashRecordQuery();
+        condition.setUserId(jwtUser.getId());
+        condition.setPageSize(Integer.parseInt(rows));
+        condition.setPageNum(Integer.parseInt(page));
+
+        return rebateService.getCashRecordList(condition);
     }
 
     @RequestMapping(value = "getUserRebateTimes", method = RequestMethod.POST)

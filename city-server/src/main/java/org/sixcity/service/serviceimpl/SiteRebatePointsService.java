@@ -80,8 +80,10 @@ public class SiteRebatePointsService {
     @Transactional(readOnly = false)
     public Boolean saveSiteRebatePoints(UserSiteRebatePoints userSiteRebatePoints) {
         if (checkSiteRebatePointsExist(userSiteRebatePoints.getUserId(), userSiteRebatePoints.getSiteId())) {
+            userSiteRebatePoints.preUpdate();
             return userSiteRebatePointsMapper.update(userSiteRebatePoints) > 0;
         }
+        userSiteRebatePoints.preInsert();
         return userSiteRebatePointsMapper.insert(userSiteRebatePoints) > 0;
     }
 }

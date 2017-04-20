@@ -130,6 +130,18 @@
         WHERE Roles = 'ROLE_USER'
     </select>
 
+    <!-- 获取没有进行统计的用户-->
+    <select id="getAllRebatingUser" resultType="org.sixcity.domain.User">
+        <include refid="selectUser"/>
+        WHERE a.Roles = 'ROLE_USER' AND a.Id NOT IN (
+        SELECT p.UserId FROM Rebate_Produce_t p
+        <where>
+            <![CDATA[
+            ProduceDate >= #{startTime} AND ProduceDate < #{endTime})
+            ]]>
+        </where>
+    </select>
+
     <!-- 更新用户密码 -->
     <update id="updatePassword">
         UPDATE User_t

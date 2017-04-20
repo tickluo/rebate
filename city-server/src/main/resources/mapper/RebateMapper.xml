@@ -48,7 +48,13 @@
     <!-- 查找银行信息 -->
     <select id="findByUserId" resultType="org.sixcity.domain.CashOut">
         <include refid="selectColumns"/>
-        WHERE UserId = #{userId}
+        WHERE UserId = #{condition.userId}
+        <if test="condition.startTime!=null">
+            and CreateTime >= #{condition.startTime}
+        </if>
+        <if test="condition.endTime!=null">
+            and CreateTime &lt; #{condition.endTime}
+        </if>
         ORDER BY CreateTime DESC
     </select>
 

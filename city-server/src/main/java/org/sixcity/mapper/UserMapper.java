@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.sixcity.domain.dto.view.MerchantUser;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -30,4 +31,7 @@ public interface UserMapper extends CrudDao<User> {
     User findById(@Param("id") Long id);
 
     List<User> getAllMerchant();
+
+    List<User> getAllRebatingUser(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
+
 }

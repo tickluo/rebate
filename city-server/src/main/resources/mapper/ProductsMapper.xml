@@ -50,29 +50,60 @@
             OrderTime,
             ArrivedTime,
             TransTime,
-            CancelTime
+            CancelTime,
+            CreateTime,
+            UpdateTime
         ) VALUES (
-            #{ItemId},
-            #{TransId},
-            #{UserId},
-            #{Name},
-            #{Url},
-            #{Quantity},
-            #{Price},
+            #{itemId},
+            #{transId},
+            #{userId},
+            #{name},
+            #{url},
+            #{quantity},
+            #{price},
             #{currency},
-            #{ActuallyPay},
-            #{RebatePoint},
-            #{RebateTotalPrice},
-            #{Settlemented},
-            #{SettlementState},
-            #{SettlementTime},
-            #{ProductStatus},
-            #{OrderTime},
-            #{ArrivedTime},
-            #{TransTime},
-            #{CancelTime}
+            #{actuallyPay},
+            #{rebatePoint},
+            #{rebateTotalPrice},
+            #{settlemented},
+            #{settlementState},
+            #{settlementTime},
+            #{productStatus},
+            #{orderTime},
+            #{arrivedTime},
+            #{transTime},
+            #{cancelTime},
+            #{createTime},
+            #{updateTime}
         )
     </insert>
+
+    <!-- 更新商品信息 -->
+    <update id="update">
+        UPDATE Product_t
+        SET
+            ItemId           = #{itemId},
+            TransId          = #{transId},
+            Name             = #{name},
+            Url              = #{url},
+            Quantity         = #{quantity},
+            Price            = #{price},
+            currency         = #{currency},
+            ActuallyPay      = #{actuallyPay},
+            RebatePoint      = #{rebatePoint},
+            RebateTotalPrice = #{rebateTotalPrice},
+            Settlemented     = #{settlemented},
+            SettlementState  = #{settlementState},
+            SettlementTime   = #{settlementTime},
+            ProductStatus    = #{productStatus},
+            OrderTime        = #{orderTime},
+            ArrivedTime      = #{arrivedTime},
+            TransTime        = #{transTime},
+            CancelTime       = #{cancelTime},
+            CreateTime       = #{createTime},
+            UpdateTime       = #{updateTime}
+        WHERE UserId = #{userId}
+    </update>
 
     <!-- 查找日期报表信息 -->
     <select id="getDateReportList" statementType="CALLABLE" resultType="org.sixcity.domain.dto.view.DateReport">
@@ -141,10 +172,10 @@
             UserId = #{condition.userId}
         </if>
         <if test="condition.startTime!=null">
-            and ( OrderTime &gt;= #{condition.startTime} OR TransTime &gt;= #{condition.startTime})
+            and ( ArrivedTime &gt;= #{condition.startTime} OR TransTime &gt;= #{condition.startTime})
         </if>
         <if test="condition.endTime!=null">
-            and ( OrderTime &lt; #{condition.endTime} OR TransTime &lt; #{condition.endTime})
+            and ( ArrivedTime &lt; #{condition.endTime} OR TransTime &lt; #{condition.endTime})
         </if>
         <if test="condition.productStatus != null and condition.productStatus.size() > 0">
             and ProductStatus in
@@ -152,6 +183,7 @@
                 #{item}
             </foreach>
         </if>
+        and Settlemented = 0
         ORDER BY OrderTime DESC
     </select>
 </mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.sixcity.mapper.RebateProduceMapper">
+
+    <sql id="selectColumns">
+        SELECT
+            a.id,
+            a.UserId,
+            a.ProduceYear,
+            a.ProduceDate,
+            a.RebateMoney,
+            a.ApplyMoney,
+            a.Balance,
+            a.CreateTime,
+            a.UpdateTime
+        FROM Rebate_Produce_t a
+    </sql>
+
+    <!-- 插入结算信息 -->
+    <insert id="insert">
+        INSERT INTO Rebate_Produce_t (
+            UserId,
+            ProduceYear,
+            ProduceDate,
+            RebateMoney,
+            ApplyMoney,
+            Balance,
+            CreateTime,
+            UpdateTime
+        ) VALUES (
+            #{userId},
+            #{produceYear},
+            #{produceDate},
+            #{rebateMoney},
+            #{applyMoney},
+            #{balance},
+            #{createTime},
+            #{updateTime}
+        )
+    </insert>
+
+
+</mapper>

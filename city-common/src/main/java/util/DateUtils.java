@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DateUtils {
 
@@ -80,7 +81,7 @@ public class DateUtils {
      * @return 新日期
      */
     public static Date addYear(Date date, int amount) {
-        return add(date, Calendar.DAY_OF_YEAR, amount);
+        return add(date, Calendar.YEAR, amount);
     }
 
     /**
@@ -91,7 +92,7 @@ public class DateUtils {
      * @return 新日期
      */
     public static Date addMonth(Date date, int amount) {
-        return add(date, Calendar.DAY_OF_MONTH, amount);
+        return add(date, Calendar.MONTH, amount);
     }
 
     /**
@@ -144,6 +145,17 @@ public class DateUtils {
             return c.getTime();
         }
     }
+
+    public static Date getDayBegin(int hour) {
+        Calendar cal = new GregorianCalendar();
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+
+    }
+
 
     /**
      * 获取日期是一年中的第几周
@@ -249,4 +261,5 @@ public class DateUtils {
                     .toString();
         }
     }
+
 }

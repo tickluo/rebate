@@ -4,6 +4,7 @@ import model.CrudDao;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.sixcity.domain.CashOut;
+import org.sixcity.domain.dto.query.CashRecordQuery;
 
 import java.util.List;
 
@@ -16,6 +17,6 @@ public interface RebateMapper extends CrudDao<CashOut> {
 
     int getRebateCountByUserId(@Param("userId") Long userId);
 
-    List<CashOut> findByUserId(@Param("userId") Long userId);
+    List<CashOut> findByUserId(@Param("condition") CashRecordQuery condition);
 
 }

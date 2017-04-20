@@ -92,4 +92,8 @@ public class UserService extends CrudService<UserMapper, User> {
     public List<User> getAllMerchant() {
         return getDao().getAllMerchant();
     }
+
+    public List<User> getAllRebatingUser(Date startTime, Date endTime) {
+        return getDao().getAllRebatingUser(startTime, endTime);
+    }
 }

@@ -1,6 +1,7 @@
 package org.sixcity.web;
 
 import com.github.pagehelper.PageInfo;
+import org.sixcity.component.RebateTask;
 import org.sixcity.domain.Product;
 import org.sixcity.domain.dto.query.CpsReportQuery;
 import org.sixcity.domain.dto.view.DateReport;
@@ -19,7 +20,6 @@ import validator.annotation.ValidateParam;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 @Controller
 @RequestMapping(value = "/report")
@@ -27,9 +27,11 @@ import java.util.List;
 public class ReportController {
 
     private final ReportService reportService;
+    private final RebateTask rebateTask;
 
-    public ReportController(ReportService reportService) {
+    public ReportController(ReportService reportService, RebateTask rebateTask) {
         this.reportService = reportService;
+        this.rebateTask = rebateTask;
     }
 
     @RequestMapping(value = "date", method = RequestMethod.GET)
@@ -55,6 +57,8 @@ public class ReportController {
     ) throws ParseException {
         JwtUser jwtUser = WebUtils.getCurrentUser();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        rebateTask.executeMonthlyRebateTask();
 
         //set timeType
         int type = 0;

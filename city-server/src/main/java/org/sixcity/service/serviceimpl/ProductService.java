@@ -7,6 +7,7 @@ import org.sixcity.domain.Product;
 import org.sixcity.domain.dto.query.CpsReportQuery;
 import org.sixcity.domain.dto.query.ProductStatusQuery;
 import org.sixcity.mapper.ProductsMapper;
+import org.springframework.transaction.annotation.Transactional;
 import service.CrudService;
 
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /*
@@ -22,6 +24,18 @@ import java.util.List;
  */
 @Service
 public class ProductService extends CrudService<ProductsMapper, Product> {
+
+    @Transactional(readOnly = false)
+    public int addProduct(Product product) {
+        product.preInsert();
+        return getDao().insert(product);
+    }
+
+    @Transactional(readOnly = false)
+    public int updateProduct(Product product){
+        product.preUpdate();
+        return getDao().update(product);
+    }
 
     /**
      * 获取用户可申请返利额
@@ -37,20 +51,32 @@ public class ProductService extends CrudService<ProductsMapper, Product> {
                                           String endTime) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
+        List<Product> productList = getUnsettledProduct(
+                userId,
+                startTime == null ? null : formatter.parse(startTime),
+                endTime == null ? null : formatter.parse(endTime)
+        );
+        return new BigDecimal(productList.stream().mapToDouble(i -> i.getRebateTotalPrice().doubleValue()).sum());
+    }
+
+    public List<Product> getUnsettledProduct(Long userId,
+                                             Date startTime,
+                                             Date endTime) {
+
         ProductStatusQuery condition = new ProductStatusQuery();
         if (userId != null) condition.setUserId(userId);
-        if (startTime != null && !"".equals(startTime)) condition.setStartTime(formatter.parse(startTime));
-        if (endTime != null && !"".equals(endTime)) condition.setEndTime(formatter.parse(endTime));
-        List<Integer> statusList = new ArrayList<Integer>();
+        if (startTime != null) condition.setStartTime(startTime);
+        if (endTime != null) condition.setEndTime(endTime);
+        List<Integer> statusList = new ArrayList<>();
         statusList.add(ProductStatusConst.TRANSPORT_IN);
         statusList.add(ProductStatusConst.RECEIVED);
         condition.setProductStatus(statusList);
-        List<Product> productList = getDao().findListInStatus(condition);
-        return new BigDecimal(productList.stream().mapToDouble(i -> i.getRebateTotalPrice().doubleValue()).sum());
+        return getDao().findListInStatus(condition);
     }
 
     /**
      * cps报表查询
+     *
      * @param condition
      * @return
      */

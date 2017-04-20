@@ -16,6 +16,8 @@ public interface ProductsMapper extends CrudDao<Product> {
 
     int insert(Product product);
 
+    int update(Product product);
+
     List<Product> findListInStatus(@Param("condition") ProductStatusQuery condition);
 
     List<Product> findList(@Param("condition") CpsReportQuery condition);
