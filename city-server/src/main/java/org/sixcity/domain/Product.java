@@ -47,7 +47,7 @@ public class Product extends DataEntity {
     private BigDecimal rebateTotalPrice;
 
     @NotBlank(message = "是否结算不能为空")
-    private Boolean settlemented;
+    private Boolean settlemented = false;
 
     @NotBlank(message = "结算状态不能为空")
     private Integer settlementState;

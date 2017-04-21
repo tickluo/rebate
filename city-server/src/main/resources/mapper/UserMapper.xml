@@ -107,6 +107,10 @@
         <include refid="selectUserAndMerchant"/>
         WHERE a.Id = #{id}
     </select>
+    <select id="findMerchantUserByAppKey" resultType="org.sixcity.domain.User">
+        <include refid="selectUserAndMerchant"/>
+        WHERE b.AppKey = #{appKey}
+    </select>
 
     <!-- 查找用户 -->
     <select id="findByUsername" resultType="org.sixcity.domain.User">

@@ -1,6 +1,7 @@
 package org.sixcity.security.model;
 
 import org.sixcity.domain.User;
+import org.sixcity.domain.dto.view.MerchantUser;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
@@ -13,6 +14,16 @@ public final class JwtUserFactory {
     }
 
     public static JwtUser create(User user) {
+        return new JwtUser(
+                user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getPhone(),
+                mapToGrantedAuthorities(user.getRoles())
+        );
+    }
+
+    public static JwtUser create(MerchantUser user) {
         return new JwtUser(
                 user.getId(),
                 user.getUsername(),

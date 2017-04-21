@@ -1,6 +1,7 @@
 package org.sixcity.security.service;
 
 import org.sixcity.domain.User;
+import org.sixcity.domain.dto.view.MerchantUser;
 import org.sixcity.mapper.UserMapper;
 import org.sixcity.security.model.JwtUserFactory;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +24,16 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
         if (user == null) {
             throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
+        } else {
+            return JwtUserFactory.create(user);
+        }
+    }
+
+    public UserDetails loadUserByAppKey(String appKey) throws UsernameNotFoundException {
+        MerchantUser user = userMapper.findMerchantUserByAppKey(appKey);
+
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("No user found with appKey '%s'.", appKey));
         } else {
             return JwtUserFactory.create(user);
         }
