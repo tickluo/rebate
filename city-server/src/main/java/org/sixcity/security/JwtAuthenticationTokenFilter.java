@@ -35,28 +35,31 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // authToken.startsWith("Bearer ")
         // String authToken = header.substring(7);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
-        Object appKey = request.getParameterValues("appKey");
+        Object appKey = request.getParameter("appKey");
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
             if (jwtTokenUtil.validateToken(authToken, userDetails)) {
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        }
+
+        if (appKey != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByAppKey(appKey.toString());
+
+            if (userDetails != null) {
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 //logger.info("authenticated user " + username + ", setting security context");
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
-        if (appKey != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByAppKey(appKey.toString());
-
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            //logger.info("authenticated user " + username + ", setting security context");
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-
         chain.doFilter(request, response);
     }
 }

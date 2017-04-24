@@ -67,13 +67,13 @@ public class ReportController {
         condition.setUserId(jwtUser.getId());
 
         //set Time range
-        if (startTime != null && !"".equals(startTime)) condition.setStartTime(formatter.parse(startTime));
-        if (endTime != null && !"".equals(endTime)) condition.setEndTime(formatter.parse(endTime));
+        if (StringHelper.isNotBlank(startTime)) condition.setStartTime(formatter.parse(startTime));
+        if (StringHelper.isNotBlank(endTime)) condition.setEndTime(formatter.parse(endTime));
 
         //set pagination
         condition.setPageNum(Integer.parseInt(page));
         condition.setPageSize(Integer.parseInt(rows));
-        if (sort != null && !"".equals(sort))
+        if (StringHelper.isNotBlank(sort))
             condition.setOrderBy(StringHelper.captureName(sort).concat(" ".concat(sord)));
 
         //do query
@@ -109,8 +109,8 @@ public class ReportController {
         condition.setProductStatus(status);
 
         condition.setItemId(itemId);
-        if (startTime != null && !"".equals(startTime)) condition.setStartTime(formatter.parse(startTime));
-        if (endTime != null && !"".equals(endTime)) condition.setEndTime(formatter.parse(endTime));
+        if (StringHelper.isNotBlank(startTime)) condition.setStartTime(formatter.parse(startTime));
+        if (StringHelper.isNotBlank(endTime)) condition.setEndTime(formatter.parse(endTime));
 
         //valid if superAdmin
         if (jwtUser.getId() != null) condition.setUserId(jwtUser.getId());
@@ -118,7 +118,7 @@ public class ReportController {
         //set pagination
         condition.setPageNum(Integer.parseInt(page));
         condition.setPageSize(Integer.parseInt(rows));
-        if (sort != null && !"".equals(sort))
+        if (StringHelper.isNotBlank(sort))
             condition.setOrderBy(StringHelper.captureName(sort).concat(" ".concat(sord)));
 
         return reportService.getCpsReportList(condition);

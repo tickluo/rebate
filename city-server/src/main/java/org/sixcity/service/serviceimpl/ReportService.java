@@ -9,6 +9,7 @@ import org.sixcity.domain.dto.view.DateReport;
 import org.sixcity.mapper.ProductsMapper;
 
 import org.springframework.stereotype.Service;
+import util.StringHelper;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -77,8 +78,8 @@ public class ReportService {
                                                   String startTime,
                                                   String endTime,
                                                   Long userId) {
-        if (startTime == null || "".equals(startTime)) startTime = "0000-00-00";
-        if (endTime == null || "".equals(endTime)) endTime = "0000-00-00";
+        if (!StringHelper.isNotBlank(startTime)) startTime = "0000-00-00";
+        if (!StringHelper.isNotBlank(endTime)) endTime = "0000-00-00";
         return productsMapper.getDateReportList(timeType, userId, startTime, endTime);
     }
 

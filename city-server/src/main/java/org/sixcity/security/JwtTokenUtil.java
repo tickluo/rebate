@@ -19,7 +19,9 @@ public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -3301605591108950415L;
 
-    private static final String CLAIM_KEY_USERNAME = "sub";
+    private static final String CLAIM_KEY_USERNAME = "username";
+    private static final String CLAIM_KEY_PASSWORD = "pwd";
+    private static final String CLAIM_KEY_AUTHORITY = "auth";
     private static final String CLAIM_KEY_CREATED = "created";
 
     @Value("${jwt.secret}")
@@ -28,15 +30,27 @@ public class JwtTokenUtil implements Serializable {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    public String getUsernameFromToken(String token) {
-        String username;
+    public String getSubjectFromToken(String token, String subjectName) {
+        String sub;
         try {
             final Claims claims = getClaimsFromToken(token);
-            username = claims.getSubject();
+            sub = claims.get(subjectName, String.class);
         } catch (Exception e) {
-            username = null;
+            sub = null;
         }
-        return username;
+        return sub;
+    }
+
+    public String getUsernameFromToken(String token) {
+        return getSubjectFromToken(token, CLAIM_KEY_USERNAME);
+    }
+
+    public String getPasswordFromToken(String token) {
+        return getSubjectFromToken(token, CLAIM_KEY_PASSWORD);
+    }
+
+    public String getAuthorityFromToken(String token) {
+        return getSubjectFromToken(token, CLAIM_KEY_AUTHORITY);
     }
 
     public Date getExpirationDateFromToken(String token) {
@@ -75,6 +89,8 @@ public class JwtTokenUtil implements Serializable {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
+        claims.put(CLAIM_KEY_PASSWORD, userDetails.getPassword());
+        claims.put(CLAIM_KEY_AUTHORITY, userDetails.getAuthorities());
         claims.put(CLAIM_KEY_CREATED, new Date());
         return generateToken(claims);
     }

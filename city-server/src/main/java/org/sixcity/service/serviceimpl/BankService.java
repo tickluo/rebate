@@ -7,6 +7,7 @@ import service.CrudService;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import util.StringHelper;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class BankService extends CrudService<BankMapper, Bank> {
     }
 
     public List<Bank> findByUserId(Long userId, String rows, String page) {
-        if (rows != null && !"".equals(rows) && page != null && !"".equals(page)) {
+        if (StringHelper.isNotBlank(rows) && StringHelper.isNotBlank(page)) {
             PageHelper.startPage(Integer.parseInt(page), Integer.parseInt(rows));
         }
         return getDao().findByUserId(userId);
