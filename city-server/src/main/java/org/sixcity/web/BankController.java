@@ -1,14 +1,13 @@
 package org.sixcity.web;
 
-import com.alibaba.fastjson.JSONArray;
 import exception.ApplicationException;
 import model.Result;
 import model.ResultCode;
 import org.sixcity.domain.Bank;
 import org.sixcity.domain.dto.post.BankInfoForm;
 import org.sixcity.security.model.JwtUser;
-import org.sixcity.service.serviceimpl.BankService;
-import org.sixcity.service.serviceimpl.UploadService;
+import org.sixcity.service.impl.BankService;
+import org.sixcity.service.impl.UploadService;
 import org.sixcity.util.MessageHandleUtils;
 import org.sixcity.util.WebUtils;
 

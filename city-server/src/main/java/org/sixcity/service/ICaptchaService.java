@@ -1,6 +1,5 @@
 package org.sixcity.service;
 
-
 import cn.apiclub.captcha.Captcha;
 
 public interface ICaptchaService {

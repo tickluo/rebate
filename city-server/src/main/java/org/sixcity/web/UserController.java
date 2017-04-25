@@ -6,11 +6,10 @@ import model.ResultCode;
 import org.sixcity.domain.dto.post.ResetPasswordForm;
 import org.sixcity.domain.dto.post.UserInfoForm;
 import org.sixcity.security.model.JwtUser;
-import org.sixcity.security.service.AuthService;
 import org.sixcity.security.service.AuthServiceImpl;
-import org.sixcity.service.serviceimpl.AdminService;
-import org.sixcity.service.serviceimpl.ProductService;
-import org.sixcity.service.serviceimpl.UserService;
+import org.sixcity.service.impl.AdminService;
+import org.sixcity.service.impl.ProductService;
+import org.sixcity.service.impl.UserService;
 
 import org.sixcity.util.MessageHandleUtils;
 import org.sixcity.util.WebUtils;

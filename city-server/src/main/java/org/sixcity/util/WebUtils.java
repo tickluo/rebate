@@ -1,15 +1,13 @@
 package org.sixcity.util;
 
-import org.sixcity.service.serviceimpl.AdminService;
+import org.sixcity.service.impl.AdminService;
 
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.File;
 import java.util.Collection;
 
 public final class WebUtils {

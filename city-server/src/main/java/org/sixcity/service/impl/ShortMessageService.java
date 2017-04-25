@@ -1,4 +1,4 @@
-package org.sixcity.service.serviceimpl;
+package org.sixcity.service.impl;
 
 import org.springframework.stereotype.Service;
 

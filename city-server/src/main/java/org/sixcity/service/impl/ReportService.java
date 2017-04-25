@@ -1,6 +1,5 @@
-package org.sixcity.service.serviceimpl;
+package org.sixcity.service.impl;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.sixcity.constant.state.ProductStatusConst;
 import org.sixcity.domain.Product;
@@ -14,7 +13,6 @@ import util.StringHelper;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

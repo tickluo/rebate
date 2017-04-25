@@ -1,4 +1,4 @@
-package org.sixcity.service.serviceimpl;
+package org.sixcity.service.impl;
 
 import org.sixcity.domain.Transfer;
 import org.sixcity.mapper.TransferMapper;
@@ -14,6 +14,10 @@ public class TransferService extends CrudService<TransferMapper, Transfer> {
 
         transfer.preInsert();
         return getDao().insert(transfer);
+    }
+
+    public Transfer getTransferByTransId(Long transId) {
+        return getDao().findById(transId);
     }
 
 }

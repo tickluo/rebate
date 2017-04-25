@@ -10,6 +10,9 @@ import java.util.Date;
 @Data
 public class ProductPost {
 
+    @NotBlank(message = "transId不能为空")
+    private Long transId;
+
     @NotBlank(message = "商品id不能为空")
     private String itemId;
 

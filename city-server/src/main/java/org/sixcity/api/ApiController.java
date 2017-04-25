@@ -1,4 +1,4 @@
-package org.sixcity.web;
+package org.sixcity.api;
 
 import com.alibaba.fastjson.JSONObject;
 import model.Result;
@@ -10,18 +10,17 @@ import org.sixcity.domain.api.ProductPost;
 import org.sixcity.domain.api.TransferPost;
 import org.sixcity.domain.api.result.TransferResult;
 import org.sixcity.security.model.JwtUser;
-import org.sixcity.service.serviceimpl.SiteRebatePointsService;
-import org.sixcity.service.serviceimpl.TransferService;
+import org.sixcity.api.service.IApiService;
+import org.sixcity.service.impl.SiteRebatePointsService;
+import org.sixcity.service.impl.TransferService;
 import org.sixcity.util.MessageHandleUtils;
 import org.sixcity.util.WebUtils;
-import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(
@@ -32,11 +31,14 @@ import java.util.Map;
 )
 public class ApiController {
 
+    private final IApiService apiService;
     private final SiteRebatePointsService siteRebatePointsService;
     private final TransferService transferService;
 
-    public ApiController(SiteRebatePointsService siteRebatePointsService,
+    public ApiController(IApiService apiService,
+                         SiteRebatePointsService siteRebatePointsService,
                          TransferService transferService) {
+        this.apiService = apiService;
         this.siteRebatePointsService = siteRebatePointsService;
         this.transferService = transferService;
     }
@@ -50,9 +52,13 @@ public class ApiController {
             return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
                     .setMessage(MessageHandleUtils.getControllerParamsInvalidMessage(fieldErrors));
         }
+        JwtUser jwtUser = WebUtils.getCurrentUser();
 
         //build Product entity
         Product productEntity = JSONObject.parseObject(JSONObject.toJSONString(productPost), Product.class);
+        productEntity.setUserId(jwtUser.getId());
+
+        apiService.saveProduct(productEntity);
 
 
         return Result.createSuccessResult();
@@ -72,16 +78,16 @@ public class ApiController {
         SiteRebatePoints siteRebate = siteRebatePointsService.getFinalSitePointByUrl(jwtUser.getId(), transferPost.getUrl());
 
         //build Transfer entity
-        Transfer transfer = new Transfer();
-        transfer.setUserId(jwtUser.getId());
-        transfer.setTransUrl(transferPost.getUrl());
-        transfer.setRebatePoint(siteRebate.getSitePoints());
+        Transfer transferEntity = new Transfer();
+        transferEntity.setUserId(jwtUser.getId());
+        transferEntity.setTransUrl(transferPost.getUrl());
+        transferEntity.setRebatePoint(siteRebate.getSitePoints());
 
-        if (transferService.addTransfer(transfer) < 1) {
+        if (transferService.addTransfer(transferEntity) < 1) {
             return Result.createErrorResult(
                     ResultCode.DAO_ERROR, "添加失败");
         }
-        TransferResult transferResult = new TransferResult(transfer.getId());
+        TransferResult transferResult = new TransferResult(transferEntity.getId());
         return Result.createSuccessResult(transferResult, "添加成功");
     }
 }

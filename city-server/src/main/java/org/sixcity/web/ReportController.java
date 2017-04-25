@@ -6,7 +6,7 @@ import org.sixcity.domain.Product;
 import org.sixcity.domain.dto.query.CpsReportQuery;
 import org.sixcity.domain.dto.view.DateReport;
 import org.sixcity.security.model.JwtUser;
-import org.sixcity.service.serviceimpl.ReportService;
+import org.sixcity.service.impl.ReportService;
 import org.sixcity.util.WebUtils;
 
 import org.springframework.security.access.prepost.PreAuthorize;

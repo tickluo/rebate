@@ -1,4 +1,4 @@
-package org.sixcity.service.serviceimpl;
+package org.sixcity.service.impl;
 
 import org.sixcity.constant.state.ConsumptionType;
 import org.sixcity.constant.state.ProductOperationConst;

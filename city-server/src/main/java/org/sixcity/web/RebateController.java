@@ -7,10 +7,10 @@ import org.sixcity.domain.*;
 import org.sixcity.domain.dto.post.RebateCashForm;
 import org.sixcity.domain.dto.query.CashRecordQuery;
 import org.sixcity.security.model.JwtUser;
-import org.sixcity.service.serviceimpl.BankService;
-import org.sixcity.service.serviceimpl.RebateService;
-import org.sixcity.service.serviceimpl.SiteRebatePointsService;
-import org.sixcity.service.serviceimpl.UserService;
+import org.sixcity.service.impl.BankService;
+import org.sixcity.service.impl.RebateService;
+import org.sixcity.service.impl.SiteRebatePointsService;
+import org.sixcity.service.impl.UserService;
 import org.sixcity.util.MessageHandleUtils;
 import org.sixcity.util.WebUtils;
 
