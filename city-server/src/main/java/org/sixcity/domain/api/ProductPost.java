@@ -1,27 +1,17 @@
-package org.sixcity.domain;
-
-import model.DataEntity;
+package org.sixcity.domain.api;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotBlank;
 import org.sixcity.util.custom.validator.Url;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class Product extends DataEntity {
+public class ProductPost {
 
     @NotBlank(message = "商品id不能为空")
     private String itemId;
-
-    @NotBlank(message = "transId不能为空")
-    private Long transId;
-
-    @NotBlank(message = "用户id不能为空")
-    private Long userId;
 
     @NotBlank(message = "商品名称不能为空")
     private String name;
@@ -42,30 +32,11 @@ public class Product extends DataEntity {
     @NotBlank(message = "商品实际单价不能为空")
     private BigDecimal actuallyPay;
 
-    @NotBlank(message = "返点值不能为空")
-    private BigDecimal rebatePoint;
-
-    @NotBlank(message = "总的返点值不能为空")
-    private BigDecimal rebateTotalPrice;
-
-    @NotBlank(message = "是否结算不能为空")
-    private Boolean settlemented = false;
-
-    @NotBlank(message = "结算状态不能为空")
-    private Integer settlementState;
-
-    private Date settlementTime;
-
     @NotBlank(message = "商品状态不能为空")
     private Integer productStatus;
 
     @NotBlank(message = "下单时间不能为空")
     private Date orderTime;
 
-    private Date arrivedTime;
-
     private Date transTime;
-
-    private Date cancelTime;
-
 }

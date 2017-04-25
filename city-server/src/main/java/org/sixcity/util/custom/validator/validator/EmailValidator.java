@@ -14,9 +14,6 @@ public class EmailValidator implements ConstraintValidator<Email, String> {
 
     @Override
     public boolean isValid(String emailField, ConstraintValidatorContext cxt) {
-        if (emailField == null) {
-            return false;
-        }
-        return ValidateUtils.isEmail(emailField);
+        return emailField != null && ValidateUtils.isEmail(emailField);
     }
 }

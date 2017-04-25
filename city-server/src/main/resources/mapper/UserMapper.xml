@@ -107,7 +107,7 @@
         <include refid="selectUserAndMerchant"/>
         WHERE a.Id = #{id}
     </select>
-    <select id="findMerchantUserByAppKey" resultType="org.sixcity.domain.User">
+    <select id="findMerchantUserByAppKey" resultType="org.sixcity.domain.dto.view.MerchantUser">
         <include refid="selectUserAndMerchant"/>
         WHERE b.AppKey = #{appKey}
     </select>

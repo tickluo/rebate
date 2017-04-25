@@ -18,7 +18,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Email {
 
-
     String message() default "{Email}";
 
     Class<?>[] groups() default {};

@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONObject;
 import org.sixcity.security.service.JwtUserDetailsServiceImpl;
 import org.sixcity.util.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // authToken.startsWith("Bearer ")
         // String authToken = header.substring(7);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
-        Object appKey = request.getParameter("appKey");
+        JSONObject params = JSONObject.parseObject(request.getParameterNames().nextElement());
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
@@ -49,8 +50,18 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             }
         }
 
-        if (appKey != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByAppKey(appKey.toString());
+      /*  if (SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername("tickluo");
+
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }*/
+
+        if (params.containsKey("appKey")  && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByAppKey(params.getString("appKey"));
 
             if (userDetails != null) {
                 UsernamePasswordAuthenticationToken authentication =

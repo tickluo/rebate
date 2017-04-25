@@ -33,7 +33,7 @@ public enum Validator {
     INT {
         @Override
         public void validate(String name, String value) throws ValidateException {
-            if (!"".equals(value) &&!ValidateUtils.isInteger(value)) {
+            if (!"".equals(value) && !ValidateUtils.isInteger(value)) {
                 throw new ValidateException(name + "必须为整数！");
             }
         }
@@ -90,6 +90,18 @@ public enum Validator {
             }
         }
     },
+    /**
+     * 邮件验证
+     */
+    URL {
+        @Override
+        public void validate(String name, String value) throws ValidateException {
+            if (!ValidateUtils.isUrl(value)) {
+                throw new ValidateException(name + "格式不正确，请检查！");
+            }
+        }
+    },
+
     /**
      * 手机验证
      */

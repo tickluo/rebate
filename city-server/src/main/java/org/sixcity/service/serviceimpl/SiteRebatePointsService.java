@@ -10,8 +10,10 @@ import org.sixcity.mapper.SiteRebatePointsMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class SiteRebatePointsService {
@@ -34,19 +36,20 @@ public class SiteRebatePointsService {
 
     /**
      * 查询某一用户的各网站的返利集合
-     *
-     * @param userId
-     * @return
      */
     public List<UserSiteRebatePoints> getUserSitePoint(Long userId) {
         return userSiteRebatePointsMapper.findByUserId(userId);
     }
 
     /**
+     * 查询某一用户的指定网站的返利
+     */
+    public UserSiteRebatePoints getUserSitePointBySiteId(Long userId, Long siteId) {
+        return userSiteRebatePointsMapper.findBySiteId(userId, siteId);
+    }
+
+    /**
      * 最终用户的各网站的返利点
-     *
-     * @param userId
-     * @return
      */
     public List<SiteRebatePoints> getFinalUserSitePoint(Long userId) throws ApplicationException {
         List<SiteRebatePoints> siteList = getSiteRebateList();
@@ -61,11 +64,24 @@ public class SiteRebatePointsService {
     }
 
     /**
+     * 最终用户的指定网站的返利点
+     */
+    public SiteRebatePoints getFinalSitePointByUrl(Long userId, String url) throws ApplicationException {
+        List<SiteRebatePoints> siteList = getSiteRebateList();
+        Optional<SiteRebatePoints> siteTemp = siteList.stream()
+                .filter(site -> url.contains(site.getSiteUrl()))
+                .findAny();
+        SiteRebatePoints siteRebate = siteTemp.isPresent() ? siteTemp.get() : null;
+        if (siteRebate != null) {
+            UserSiteRebatePoints userSiteRebate = getUserSitePointBySiteId(userId, siteRebate.getId());
+            if (userSiteRebate != null) siteRebate.setSitePoints(userSiteRebate.getSitePoints());
+            else siteRebate.setSitePoints(new BigDecimal(0));
+        }
+        return siteRebate;
+    }
+
+    /**
      * 检查用户网站返利点是否已经设置
-     *
-     * @param userId
-     * @param siteId
-     * @return
      */
     public Boolean checkSiteRebatePointsExist(Long userId, Long siteId) {
         return userSiteRebatePointsMapper.checkSiteRebatePointsExist(userId, siteId);
@@ -73,9 +89,6 @@ public class SiteRebatePointsService {
 
     /**
      * 保存用户网站返利点
-     *
-     * @param userSiteRebatePoints
-     * @return
      */
     @Transactional(readOnly = false)
     public Boolean saveSiteRebatePoints(UserSiteRebatePoints userSiteRebatePoints) {
