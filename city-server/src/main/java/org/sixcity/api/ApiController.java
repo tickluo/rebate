@@ -3,18 +3,15 @@ package org.sixcity.api;
 import com.alibaba.fastjson.JSONObject;
 import model.Result;
 import model.ResultCode;
-import org.sixcity.constant.state.ProductOperationConst;
-import org.sixcity.constant.state.ProductStatusEnum;
 import org.sixcity.domain.Product;
-import org.sixcity.domain.ProductRecord;
 import org.sixcity.domain.SiteRebatePoints;
 import org.sixcity.domain.Transfer;
 import org.sixcity.domain.api.ProductPost;
 import org.sixcity.domain.api.TransferPost;
+import org.sixcity.domain.api.UpdateStatusPost;
 import org.sixcity.domain.api.result.TransferResult;
 import org.sixcity.security.model.JwtUser;
 import org.sixcity.api.service.IApiService;
-import org.sixcity.service.impl.ProductRecordService;
 import org.sixcity.service.impl.SiteRebatePointsService;
 import org.sixcity.service.impl.TransferService;
 import org.sixcity.util.MessageHandleUtils;
@@ -64,7 +61,7 @@ public class ApiController {
         //do save
         apiService.saveProduct(productEntity);
 
-        return Result.createSuccessResult("添加成功");
+        return Result.createSuccessResult("更新成功");
     }
 
     @RequestMapping(value = "transferProduct")
@@ -92,5 +89,19 @@ public class ApiController {
         }
         TransferResult transferResult = new TransferResult(transferEntity.getId());
         return Result.createSuccessResult(transferResult, "添加成功");
+    }
+
+    @RequestMapping(value = "updateProductStatus")
+    public Result updateProductStatus(@RequestBody @Valid UpdateStatusPost updateStatusPost,
+                                      BindingResult bindingResult) {
+        // valid params
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            return Result.createErrorResult(ResultCode.VALIDATE_ERROR)
+                    .setMessage(MessageHandleUtils.getControllerParamsInvalidMessage(fieldErrors));
+        }
+
+        apiService.updateProductStatus(updateStatusPost.getTransId(), updateStatusPost.getProductStatus());
+        return Result.createSuccessResult();
     }
 }

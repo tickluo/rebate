@@ -83,7 +83,6 @@
         UPDATE Product_t
         SET
             ItemId           = #{itemId},
-            TransId          = #{transId},
             Name             = #{name},
             Url              = #{url},
             Quantity         = #{quantity},
@@ -100,10 +99,14 @@
             ArrivedTime      = #{arrivedTime},
             TransTime        = #{transTime},
             CancelTime       = #{cancelTime},
-            CreateTime       = #{createTime},
             UpdateTime       = #{updateTime}
-        WHERE UserId = #{userId}
+        WHERE TransId = #{transId}
     </update>
+
+    <select id="findByTransId" resultType="org.sixcity.domain.Product">
+        <include refid="selectColumns"/>
+        WHERE TransId = #{transId}
+    </select>
 
     <!-- 查找日期报表信息 -->
     <select id="getDateReportList" statementType="CALLABLE" resultType="org.sixcity.domain.dto.view.DateReport">

@@ -10,6 +10,7 @@ import org.sixcity.service.impl.ProductService;
 import org.sixcity.service.impl.RebateProduceService;
 import org.sixcity.service.impl.RebateService;
 import org.sixcity.service.impl.UserService;
+import org.sixcity.service.transaction.RebateProduceTrans;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import util.DateUtils;
@@ -24,16 +25,16 @@ public class RebateTask {
     private final UserService userService;
     private final RebateService rebateService;
     private final ProductService productService;
-    private final RebateProduceService rebateProduceService;
+    private final RebateProduceTrans rebateProduceTrans;
 
     public RebateTask(UserService userService,
                       RebateService rebateService,
                       ProductService productService,
-                      RebateProduceService rebateProduceService) {
+                      RebateProduceTrans rebateProduceTrans) {
         this.userService = userService;
         this.rebateService = rebateService;
         this.productService = productService;
-        this.rebateProduceService = rebateProduceService;
+        this.rebateProduceTrans = rebateProduceTrans;
     }
 
     /**
@@ -88,7 +89,7 @@ public class RebateTask {
                 }
 
                 //set rebateProduce
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
+                //SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
                 GregorianCalendar calendar = new GregorianCalendar();
                 calendar.setTime(endDate);
 
@@ -106,7 +107,7 @@ public class RebateTask {
                 productList.addAll(userProductList);
             }
             //do rebateProduce
-            rebateProduceService.rebateProduce(userList, rebateProduceList, productList);
+            rebateProduceTrans.rebateProduce(userList, rebateProduceList, productList);
 
         } catch (ApplicationException ex) {
 

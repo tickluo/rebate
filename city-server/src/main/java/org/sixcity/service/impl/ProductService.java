@@ -37,6 +37,10 @@ public class ProductService extends CrudService<ProductsMapper, Product> {
         return getDao().update(product);
     }
 
+    public Product getProductByTransId(Long transId) {
+        return getDao().findByTransId(transId);
+    }
+
     /**
      * 获取用户可申请返利额
      *
@@ -59,6 +63,14 @@ public class ProductService extends CrudService<ProductsMapper, Product> {
         return new BigDecimal(productList.stream().mapToDouble(i -> i.getRebateTotalPrice().doubleValue()).sum());
     }
 
+    /**
+     * 获取未结算商品列表
+     *
+     * @param userId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
     public List<Product> getUnsettledProduct(Long userId,
                                              Date startTime,
                                              Date endTime) {
