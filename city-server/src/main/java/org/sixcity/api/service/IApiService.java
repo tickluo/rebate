@@ -9,6 +9,6 @@ public interface IApiService {
      * @param product
      * @return
      */
-    public int saveProduct(Product product);
+    public void saveProduct(Product product);
 
 }

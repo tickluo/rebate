@@ -2,7 +2,7 @@ package org.sixcity.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.sixcity.constant.state.ProductStatusConst;
+import org.sixcity.constant.state.ProductStatusEnum;
 import org.sixcity.domain.Product;
 import org.sixcity.domain.dto.query.CpsReportQuery;
 import org.sixcity.domain.dto.query.ProductStatusQuery;
@@ -32,7 +32,7 @@ public class ProductService extends CrudService<ProductsMapper, Product> {
     }
 
     @Transactional(readOnly = false)
-    public int updateProduct(Product product){
+    public int updateProduct(Product product) {
         product.preUpdate();
         return getDao().update(product);
     }
@@ -68,8 +68,8 @@ public class ProductService extends CrudService<ProductsMapper, Product> {
         if (startTime != null) condition.setStartTime(startTime);
         if (endTime != null) condition.setEndTime(endTime);
         List<Integer> statusList = new ArrayList<>();
-        statusList.add(ProductStatusConst.TRANSPORT_IN);
-        statusList.add(ProductStatusConst.RECEIVED);
+        statusList.add(ProductStatusEnum.TRANSPORT_IN.getCode());
+        statusList.add(ProductStatusEnum.RECEIVED.getCode());
         condition.setProductStatus(statusList);
         return getDao().findListInStatus(condition);
     }

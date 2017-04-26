@@ -3,7 +3,10 @@ package org.sixcity.api;
 import com.alibaba.fastjson.JSONObject;
 import model.Result;
 import model.ResultCode;
+import org.sixcity.constant.state.ProductOperationConst;
+import org.sixcity.constant.state.ProductStatusEnum;
 import org.sixcity.domain.Product;
+import org.sixcity.domain.ProductRecord;
 import org.sixcity.domain.SiteRebatePoints;
 import org.sixcity.domain.Transfer;
 import org.sixcity.domain.api.ProductPost;
@@ -11,6 +14,7 @@ import org.sixcity.domain.api.TransferPost;
 import org.sixcity.domain.api.result.TransferResult;
 import org.sixcity.security.model.JwtUser;
 import org.sixcity.api.service.IApiService;
+import org.sixcity.service.impl.ProductRecordService;
 import org.sixcity.service.impl.SiteRebatePointsService;
 import org.sixcity.service.impl.TransferService;
 import org.sixcity.util.MessageHandleUtils;
@@ -57,11 +61,10 @@ public class ApiController {
         //build Product entity
         Product productEntity = JSONObject.parseObject(JSONObject.toJSONString(productPost), Product.class);
         productEntity.setUserId(jwtUser.getId());
-
+        //do save
         apiService.saveProduct(productEntity);
 
-
-        return Result.createSuccessResult();
+        return Result.createSuccessResult("添加成功");
     }
 
     @RequestMapping(value = "transferProduct")

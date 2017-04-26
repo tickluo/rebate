@@ -1,7 +1,7 @@
 package org.sixcity.service.impl;
 
 import com.github.pagehelper.PageInfo;
-import org.sixcity.constant.state.ProductStatusConst;
+import org.sixcity.constant.state.ProductStatusEnum;
 import org.sixcity.domain.Product;
 import org.sixcity.domain.dto.query.CpsReportQuery;
 import org.sixcity.domain.dto.view.DateReport;
@@ -41,8 +41,8 @@ public class ReportService {
 
         PageInfo<Product> reportList = productService.getProductByQuery(cpsReportQuery);
         PageInfo<DateReport> resultList = new PageInfo<>(reportList.getList().stream().map(r -> {
-            boolean flag = !r.getProductStatus().equals(ProductStatusConst.WAIT_PAYS)
-                    && !r.getProductStatus().equals(ProductStatusConst.CANCELED);
+            boolean flag = !r.getProductStatus().equals(ProductStatusEnum.WAIT_PAYS.getCode())
+                    && !r.getProductStatus().equals(ProductStatusEnum.CANCELED.getCode());
             DateReport dr = new DateReport();
             dr.setOrderTime(formatter.format(r.getOrderTime()));
             dr.setAllOrderNum(1L);
@@ -73,9 +73,9 @@ public class ReportService {
      * @return
      */
     public List<DateReport> getDateReportList(int timeType,
-                                                  String startTime,
-                                                  String endTime,
-                                                  Long userId) {
+                                              String startTime,
+                                              String endTime,
+                                              Long userId) {
         if (!StringHelper.isNotBlank(startTime)) startTime = "0000-00-00";
         if (!StringHelper.isNotBlank(endTime)) endTime = "0000-00-00";
         return productsMapper.getDateReportList(timeType, userId, startTime, endTime);

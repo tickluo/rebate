@@ -30,4 +30,10 @@
         )
     </insert>
 
+    <!-- 查找追踪商品 -->
+    <select id="findById" resultType="org.sixcity.domain.Transfer">
+        <include refid="selectColumns"/>
+        WHERE Id = #{transId}
+    </select>
+
 </mapper>
