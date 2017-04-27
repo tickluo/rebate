@@ -13,7 +13,7 @@ public interface BankMapper extends CrudDao<Bank> {
 
     int insert(Bank bank);
 
-    List<Bank> findByUserId(@Param("userId") Long userId);
+    List<Bank> findByAppId(@Param("appId") String appId);
 
     Bank findById(@Param("id") Long id);
 

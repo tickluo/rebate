@@ -7,6 +7,7 @@ import org.sixcity.domain.ConsumptionRecord;
 import org.sixcity.domain.Product;
 import org.sixcity.domain.RebateProduce;
 import org.sixcity.domain.User;
+import org.sixcity.domain.dto.view.MerchantUser;
 import org.sixcity.service.impl.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,12 +32,13 @@ public class MoneyChangeTrans {
 
     /**
      * 商品状态改为取消后关联操作
+     *
      * @param product
      */
     @Transactional(rollbackFor = DaoException.class)
     public void productCancel(Product product) {
         //update user amount
-        User user = userService.findById(product.getUserId());
+        MerchantUser user = userService.findMerchantUserByAppId(product.getAppId());
         if (user == null) {
             throw new FindEmptyException("用户不存在");
         }
@@ -48,8 +50,8 @@ public class MoneyChangeTrans {
         //update rebateProduce
         Date startDate = product.getSettlementTime();
         Date endDate = DateUtils.addMonth(startDate, 1);
-        RebateProduce rebateProduce = rebateProduceService.getRebateProduceByUserIdAndTime(
-                product.getUserId(), startDate, endDate
+        RebateProduce rebateProduce = rebateProduceService.getRebateProduceByAppIdAndTime(
+                product.getAppId(), startDate, endDate
         );
         if (rebateProduce == null) {
             throw new FindEmptyException("返利未产生");
@@ -61,7 +63,7 @@ public class MoneyChangeTrans {
         }
         //add consumption record
         ConsumptionRecord consumptionRecord = new ConsumptionRecord();
-        consumptionRecord.setUserId(product.getUserId());
+        consumptionRecord.setAppId(product.getAppId());
         consumptionRecord.setTransId(product.getTransId());
         consumptionRecord.setTypeId(ConsumptionType.PRODUCT);
         consumptionRecord.setAmount(product.getRebateTotalPrice().negate());

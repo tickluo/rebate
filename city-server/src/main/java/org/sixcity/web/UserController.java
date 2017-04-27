@@ -138,7 +138,7 @@ public class UserController {
         JwtUser jwtUser = WebUtils.getCurrentUser();
 
         return Result.createSuccessResult(
-                productService.getUserRebateAmount(jwtUser.getId(), null, null), "用户可申请返利"
+                productService.getUserRebateAmount(jwtUser.getAppId(), null, null), "用户可申请返利"
         );
     }
 

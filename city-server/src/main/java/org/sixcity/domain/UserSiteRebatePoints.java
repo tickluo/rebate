@@ -3,6 +3,7 @@ package org.sixcity.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import model.DataEntity;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -11,8 +12,8 @@ import java.math.BigDecimal;
 @Data
 public class UserSiteRebatePoints extends DataEntity {
 
-    @NotNull(message = "用户id不能为空")
-    private Long userId;
+    @NotBlank(message = "商户Id不能为空")
+    private String appId;
 
     @NotNull(message = "网站id不能为空")
     private Long siteId;

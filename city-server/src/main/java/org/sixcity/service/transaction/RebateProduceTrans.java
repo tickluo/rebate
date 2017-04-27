@@ -4,6 +4,7 @@ import exception.DaoException;
 import org.sixcity.constant.state.ConsumptionType;
 import org.sixcity.constant.state.ProductOperationConst;
 import org.sixcity.domain.*;
+import org.sixcity.domain.dto.view.MerchantUser;
 import org.sixcity.service.impl.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +51,7 @@ public class RebateProduceTrans {
         });
         //update product
         productList.forEach(product -> {
-            User user = userService.findById(product.getUserId());
+            MerchantUser user = userService.findMerchantUserByAppId(product.getAppId());
 
             product.setSettlemented(true);
             product.setSettlementTime(new Date());
@@ -67,7 +68,7 @@ public class RebateProduceTrans {
             productRecordService.addProductRecord(productRecord);
 
             ConsumptionRecord consumptionRecord = new ConsumptionRecord();
-            consumptionRecord.setUserId(product.getUserId());
+            consumptionRecord.setAppId(product.getAppId());
             consumptionRecord.setTransId(product.getTransId());
             consumptionRecord.setTypeId(ConsumptionType.PRODUCT);
             consumptionRecord.setAmount(product.getRebateTotalPrice());

@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 public class CashRecordQuery extends Paging {
 
-    private Long userId;
+    private String appId;
 
     private Date startTime;
 

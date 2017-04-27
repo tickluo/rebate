@@ -69,16 +69,16 @@ public class ReportService {
      * @param timeType
      * @param startTime
      * @param endTime
-     * @param userId
+     * @param appId
      * @return
      */
     public List<DateReport> getDateReportList(int timeType,
                                               String startTime,
                                               String endTime,
-                                              Long userId) {
+                                              String appId) {
         if (!StringHelper.isNotBlank(startTime)) startTime = "0000-00-00";
         if (!StringHelper.isNotBlank(endTime)) endTime = "0000-00-00";
-        return productsMapper.getDateReportList(timeType, userId, startTime, endTime);
+        return productsMapper.getDateReportList(timeType, appId, startTime, endTime);
     }
 
     public PageInfo<Product> getCpsReportList(CpsReportQuery condition) throws ParseException {

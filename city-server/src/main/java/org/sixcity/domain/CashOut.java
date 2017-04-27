@@ -13,8 +13,8 @@ import java.util.Date;
 @Data
 public class CashOut extends DataEntity {
 
-    @NotBlank(message = "用户Id不能为空")
-    private Long userId;
+    @NotBlank(message = "商户Id不能为空")
+    private String appId;
 
     @NotBlank(message = "开户人不能为空")
     private String accountName;

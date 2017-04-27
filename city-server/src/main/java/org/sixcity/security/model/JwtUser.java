@@ -9,21 +9,21 @@ import java.util.Collection;
 public class JwtUser implements UserDetails {
 
     private final Long id;
+    private final String appId;
     private final String username;
     private final String password;
-    private final String phone;
     private Collection<SimpleGrantedAuthority> authorities;
 
     public JwtUser(
             Long id,
+            String appId,
             String username,
             String password,
-            String phone,
             Collection<SimpleGrantedAuthority> authorities) {
         this.id = id;
+        this.appId = appId;
         this.username = username;
         this.password = password;
-        this.phone = phone;
         this.authorities = authorities;
     }
 
@@ -50,6 +50,10 @@ public class JwtUser implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public String getAppId() {
+        return appId;
     }
 
     // 账户是否未过期

@@ -23,7 +23,7 @@ $(document).ready(function () {
     getAjax("/user/getAllMerchant", {}, function (data) {
         var selectList = data.data.map(function (item) {
             return {
-                id: item.id,
+                id: item.appId,
                 text: item.companyName
             }
         });
@@ -80,7 +80,7 @@ function submitForm() {
     }
 
     postAjax("/rebate/saveSiteRebatePoint", {
-        userId: $.trim($siteUser.val()),
+        appId: $.trim($siteUser.val()),
         siteId: $.trim($siteName.val()),
         sitePoints: $.trim($sitePoints.val())
     }, function (data) {

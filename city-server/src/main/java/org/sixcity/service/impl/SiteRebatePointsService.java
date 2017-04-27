@@ -37,23 +37,23 @@ public class SiteRebatePointsService {
     /**
      * 查询某一用户的各网站的返利集合
      */
-    public List<UserSiteRebatePoints> getUserSitePoint(Long userId) {
-        return userSiteRebatePointsMapper.findByUserId(userId);
+    public List<UserSiteRebatePoints> getUserSitePoint(String appId) {
+        return userSiteRebatePointsMapper.findByAppId(appId);
     }
 
     /**
      * 查询某一用户的指定网站的返利
      */
-    public UserSiteRebatePoints getUserSitePointBySiteId(Long userId, Long siteId) {
-        return userSiteRebatePointsMapper.findBySiteId(userId, siteId);
+    public UserSiteRebatePoints getUserSitePointBySiteId(String appId, Long siteId) {
+        return userSiteRebatePointsMapper.findBySiteId(appId, siteId);
     }
 
     /**
      * 最终用户的各网站的返利点
      */
-    public List<SiteRebatePoints> getFinalUserSitePoint(Long userId) throws ApplicationException {
+    public List<SiteRebatePoints> getFinalUserSitePoint(String appId) throws ApplicationException {
         List<SiteRebatePoints> siteList = getSiteRebateList();
-        List<UserSiteRebatePoints> userSiteList = getUserSitePoint(userId);
+        List<UserSiteRebatePoints> userSiteList = getUserSitePoint(appId);
 
         userSiteList.forEach(us -> {
             siteList.stream().filter(s -> Objects.equals(s.getId(), us.getSiteId()))
@@ -66,16 +66,15 @@ public class SiteRebatePointsService {
     /**
      * 最终用户的指定网站的返利点
      */
-    public SiteRebatePoints getFinalSitePointByUrl(Long userId, String url) throws ApplicationException {
+    public SiteRebatePoints getFinalSitePointByUrl(String appId, String url) throws ApplicationException {
         List<SiteRebatePoints> siteList = getSiteRebateList();
         Optional<SiteRebatePoints> siteTemp = siteList.stream()
                 .filter(site -> url.contains(site.getSiteUrl()))
                 .findAny();
         SiteRebatePoints siteRebate = siteTemp.isPresent() ? siteTemp.get() : null;
         if (siteRebate != null) {
-            UserSiteRebatePoints userSiteRebate = getUserSitePointBySiteId(userId, siteRebate.getId());
+            UserSiteRebatePoints userSiteRebate = getUserSitePointBySiteId(appId, siteRebate.getId());
             if (userSiteRebate != null) siteRebate.setSitePoints(userSiteRebate.getSitePoints());
-            else siteRebate.setSitePoints(new BigDecimal(0));
         }
         return siteRebate;
     }
@@ -83,8 +82,8 @@ public class SiteRebatePointsService {
     /**
      * 检查用户网站返利点是否已经设置
      */
-    public Boolean checkSiteRebatePointsExist(Long userId, Long siteId) {
-        return userSiteRebatePointsMapper.checkSiteRebatePointsExist(userId, siteId);
+    public Boolean checkSiteRebatePointsExist(String appId, Long siteId) {
+        return userSiteRebatePointsMapper.checkSiteRebatePointsExist(appId, siteId);
     }
 
     /**
@@ -92,7 +91,7 @@ public class SiteRebatePointsService {
      */
     @Transactional(readOnly = false)
     public Boolean saveSiteRebatePoints(UserSiteRebatePoints userSiteRebatePoints) {
-        if (checkSiteRebatePointsExist(userSiteRebatePoints.getUserId(), userSiteRebatePoints.getSiteId())) {
+        if (checkSiteRebatePointsExist(userSiteRebatePoints.getAppId(), userSiteRebatePoints.getSiteId())) {
             userSiteRebatePoints.preUpdate();
             return userSiteRebatePointsMapper.update(userSiteRebatePoints) > 0;
         }

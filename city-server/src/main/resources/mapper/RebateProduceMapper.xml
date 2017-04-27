@@ -5,7 +5,7 @@
     <sql id="selectColumns">
         SELECT
             a.id,
-            a.UserId,
+            a.AppId,
             a.ProduceYear,
             a.ProduceDate,
             a.RebateMoney,
@@ -19,7 +19,7 @@
     <!-- 插入结算信息 -->
     <insert id="insert">
         INSERT INTO Rebate_Produce_t (
-            UserId,
+            AppId,
             ProduceYear,
             ProduceDate,
             RebateMoney,
@@ -28,7 +28,7 @@
             CreateTime,
             UpdateTime
         ) VALUES (
-            #{userId},
+            #{appId},
             #{produceYear},
             #{produceDate},
             #{rebateMoney},

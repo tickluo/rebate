@@ -57,7 +57,7 @@ public class ApiController {
 
         //build Product entity
         Product productEntity = JSONObject.parseObject(JSONObject.toJSONString(productPost), Product.class);
-        productEntity.setUserId(jwtUser.getId());
+        productEntity.setAppId(jwtUser.getAppId());
         //do save
         apiService.saveProduct(productEntity);
 
@@ -75,11 +75,11 @@ public class ApiController {
         }
         JwtUser jwtUser = WebUtils.getCurrentUser();
 
-        SiteRebatePoints siteRebate = siteRebatePointsService.getFinalSitePointByUrl(jwtUser.getId(), transferPost.getUrl());
+        SiteRebatePoints siteRebate = siteRebatePointsService.getFinalSitePointByUrl(jwtUser.getAppId(), transferPost.getUrl());
 
         //build Transfer entity
         Transfer transferEntity = new Transfer();
-        transferEntity.setUserId(jwtUser.getId());
+        transferEntity.setAppId(jwtUser.getAppId());
         transferEntity.setTransUrl(transferPost.getUrl());
         transferEntity.setRebatePoint(siteRebate.getSitePoints());
 

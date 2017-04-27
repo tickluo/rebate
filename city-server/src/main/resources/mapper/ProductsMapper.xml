@@ -7,7 +7,7 @@
             a.Id,
             a.ItemId,
             a.TransId,
-            a.UserId,
+            a.AppId,
             a.Name,
             a.Url,
             a.Quantity,
@@ -34,7 +34,7 @@
         INSERT INTO Product_t (
             ItemId,
             TransId,
-            UserId,
+            AppId,
             Name,
             Url,
             Quantity,
@@ -56,7 +56,7 @@
         ) VALUES (
             #{itemId},
             #{transId},
-            #{userId},
+            #{appId},
             #{name},
             #{url},
             #{quantity},
@@ -113,7 +113,7 @@
          <![CDATA[
         {CALL proc_DataReport(
                 #{timeType,mode=IN,jdbcType=INTEGER},
-                #{userId,mode=IN,jdbcType=INTEGER},
+                #{appId,mode=IN,jdbcType=INTEGER},
                 #{startTime,mode=IN,jdbcType=VARCHAR},
                 #{endTime,mode=IN,jdbcType=VARCHAR}
         )}
@@ -125,8 +125,8 @@
         <include refid="selectColumns"/>
         WHERE
         1 = 1
-        <if test="condition.userId!=null">
-            and UserId = #{condition.userId}
+        <if test="condition.appId!=null">
+            and AppId = #{condition.appId}
         </if>
         <if test="condition.itemId != null and condition.itemId != ''">
             and ItemId = #{condition.itemId}
@@ -171,8 +171,8 @@
     <select id="findListInStatus" resultType="org.sixcity.domain.Product">
         <include refid="selectColumns"/>
         WHERE
-        <if test="condition.userId!=null">
-            UserId = #{condition.userId}
+        <if test="condition.appId!=null">
+            AppId = #{condition.appId}
         </if>
         <if test="condition.startTime!=null">
             and ( ArrivedTime &gt;= #{condition.startTime} OR TransTime &gt;= #{condition.startTime})

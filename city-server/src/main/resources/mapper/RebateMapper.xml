@@ -5,7 +5,7 @@
     <sql id="selectColumns">
         SELECT
             a.Id,
-            a.UserId,
+            a.AppId,
             a.AccountName,
             a.BankName,
             a.BankId,
@@ -21,7 +21,7 @@
     <!-- 插入银行信息 -->
     <insert id="insert">
         INSERT INTO Cashout_Record_t (
-            UserId,
+            AppId,
             AccountName,
             BankName,
             BankId,
@@ -32,7 +32,7 @@
             CreateTime,
             UpdateTime
         ) VALUES (
-            #{userId},
+            #{appId},
             #{accountName},
             #{bankName},
             #{bankId},
@@ -46,9 +46,9 @@
     </insert>
 
     <!-- 查找银行信息 -->
-    <select id="findByUserId" resultType="org.sixcity.domain.CashOut">
+    <select id="findByAppId" resultType="org.sixcity.domain.CashOut">
         <include refid="selectColumns"/>
-        WHERE UserId = #{condition.userId}
+        WHERE AppId = #{condition.appId}
         <if test="condition.startTime!=null">
             and CreateTime >= #{condition.startTime}
         </if>
@@ -64,12 +64,12 @@
     </select>
 
     <!-- 查询用户提现次数 -->
-    <select id="getRebateCountByUserId" resultType="java.lang.Integer">
+    <select id="getRebateCountByAppId" resultType="java.lang.Integer">
         SELECT COUNT(1)
         FROM Cashout_Record_t
         WHERE YEAR(CreateTime) = YEAR(now())
               AND MONTH(CreateTime) = MONTH(now())
-              AND UserId = #{userId}
+              AND AppId = #{appId}
     </select>
 
 </mapper>

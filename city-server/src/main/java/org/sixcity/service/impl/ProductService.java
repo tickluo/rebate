@@ -44,19 +44,19 @@ public class ProductService extends CrudService<ProductsMapper, Product> {
     /**
      * 获取用户可申请返利额
      *
-     * @param userId
+     * @param appId
      * @param startTime
      * @param endTime
      * @return
      * @throws ParseException
      */
-    public BigDecimal getUserRebateAmount(Long userId,
+    public BigDecimal getUserRebateAmount(String appId,
                                           String startTime,
                                           String endTime) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
         List<Product> productList = getUnsettledProduct(
-                userId,
+                appId,
                 startTime == null ? null : formatter.parse(startTime),
                 endTime == null ? null : formatter.parse(endTime)
         );
@@ -66,17 +66,17 @@ public class ProductService extends CrudService<ProductsMapper, Product> {
     /**
      * 获取未结算商品列表
      *
-     * @param userId
+     * @param appId
      * @param startTime
      * @param endTime
      * @return
      */
-    public List<Product> getUnsettledProduct(Long userId,
+    public List<Product> getUnsettledProduct(String appId,
                                              Date startTime,
                                              Date endTime) {
 
         ProductStatusQuery condition = new ProductStatusQuery();
-        if (userId != null) condition.setUserId(userId);
+        if (appId != null) condition.setAppId(appId);
         if (startTime != null) condition.setStartTime(startTime);
         if (endTime != null) condition.setEndTime(endTime);
         List<Integer> statusList = new ArrayList<>();

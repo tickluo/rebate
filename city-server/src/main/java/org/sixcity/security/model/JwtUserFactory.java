@@ -16,9 +16,9 @@ public final class JwtUserFactory {
     public static JwtUser create(User user) {
         return new JwtUser(
                 user.getId(),
+                user.getAppId(),
                 user.getUsername(),
                 user.getPassword(),
-                user.getPhone(),
                 mapToGrantedAuthorities(user.getRoles())
         );
     }
@@ -26,15 +26,16 @@ public final class JwtUserFactory {
     public static JwtUser create(MerchantUser user) {
         return new JwtUser(
                 user.getId(),
+                user.getAppId(),
                 user.getUsername(),
                 user.getPassword(),
-                user.getPhone(),
                 mapToGrantedAuthorities(user.getRoles())
         );
     }
 
     /**
      * 权限转换
+     *
      * @return 权限列表
      */
     private static List<SimpleGrantedAuthority> mapToGrantedAuthorities(String roles) {

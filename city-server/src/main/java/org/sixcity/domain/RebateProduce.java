@@ -12,8 +12,8 @@ import java.util.Date;
 @Data
 public class RebateProduce extends DataEntity {
 
-    @NotBlank(message = "用户Id不能为空")
-    private Long userId;
+    @NotBlank(message = "商户Id不能为空")
+    private String appId;
 
     @NotBlank(message = "年份不能为空")
     private int produceYear;

@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 @Data
 public class ConsumptionRecord extends DataEntity {
 
-    @NotBlank(message = "用户id不能为空")
-    private Long userId;
+    @NotBlank(message = "商户Id不能为空")
+    private String appId;
 
     @NotBlank(message = "transId不能为空")
     private Long transId;

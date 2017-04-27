@@ -15,7 +15,7 @@ public interface RebateProduceMapper extends CrudDao<RebateProduce> {
 
     int update(RebateProduce rebateProduce);
 
-    RebateProduce findByUserIdAndTime(@Param("userId") Long userId,
+    RebateProduce findByAppIdAndTime(@Param("appId") String appId,
                                       @Param("startTime") Date startTime,
                                       @Param("endTime") Date endTime);
 }

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.io.IOUtils;
 import org.sixcity.security.service.JwtUserDetailsServiceImpl;
 import org.sixcity.util.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import wrapper.ResettableStreamHttpServletRequest;
 
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
@@ -33,10 +35,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String authToken = CookieUtils.getValue(request, cookieTokenName);
-        // authToken.startsWith("Bearer ")
-        // String authToken = header.substring(7);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
-        //JSONObject params = JSONObject.parseObject(request.getParameterNames().nextElement());
+
+        ResettableStreamHttpServletRequest wrappedRequest = new ResettableStreamHttpServletRequest(
+                (HttpServletRequest) request);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
@@ -45,32 +47,27 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             if (jwtTokenUtil.validateToken(authToken, userDetails)) {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(wrappedRequest));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        }
+        } else if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            // get params from wrappedRequest
+            String jsonString = IOUtils.toString(wrappedRequest.getReader());
+            JSONObject params = JSONObject.parseObject(jsonString);
+            wrappedRequest.resetInputStream();
+            if ((params != null && params.containsKey("appKey"))) {
+                UserDetails userDetails = this.userDetailsService.loadUserByAppKey(params.getString("appKey"));
 
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
-
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername("tickluo");
-
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-
-        /*if (params.containsKey("appKey")  && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByAppKey(params.getString("appKey"));
-
-            if (userDetails != null) {
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                //logger.info("authenticated user " + username + ", setting security context");
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                if (userDetails != null) {
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(wrappedRequest));
+                    //logger.info("authenticated user " + username + ", setting security context");
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
-        }*/
-        chain.doFilter(request, response);
+
+        }
+        chain.doFilter(wrappedRequest, response);
     }
 }

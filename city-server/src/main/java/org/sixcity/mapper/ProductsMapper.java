@@ -25,7 +25,7 @@ public interface ProductsMapper extends CrudDao<Product> {
     List<Product> findList(@Param("condition") CpsReportQuery condition);
 
     List<DateReport> getDateReportList(@Param("timeType") int timeType,
-                                       @Param("userId") Long userId,
+                                       @Param("appId") String appId,
                                        @Param("startTime") String startTime,
                                        @Param("endTime") String endTime);
 }

@@ -64,7 +64,7 @@ public class ReportController {
         int type = 0;
         if (timeType != null) type = Integer.parseInt(timeType);
         CpsReportQuery condition = new CpsReportQuery();
-        condition.setUserId(jwtUser.getId());
+        condition.setAppId(jwtUser.getAppId());
 
         //set Time range
         if (StringHelper.isNotBlank(startTime)) condition.setStartTime(formatter.parse(startTime));
@@ -78,7 +78,7 @@ public class ReportController {
 
         //do query
         if (type == 0) return reportService.getALLDateReportList(condition);
-        return new PageInfo<DateReport>(reportService.getDateReportList(type, startTime, endTime, jwtUser.getId()));
+        return new PageInfo<DateReport>(reportService.getDateReportList(type, startTime, endTime, jwtUser.getAppId()));
     }
 
     @RequestMapping(value = "getCpsReportList", method = RequestMethod.GET)
@@ -113,7 +113,7 @@ public class ReportController {
         if (StringHelper.isNotBlank(endTime)) condition.setEndTime(formatter.parse(endTime));
 
         //valid if superAdmin
-        if (jwtUser.getId() != null) condition.setUserId(jwtUser.getId());
+        if (jwtUser.getId() != null) condition.setAppId(jwtUser.getAppId());
 
         //set pagination
         condition.setPageNum(Integer.parseInt(page));

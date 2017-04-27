@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class ProductStatusQuery {
 
-    private Long userId;
+    private String appId;
 
     private List<Integer> productStatus;
 

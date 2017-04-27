@@ -89,6 +89,10 @@ public class UserService extends CrudService<UserMapper, User> {
         return getDao().findMerchantUserByAppKey(appKey);
     }
 
+    public MerchantUser findMerchantUserByAppId(String appId) {
+        return getDao().findMerchantUserByAppId(appId);
+    }
+
     public MerchantUser findMerchantUserById(Long id) {
         return getDao().findMerchantUserById(id);
     }

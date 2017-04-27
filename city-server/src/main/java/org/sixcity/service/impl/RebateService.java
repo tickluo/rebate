@@ -28,8 +28,8 @@ public class RebateService extends CrudService<RebateMapper, CashOut> {
     /**
      * 获取用户当月提现次数
      */
-    public int getUserRebateTimes(Long userId) {
-        return getDao().getRebateCountByUserId(userId);
+    public int getUserRebateTimes(String appId) {
+        return getDao().getRebateCountByAppId(appId);
     }
 
     /**
@@ -39,7 +39,7 @@ public class RebateService extends CrudService<RebateMapper, CashOut> {
         if (condition.getPageSize() > 0 && condition.getPageNum() >= 0) {
             PageHelper.startPage(condition.getPageNum(), condition.getPageSize());
         }
-        return getDao().findByUserId(condition);
+        return getDao().findByAppId(condition);
     }
 
 }

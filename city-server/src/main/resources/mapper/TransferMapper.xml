@@ -5,7 +5,7 @@
     <sql id="selectColumns">
         SELECT
             a.Id,
-            a.UserId,
+            a.AppId,
             a.TransUrl,
             a.RebatePoint,
             a.CreateTime,
@@ -16,13 +16,13 @@
     <!-- 插入银行信息 -->
     <insert id="insert" parameterType="Transfer" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO Transfer_t (
-            UserId,
+            AppId,
             TransUrl,
             RebatePoint,
             CreateTime,
             UpdateTime
         ) VALUES (
-            #{userId},
+            #{appId},
             #{transUrl},
             #{rebatePoint},
             #{createTime},

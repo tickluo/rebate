@@ -85,7 +85,7 @@ public class RebateController {
             @ValidateParam(name = "当前页码", validators = {Validator.INT}) String page) {
         JwtUser jwtUser = WebUtils.getCurrentUser();
         CashRecordQuery condition = new CashRecordQuery();
-        condition.setUserId(jwtUser.getId());
+        condition.setAppId(jwtUser.getAppId());
         condition.setPageSize(Integer.parseInt(rows));
         condition.setPageNum(Integer.parseInt(page));
 
@@ -96,7 +96,7 @@ public class RebateController {
     @ResponseBody
     public Result rebateTimes() {
         JwtUser jwtUser = WebUtils.getCurrentUser();
-        return Result.createSuccessResult(rebateService.getUserRebateTimes(jwtUser.getId()), "提现次数");
+        return Result.createSuccessResult(rebateService.getUserRebateTimes(jwtUser.getAppId()), "提现次数");
     }
 
     @RequestMapping(value = "doRebateCash", method = RequestMethod.POST)
@@ -118,7 +118,7 @@ public class RebateController {
             );
         }
         //check jwtUser if bankId valid
-        List<Bank> bankList = bankService.findByUserId(jwtUser.getId(), "", "");
+        List<Bank> bankList = bankService.findByAppId(jwtUser.getAppId(), "", "");
         Optional<Bank> currentBank = bankList.stream()
                 .filter(p -> Objects.equals(p.getId(), form.getBankId()))
                 .findAny();
@@ -127,14 +127,14 @@ public class RebateController {
                     ResultCode.SERVICE_ERROR, "银行卡不存在");
         }
         //check user rebate times
-        if (rebateService.getUserRebateTimes(jwtUser.getId()) >= 10) {
+        if (rebateService.getUserRebateTimes(jwtUser.getAppId()) >= 10) {
             return Result.createErrorResult(
                     ResultCode.SERVICE_ERROR, "提现次数已经用完");
         }
 
         //build cash out Entity
         CashOut cashOutEntity = new CashOut();
-        cashOutEntity.setUserId(jwtUser.getId());
+        cashOutEntity.setAppId(jwtUser.getAppId());
         cashOutEntity.setBankId(form.getBankId());
         cashOutEntity.setAccountName(currentBank.get().getOpenAccountName());
         cashOutEntity.setBankName(currentBank.get().getBankName());
@@ -157,7 +157,7 @@ public class RebateController {
     @ResponseBody
     public List<SiteRebatePoints> siteRebateList() {
         JwtUser jwtUser = WebUtils.getCurrentUser();
-        return siteRebatePointsService.getFinalUserSitePoint(jwtUser.getId());
+        return siteRebatePointsService.getFinalUserSitePoint(jwtUser.getAppId());
     }
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")

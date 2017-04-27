@@ -28,7 +28,11 @@ public interface UserMapper extends CrudDao<User> {
 
     User findById(@Param("id") Long id);
 
+    User findByAppId(@Param("appId") String appId);
+
     MerchantUser findMerchantUserByAppKey(String appKey);
+
+    MerchantUser findMerchantUserByAppId(String appId);
 
     MerchantUser findMerchantUserById(Long id);
 

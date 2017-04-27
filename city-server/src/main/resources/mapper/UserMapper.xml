@@ -109,7 +109,11 @@
     </select>
     <select id="findMerchantUserByAppKey" resultType="org.sixcity.domain.dto.view.MerchantUser">
         <include refid="selectUserAndMerchant"/>
-        WHERE b.AppKey = #{appKey}
+        WHERE b.AppKey = #{appKey} AND a.Roles = 'ROLE_USER'
+    </select>
+    <select id="findMerchantUserByAppId" resultType="org.sixcity.domain.dto.view.MerchantUser">
+        <include refid="selectUserAndMerchant"/>
+        WHERE b.AppId = #{appId} AND a.Roles = 'ROLE_USER'
     </select>
 
     <!-- 查找用户 -->
@@ -137,8 +141,8 @@
     <!-- 获取没有进行统计的用户-->
     <select id="getAllRebatingUser" resultType="org.sixcity.domain.User">
         <include refid="selectUser"/>
-        WHERE a.Roles = 'ROLE_USER' AND a.Id NOT IN (
-        SELECT p.UserId FROM Rebate_Produce_t p
+        WHERE a.Roles = 'ROLE_USER' AND a.AppId NOT IN (
+        SELECT p.AppId FROM Rebate_Produce_t p
         <where>
             <![CDATA[
             ProduceDate >= #{startTime} AND ProduceDate < #{endTime})

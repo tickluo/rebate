@@ -10,8 +10,8 @@ import org.hibernate.validator.constraints.NotBlank;
 @Data
 public class Bank extends DataEntity {
 
-    @NotBlank(message = "用户Id不能为空")
-    private Long userId;
+    @NotBlank(message = "商户Id不能为空")
+    private String appId;
 
     @NotBlank(message = "银行名称不能为空")
     private String bankNo;

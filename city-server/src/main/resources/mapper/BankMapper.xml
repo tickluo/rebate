@@ -5,7 +5,7 @@
     <sql id="selectColumns">
         SELECT
             a.id,
-            a.UserId,
+            a.AppId,
             a.BankNo,
             a.BankName,
             a.BankProvince,
@@ -26,7 +26,7 @@
     <!-- 插入银行信息 -->
     <insert id="insert">
         INSERT INTO Bank_Information_t (
-            UserId,
+            AppId,
             BankNo,
             BankName,
             BankProvince,
@@ -42,7 +42,7 @@
             CreateTime,
             UpdateTime
         ) VALUES (
-            #{userId,},
+            #{appId,},
             #{bankNo,},
             #{bankName,},
             #{bankProvince,},
@@ -61,9 +61,9 @@
     </insert>
 
     <!-- 查找银行信息 -->
-    <select id="findByUserId" resultType="org.sixcity.domain.Bank">
+    <select id="findByAppId" resultType="org.sixcity.domain.Bank">
         <include refid="selectColumns"/>
-        WHERE UserId = #{userId}
+        WHERE AppId = #{appId}
     </select>
 
     <select id="findById" resultType="org.sixcity.domain.Bank">

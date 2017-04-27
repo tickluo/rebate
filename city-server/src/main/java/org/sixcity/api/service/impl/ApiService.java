@@ -115,11 +115,10 @@ public class ApiService implements IApiService {
         productRecordEntity.setOperateType(ProductOperationConst.UPDATE_STATUS);
         productRecordEntity.setOldValue(oldStatus.toString());
         productRecordEntity.setNewValue(status.toString());
-        String remark = new StringBuilder().append("更新数据 商品状态由: ")
-                .append(ProductStatusEnum.getText(oldStatus))
-                .append(" 更新为: ")
-                .append(ProductStatusEnum.getText(product.getProductStatus()))
-                .toString();
+        String remark = "更新数据 商品状态由: " +
+                ProductStatusEnum.getText(oldStatus) +
+                " 更新为: " +
+                ProductStatusEnum.getText(product.getProductStatus());
         productRecordEntity.setRemark(remark);
         //insert record
         productRecordService.addProductRecord(productRecordEntity);

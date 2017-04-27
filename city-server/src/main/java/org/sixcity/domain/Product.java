@@ -21,8 +21,8 @@ public class Product extends DataEntity {
     @NotNull(message = "transId不能为空")
     private Long transId;
 
-    @NotNull(message = "用户id不能为空")
-    private Long userId;
+    @NotBlank(message = "商户Id不能为空")
+    private String appId;
 
     @NotBlank(message = "商品名称不能为空")
     private String name;

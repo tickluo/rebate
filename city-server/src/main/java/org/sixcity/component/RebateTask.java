@@ -52,9 +52,9 @@ public class RebateTask {
 
         int userCount = 0;
         //normal users
-        String userIds = "";
+        String appIds = "";
         //abnormal users
-        String errorUserIDs = "";
+        String errorAppIds = "";
 
         try {
             //查询上个月没有进行统计的用户集合
@@ -64,7 +64,7 @@ public class RebateTask {
             List<Product> userProductList;
             for (User user : userList) {
                 //每个月产生的返利，。判断状态是1.已收货(可结算)，转运中(可结算)  2.没有结算
-                userProductList = productService.getUnsettledProduct(user.getId(), startDate, endDate);
+                userProductList = productService.getUnsettledProduct(user.getAppId(), startDate, endDate);
                 BigDecimal userTotalRebate = new BigDecimal(
                         userProductList
                                 .stream()
@@ -72,7 +72,7 @@ public class RebateTask {
                 );
                 CashRecordQuery condition = new CashRecordQuery();
 
-                condition.setUserId(user.getId());
+                condition.setAppId(user.getAppId());
                 condition.setStartTime(startDate);
                 condition.setEndTime(endDate);
                 List<CashOut> userCashOutList = rebateService.getCashRecordList(condition);
@@ -85,7 +85,7 @@ public class RebateTask {
                 //set user amount
                 user.setAmount(user.getAmount().add(userTotalRebate));
                 if (user.getAmount().compareTo(new BigDecimal(0)) < 0) {
-                    errorUserIDs += user.getUsername().concat(" | ");
+                    errorAppIds += user.getUsername().concat(" | ");
                 }
 
                 //set rebateProduce
@@ -94,7 +94,7 @@ public class RebateTask {
                 calendar.setTime(endDate);
 
                 RebateProduce rebateProduce = new RebateProduce();
-                rebateProduce.setUserId(user.getId());
+                rebateProduce.setAppId(user.getAppId());
                 rebateProduce.setApplyMoney(userTotalCashOut);
                 rebateProduce.setBalance(user.getAmount());
                 rebateProduce.setProduceDate(endDate);
@@ -102,7 +102,7 @@ public class RebateTask {
                 rebateProduce.setRebateMoney(userTotalRebate);
 
                 rebateProduceList.add(rebateProduce);
-                userIds += user.getUsername().concat(" | ");
+                appIds += user.getUsername().concat(" | ");
 
                 productList.addAll(userProductList);
             }

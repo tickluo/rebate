@@ -27,10 +27,10 @@ public class BankService extends CrudService<BankMapper, Bank> {
         return getDao().checkBankExist(bankNum);
     }
 
-    public List<Bank> findByUserId(Long userId, String rows, String page) {
+    public List<Bank> findByAppId(String appId, String rows, String page) {
         if (StringHelper.isNotBlank(rows) && StringHelper.isNotBlank(page)) {
             PageHelper.startPage(Integer.parseInt(page), Integer.parseInt(rows));
         }
-        return getDao().findByUserId(userId);
+        return getDao().findByAppId(appId);
     }
 }

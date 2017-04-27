@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 public class CpsReportQuery extends Paging {
 
-    private Long userId;
+    private String appId;
 
     private Integer timeType = 0;
 

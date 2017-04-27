@@ -24,8 +24,8 @@ public class RebateProduceService extends CrudService<RebateProduceMapper, Rebat
         return getDao().update(rebateProduce);
     }
 
-    public RebateProduce getRebateProduceByUserIdAndTime(Long userId, Date startDate, Date endDate) {
-        return getDao().findByUserIdAndTime(userId, startDate, endDate);
+    public RebateProduce getRebateProduceByAppIdAndTime(String appId, Date startDate, Date endDate) {
+        return getDao().findByAppIdAndTime(appId, startDate, endDate);
     }
 
 }

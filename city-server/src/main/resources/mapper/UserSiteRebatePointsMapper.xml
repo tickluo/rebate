@@ -5,7 +5,7 @@
     <sql id="selectColumns">
         SELECT
             a.Id,
-            a.UserId,
+            a.AppId,
             a.SiteId,
             a.SitePoints,
             a.Enable,
@@ -17,14 +17,14 @@
     <!-- 插入用户网站返点信息 -->
     <insert id="insert">
         INSERT INTO User_SitePoint_Mapping_t (
-            UserId,
+            AppId,
             SiteId,
             SitePoints,
             Enable,
             CreateTime,
             UpdateTime
         ) VALUES (
-            #{userId},
+            #{appId},
             #{siteId},
             #{sitePoints},
             #{enable},
@@ -38,17 +38,17 @@
         UPDATE User_SitePoint_Mapping_t
         SET
             `SitePoints` = #{sitePoints}
-        WHERE `UserId` = #{userId} AND SiteId = #{siteId}
+        WHERE AppId = #{appId} AND SiteId = #{siteId}
     </update>
 
     <!-- 查找网站返点 -->
-    <select id="findByUserId" resultType="org.sixcity.domain.UserSiteRebatePoints">
+    <select id="findByAppId" resultType="org.sixcity.domain.UserSiteRebatePoints">
         <include refid="selectColumns"/>
-        WHERE `UserId` = #{userId}
+        WHERE AppId = #{appId}
     </select>
     <select id="findBySiteId" resultType="org.sixcity.domain.UserSiteRebatePoints">
         <include refid="selectColumns"/>
-        WHERE UserId = #{userId} AND SiteId = #{siteId}
+        WHERE AppId = #{appId} AND SiteId = #{siteId}
     </select>
 
     <!-- 查找网站返点信息是否存在-->
@@ -57,7 +57,7 @@
             THEN 1
                ELSE 0 END
         FROM User_SitePoint_Mapping_t
-        WHERE UserId = #{userId} AND SiteId = #{siteId}
+        WHERE AppId = #{appId} AND SiteId = #{siteId}
     </select>
 
 </mapper>
