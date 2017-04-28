@@ -71,18 +71,16 @@ public class Result {
         return create(code);
     }
 
-    /**
-     * Description:创建一个错误的结果体
-     *
-     * @param data    将要返回的数据
-     * @param message 消息信息
-     */
     public static Result createErrorResult(Object data, String message) {
-        return createErrorResult().setData(message).setMessage(message);
+        return createErrorResult().setData(data).setMessage(message);
+    }
+
+    public static Result createErrorResult(Integer code, String message) {
+        return createErrorResult(code).setMessage(message);
     }
 
     public static Result createErrorResult(Integer code, Object data, String message) {
-        return createErrorResult(code).setData(message).setMessage(message);
+        return createErrorResult(code).setData(data).setMessage(message);
     }
 
     /**

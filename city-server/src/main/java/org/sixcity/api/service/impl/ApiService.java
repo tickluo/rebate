@@ -52,7 +52,8 @@ public class ApiService implements IApiService {
         product.setRebateTotalPrice(product.getActuallyPay().multiply(new BigDecimal(product.getQuantity())));
         product.setSettlementState(product.getProductStatus());
         //save product
-        if (productService.getProductByTransId(transfer.getId()) == null) {
+        Product oldProduct = productService.getProductByTransId(transfer.getId());
+        if (oldProduct == null) {
             if (productService.addProduct(product) <= 0) {
                 throw new DaoException("添加失败");
             }
@@ -67,9 +68,11 @@ public class ApiService implements IApiService {
         productRecordEntity.setTransId(product.getTransId());
         productRecordEntity.setOperateName("接口");
         productRecordEntity.setOperateType(ProductOperationConst.INSERT);
-        productRecordEntity.setOldValue("");
+        productRecordEntity.setOldValue(oldProduct == null ? "" : oldProduct.getProductStatus().toString());
         productRecordEntity.setNewValue(product.getProductStatus().toString());
-        productRecordEntity.setRemark("插入数据 商品状态: ".concat(ProductStatusEnum.getText(product.getProductStatus())));
+        productRecordEntity.setRemark(oldProduct == null ?
+                "插入数据 商品状态: ".concat(ProductStatusEnum.getText(product.getProductStatus())) :
+                "更新数据 商品状态: ".concat(ProductStatusEnum.getText(product.getProductStatus())));
         //insert record
         productRecordService.addProductRecord(productRecordEntity);
     }
