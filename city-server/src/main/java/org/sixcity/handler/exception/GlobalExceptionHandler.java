@@ -1,5 +1,6 @@
 package org.sixcity.handler.exception;
 
+import exception.DaoException;
 import exception.ServiceException;
 import model.Result;
 import org.sixcity.api.exception.FindEmptyException;
@@ -26,6 +27,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = ServiceException.class)
     public Result ServiceException(ServiceException exception) {
+        return Result.createErrorResult(exception.getCode(), exception.getMessage());
+    }
+
+    @ExceptionHandler(value = DaoException.class)
+    public Result DaoException(DaoException exception) {
         return Result.createErrorResult(exception.getCode(), exception.getMessage());
     }
 }

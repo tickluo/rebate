@@ -48,7 +48,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .setUseTrailingSlashMatch(true); // 系统不区分 URL 的最后一个字符是否是斜杠 /
     }
 
-    @Override
+    /*@Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         super.configureMessageConverters(converters);
 
@@ -61,12 +61,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         fastConverter.setFastJsonConfig(fastJsonConfig);
 
         converters.add(fastConverter);
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
         //Unified exception handling
         exceptionResolvers.add(new ExceptionResolver());
-    }
+    }*/
 
 }
