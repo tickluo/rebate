@@ -6,5 +6,6 @@ import org.sixcity.domain.User;
 public interface AuthService {
     /*int register(User userToAdd);*/
     String login(String username, String password);
+    void logout();
     String refresh(String oldToken);
 }

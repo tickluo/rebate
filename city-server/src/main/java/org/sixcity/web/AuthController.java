@@ -127,7 +127,7 @@ public class AuthController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletResponse httpServletResponse) {
-
+        authService.logout();
         CookieUtils.clear(httpServletResponse, cookieTokenName);
         return "redirect:login";
     }

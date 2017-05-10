@@ -51,6 +51,10 @@ public class AuthServiceImpl implements AuthService {
         return jwtTokenUtil.refreshToken(token);
     }
 
+    public void logout() {
+        SecurityContextHolder.clearContext();
+    }
+
     public JwtUser getUserByUsername(String username) {
         return (JwtUser) userDetailsService.loadUserByUsername(username);
     }
