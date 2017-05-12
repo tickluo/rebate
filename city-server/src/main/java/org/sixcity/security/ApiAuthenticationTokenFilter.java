@@ -31,51 +31,38 @@ public class ApiAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         ResettableStreamHttpServletRequest wrappedRequest = new ResettableStreamHttpServletRequest(
                 (HttpServletRequest) request);
+        // get params from wrappedRequest
+        JSONObject params = null;
+        if (request.getContentType() == null) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("appToken", request.getParameter("appToken"));
+            params = new JSONObject(map);
+        } else {
+            String jsonString = IOUtils.toString(wrappedRequest.getReader());
+            params = JSONObject.parseObject(jsonString);
+            wrappedRequest.resetInputStream();
+        }
+        boolean ssoAccess = false;
+        if (params != null && params.containsKey("appToken")) {
+            String tempAppKey = ApiTokenUtil.getAppKeyByToken(params.getString("appToken"));
+            if (SecurityContextHolder.getContext().getAuthentication() == null && tempAppKey != null) {
 
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            // get params from wrappedRequest
-            JSONObject params = null;
-            if (request.getContentType() == null) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("appToken", request.getParameter("appToken"));
-                params = new JSONObject(map);
-            } else {
-                String jsonString = IOUtils.toString(wrappedRequest.getReader());
-                params = JSONObject.parseObject(jsonString);
-                wrappedRequest.resetInputStream();
-            }
-
-           /* if ((params != null && params.containsKey("appKey"))) {
-                UserDetails userDetails = this.userDetailsService.loadUserByAppKey(params.getString("appKey"));
+                UserDetails userDetails = this.userDetailsService.loadUserByAppKey(tempAppKey);
 
                 if (userDetails != null) {
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(wrappedRequest));
                     //logger.info("authenticated user " + username + ", setting security context");
+                    ssoAccess = true;
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
-            }*/
-            boolean ssoAccess = false;
-            if (params != null && params.containsKey("appToken")) {
-                String tempAppKey = ApiTokenUtil.getAppKeyByToken(params.getString("appToken"));
-                if (tempAppKey != null) {
-                    UserDetails userDetails = this.userDetailsService.loadUserByAppKey(tempAppKey);
-
-                    if (userDetails != null) {
-                        UsernamePasswordAuthenticationToken authentication =
-                                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(wrappedRequest));
-                        //logger.info("authenticated user " + username + ", setting security context");
-                        ssoAccess = true;
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
-                    }
-                }
+            } else if (SecurityContextHolder.getContext().getAuthentication() != null && tempAppKey != null) {
+                ssoAccess = true;
             }
-           /* if(!ssoAccess){
-                throw new TokenInvalidException("");
-            }*/
-
+        }
+        if (!ssoAccess && !request.getRequestURL().toString().contains("/api/rebate/getAppToken")) {
+            throw new TokenInvalidException("");
         }
         chain.doFilter(wrappedRequest, response);
     }
