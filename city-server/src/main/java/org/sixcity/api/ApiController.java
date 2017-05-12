@@ -20,6 +20,10 @@ import org.sixcity.service.impl.WeChatService;
 import org.sixcity.util.MessageHandleUtils;
 import org.sixcity.util.UrlUtils;
 import org.sixcity.util.WebUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -82,20 +86,22 @@ public class ApiController {
     }
 
     @RequestMapping(value = "getQRCode", method = RequestMethod.GET)
-    public byte[] getQRCode(@ValidateParam(name = "url", validators = {Validator.URL}) String url,
-                            HttpServletResponse response) throws IOException {
+    public ResponseEntity<byte[]> getQRCode(@ValidateParam(name = "url", validators = {Validator.URL}) String url,
+                                            HttpServletResponse response) throws IOException {
 
         String shortUrl = UrlUtils.generateShortUrl(url);
-        return weChatService.getQRCode(shortUrl);
-        /*ByteArrayOutputStream bao = new ByteArrayOutputStream();
+        //return weChatService.getQRCode(shortUrl);
+        ByteArrayOutputStream bao = new ByteArrayOutputStream();
         InputStream in = new ByteArrayInputStream(weChatService.getQRCode(shortUrl));
         BufferedImage image = ImageIO.read(in);
         try {
             ImageIO.write(image, "png", bao);
-            return bao.toByteArray();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_PNG);
+            return new ResponseEntity<>(bao.toByteArray(), headers, HttpStatus.OK);
         } catch (IOException e) {
             return null;
-        }*/
+        }
     }
 
     @RequestMapping(value = "saveProduct")
