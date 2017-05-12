@@ -44,6 +44,11 @@
         <spring-tx>4.3.7.RELEASE</spring-tx>
         <commons-io>2.5</commons-io>
         <page-helper>1.1.0</page-helper>
+        <http-client>4.5.3</http-client>
+        <http-request>6.0</http-request>
+        <zxing-core>3.2.0</zxing-core>
+        <zxing-javase>3.2.0</zxing-javase>
+
     </properties>
 
     <modules>

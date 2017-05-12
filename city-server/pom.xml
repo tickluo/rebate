@@ -26,17 +26,29 @@
 
     <dependencies>
 
+        <!-- httpclient -->
+        <dependency>
+            <groupId>com.github.kevinsawicki</groupId>
+            <artifactId>http-request</artifactId>
+            <version>${http-request}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${http-client}</version>
+        </dependency>
+
         <!-- QR code dependency -->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
-            <version>3.2.0</version>
+            <version>${zxing-core}</version>
         </dependency>
 
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
-            <version>3.2.0</version>
+            <version>${zxing-javase}</version>
         </dependency>
 
         <!-- MyBatis -->

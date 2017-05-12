@@ -241,7 +241,8 @@ public class ValidateUtils {
         Pattern p = null;// 正则表达式
         Matcher m = null;// 操作符表达式
         boolean b = false;
-        p = p.compile("^http[s]?:\\/\\/([\\w-]+\\.)+[\\w-]+([\\w./?%&=]*)?$");
+        //p = p.compile("^http[s]?:\\/\\/([\\w-]+\\.)+[\\w-]+([\\w./?%&=]*)?$");
+        p = p.compile("^http[s]?:\\/\\/([\\w-]+\\.)+[\\w-]+([\\w./?%&-=]*)?$");
         m = p.matcher(value);
         b = m.matches();
         return b;
