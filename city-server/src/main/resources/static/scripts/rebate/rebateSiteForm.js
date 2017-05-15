@@ -84,7 +84,7 @@ function submitForm() {
         siteId: $.trim($siteName.val()),
         sitePoints: $.trim($sitePoints.val())
     }, function (data) {
-        if (data.state == "success") {
+        if (data.success) {
             $siteFormMes.text("保存成功");
             $.currentWindow().$("#gridList").trigger("reloadGrid");
 

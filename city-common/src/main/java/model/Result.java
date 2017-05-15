@@ -8,11 +8,6 @@ public class Result {
     protected Object data;
 
     /**
-     * web端标识
-     */
-    protected String state;
-
-    /**
      * 状态码
      */
     protected Integer code;
@@ -40,7 +35,7 @@ public class Result {
      * @return
      */
     public static Result createSuccessResult() {
-        return create(ResultCode.SUCCESS).setState();
+        return create(ResultCode.SUCCESS);
     }
 
     public static Result createSuccessResult(String message) {
@@ -115,14 +110,5 @@ public class Result {
     public Result setMessage(String message) {
         this.message = message;
         return this;
-    }
-
-    public Result setState() {
-        this.state = "success";
-        return this;
-    }
-
-    public String getState() {
-        return state;
     }
 }

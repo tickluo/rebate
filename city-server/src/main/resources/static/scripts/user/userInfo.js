@@ -41,7 +41,7 @@
                 email: $.trim($email.val()),
                 phone: $.trim($phone.val())
             },function (data) {
-                if (data.state == "success") {
+                if (data.success) {
                     $("#mes").text(data.message);
                 } else {
                     $("#mes").text(data.message);

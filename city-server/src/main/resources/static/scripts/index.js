@@ -84,7 +84,7 @@ $(function ($) {
 $(function () {
     postSyncAjax("/user/getUserInfoByToken", {},
         function (data) {
-            if (data.state == "success") {
+            if (data.success) {
                 globalUser = data.data;
                 clients = $.clientsInit();
                 $initSideBar();

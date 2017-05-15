@@ -28,7 +28,7 @@ $(document).ready(function () {
         postAjax("adminSelectMerchant", {
             username: defaultSelect.username
         }, function (data) {
-            if (data.state == 'success') {
+            if (data.success) {
                 selectData = defaultSelect;
                 $('#MerchantUsername').text(selectData.username);
                 $('#MerchantActualName').text(selectData.actualName);
@@ -54,7 +54,7 @@ $(document).ready(function () {
         postAjax("adminSelectMerchant", {
             username: selectData.username
         }, function (data) {
-            if (data.state == 'success') {
+            if (data.success) {
                 currentSelectUser = selectData.id;
                 return $MesDisplay.text('已选中商户')
             }

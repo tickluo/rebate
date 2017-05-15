@@ -101,7 +101,7 @@
                 "phone": $.trim($phone.val()),
                 "code": $.trim($code.val())
             }, function (data) {
-                if (data.state == "success") {
+                if (data.success) {
                     $("#register_button").find('span').html("注册成功，正在跳转...");
                     $.register.formMessage("");
                     window.setTimeout(function () {
@@ -158,7 +158,7 @@ function GetShortMessage() {
         type: "post",
         dataType: "json",
         success: function (data) {
-            if (data.state == "success") {
+            if (data.success) {
                 $.register.formMessage(data.message);
             }
         }

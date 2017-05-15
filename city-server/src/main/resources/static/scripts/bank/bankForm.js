@@ -126,7 +126,7 @@ function submitForm() {
         licencePositive: $.trim($LicencePositive.val()),
         licenceSide: $.trim($LicenceSide.val())
     },function (data) {
-        if (data.state == "success") {
+        if (data.success) {
             $("#mes").text("新添加成功");
             $.currentWindow().$("#gridList").trigger("reloadGrid");
 
@@ -170,7 +170,7 @@ function upload(input, form, url, callback) {
 
 $(document).ready(function () {
     upload($("#FileUpload1"), $("#fileForm1")[0], "/upload/uploadImage", function (data) {
-        if (data.state == "success") {
+        if (data.success) {
             $("#res1").text("上传成功");
             $("#LicencePositive").val(data.data.path);
         } else {
@@ -179,7 +179,7 @@ $(document).ready(function () {
 
     });
     upload($("#FileUpload2"), $("#fileForm2")[0], "/upload/uploadImage", function (data) {
-        if (data.state == "success") {
+        if (data.success) {
             $("#res2").text("上传成功");
             $("#LicenceSide").val(data.data.path);
         } else {

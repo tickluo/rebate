@@ -41,7 +41,7 @@
                     newPassword: $.trim($newPwd.val())
                 },
                 function (data) {
-                    if (data.state == "success") {
+                    if (data.success) {
                         $("#mes").text(data.message);
                     } else {
                         $("#mes").text(data.message);

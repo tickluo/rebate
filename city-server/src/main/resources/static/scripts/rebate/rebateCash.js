@@ -82,7 +82,7 @@ function btn_Submit() {
             bankId: $.trim($("#OpenAcountName").val()),
             applyMoney: $money.val()
         }, function (data) {
-            if (data.state == "success") {
+            if (data.success) {
                 //金额显示减掉
                 var $can = $("#can");
                 var canMoney = $can.text();
@@ -108,7 +108,7 @@ function btn_Submit() {
 function GetUserAmount() {
     postAjax("/user/getUserInfoByToken", {},
         function (data) {
-            if (data.state == "success") {
+            if (data.success) {
                 globalUser = data.data;
                 $("#can").text(globalUser.amount)
             }
@@ -118,7 +118,7 @@ function GetUserAmount() {
 function GetUserRebateTimes() {
     postAjax("/rebate/getUserRebateTimes", {},
         function (data) {
-            if (data.state == "success") {
+            if (data.success) {
                 $("#rebateCount").text(10 - data.data)
             }
         });
