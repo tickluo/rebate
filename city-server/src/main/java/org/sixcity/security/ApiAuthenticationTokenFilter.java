@@ -61,7 +61,9 @@ public class ApiAuthenticationTokenFilter extends OncePerRequestFilter {
                 ssoAccess = true;
             }
         }
-        if (!ssoAccess && !request.getRequestURL().toString().contains("/api/rebate/getAppToken")) {
+        if (!ssoAccess &&
+                request.getServletPath().startsWith("/api") &&
+                !request.getServletPath().equals("/api/rebate/getAppToken")) {
             throw new TokenInvalidException("");
         }
         chain.doFilter(wrappedRequest, response);

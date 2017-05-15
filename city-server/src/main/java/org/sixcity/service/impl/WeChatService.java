@@ -30,7 +30,7 @@ public class WeChatService {
     public void checkToken() {
         if (accessToken.containsKey("expire") &&
                 accessToken.get("expire") != null &&
-                Long.parseLong(accessToken.get("expire").toString()) > new Date().getTime()) {// && accessToken.get("expire") > new Date().getTime()){
+                Long.parseLong(accessToken.get("expire").toString()) > new Date().getTime()) {
             return;
         }
         String postUrl = MessageFormat.format(getTokenUrl, appId, appSecret);
