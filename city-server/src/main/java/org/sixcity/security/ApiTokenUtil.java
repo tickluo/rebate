@@ -3,6 +3,7 @@ package org.sixcity.security;
 import org.sixcity.domain.dto.view.MerchantUser;
 import org.sixcity.util.MD5Utils;
 import org.springframework.stereotype.Component;
+import util.RandomUtils;
 
 import java.util.*;
 
@@ -16,7 +17,7 @@ public class ApiTokenUtil {
     }
 
     public static String generateToken(String appKey) {
-        String appToken = "sckey-" + UUID.randomUUID().toString() + new Date().getTime();
+        String appToken = "sckey" + RandomUtils.uuid() + new Date().getTime();
         if (AppTokenClient.containsKey(appKey)) {
             AppTokenClient.replace(appKey, appToken);
         } else {

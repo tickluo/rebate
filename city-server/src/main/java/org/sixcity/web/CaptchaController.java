@@ -1,7 +1,5 @@
 package org.sixcity.web;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.UUID;
 
 import org.sixcity.service.impl.CaptchaService;
@@ -12,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import cn.apiclub.captcha.Captcha;
+import util.RandomUtils;
 
 @RestController
 @RequestMapping("captcha")
@@ -32,7 +30,7 @@ public class CaptchaController {
 
     @RequestMapping(value = "/getAuthCode", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getCaptcha(HttpServletRequest request) {
-        String uuid = UUID.randomUUID().toString();
+        String uuid = RandomUtils.uuid();
 
         Captcha captcha = captchaService.generateCaptcha(uuid);
 
