@@ -5,6 +5,7 @@ import exception.ServiceException;
 import model.Result;
 import org.sixcity.api.exception.FindEmptyException;
 
+import org.sixcity.api.exception.TokenInvalidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -34,4 +35,10 @@ public class GlobalExceptionHandler {
     public Result DaoException(DaoException exception) {
         return Result.createErrorResult(exception.getCode(), exception.getMessage());
     }
+
+    @ExceptionHandler(value = TokenInvalidException.class)
+    public Result TokenInvalidException(TokenInvalidException exception) {
+        return Result.createErrorResult(exception.getCode(), exception.getMessage());
+    }
+
 }

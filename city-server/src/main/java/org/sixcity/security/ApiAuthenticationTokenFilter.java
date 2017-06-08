@@ -1,6 +1,7 @@
 package org.sixcity.security;
 
 import com.alibaba.fastjson.JSONObject;
+import model.ResultCode;
 import org.apache.commons.io.IOUtils;
 import org.sixcity.api.exception.TokenInvalidException;
 import org.sixcity.security.service.JwtUserDetailsServiceImpl;
@@ -64,9 +65,18 @@ public class ApiAuthenticationTokenFilter extends OncePerRequestFilter {
         if (!ssoAccess &&
                 request.getServletPath().startsWith("/api") &&
                 !request.getServletPath().equals("/api/rebate/getAppToken")) {
-            throw new TokenInvalidException("");
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
+            httpResponse.sendError(ResultCode.SSO_TOKEN_ERROR, "appToken验证失败");
+            return;
+            //throw new TokenInvalidException("");
         }
         chain.doFilter(wrappedRequest, response);
+        /*try {
+            chain.doFilter(wrappedRequest, response);
+        } catch (RuntimeException e) {
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
+            httpResponse.sendError(ResultCode.SSO_TOKEN_ERROR, "appToken验证失败");
+        }*/
     }
 
 }

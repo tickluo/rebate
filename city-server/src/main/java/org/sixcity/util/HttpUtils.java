@@ -3,8 +3,6 @@ package org.sixcity.util;
 import com.alibaba.fastjson.JSONObject;
 import com.github.kevinsawicki.http.HttpRequest;
 
-import javax.imageio.ImageIO;
-import java.io.OutputStream;
 import java.util.Map;
 
 /**
